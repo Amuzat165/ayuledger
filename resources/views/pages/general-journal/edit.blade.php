@@ -1,0 +1,135 @@
+<!-- edit.blade.php -->
+
+@extends('layouts.app')
+
+@section('title', $params->title)
+
+@section('top-bar')
+    @include('shared.header')
+@stop
+
+@section('left-sidebar')
+    @include('shared.sidebar')
+@stop
+
+@section('content')
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <a class="btn btn-sm btn-info waves-effect" href="{{ route('general-journal.index') }}">Back</a>
+            </div>
+
+            <ol class="breadcrumb breadcrumb-col-cyan pull-right">
+                <li><a href="{{ route('dashboard') }}"><i class="material-icons">home</i> Home</a></li>
+                <li><a href="{{ route('general-journal.index') }}"><i class="fas fa-archive"></i> General Journal</a></li>
+                <li class="active"><i class="material-icons">archive</i> {{ $params->title }}</li>
+            </ol>
+
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>{{ $params->title }}</h2>
+                            <small>Enter {{ $params->resource }} Information</small>
+                        </div>
+                        <div class="body">
+                            <form method="POST" action="{{ $params->action }}" class="form2">
+                                @csrf
+                                @method('PUT')
+                                <table class="table table-bordered">
+                                    <tbody>
+                                    <tr>
+                                        <td style="width: 25%;"><label for="branch">Branch</label></td>
+                                        <td>
+                                            <select id="branch_id" class="form-control" name="branch_id" required>
+                                                <option value="">Select Branch</option>
+                                                @foreach($params->branches as $branch)
+                                                    <option value="{{ $branch->id }}" {{ $branch->id == $params->general_journal->branch_id ? 'selected' : '' }}>
+                                                        {{ $branch->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    <tr>
+                                        <td style="width: 25%;"><label for="account">Debit Account</label></td>
+                                        <td>
+                                            <input id="debit_account_id" name="debit_account_id" type="text" class="form-control"
+                                                   value="{{ old('account', $params->accounts[$params->defaults['debit_account_id']] ?? '') }}" readonly>
+                                        </td>
+                                    </tr>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="debit">Debit</label></td>
+                                        <td>
+                                            <input id="debit" name="debit" type="number" class="form-control"
+                                                   value="{{ old('debit', $params->defaults['debit'] ?? '') }}" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 25%;"><label for="credit_account">Credit Account</label></td>
+                                        <td>
+                                            <input id="credit_account_id" name="credit_account_id" type="text" class="form-control"
+                                                   value="{{ old('credit_account', $params->accounts[$params->defaults['credit_account_id']] ?? '') }}" readonly>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label for="credit">Credit</label></td>
+                                        <td>
+                                            <input id="credit" name="credit" type="number" class="form-control"
+                                                   value="{{ old('credit', $params->defaults['credit'] ?? '') }}" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="memo">Memo</label></td>
+                                        <td>
+                                            <input id="memo" name="memo" class="form-control" required
+                                                   value="{{ old('memo', $params->defaults['memo'] ?? '') }}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="customer_vendor">Customer/Vendor</label></td>
+                                        <td>
+                                            <select id="customer_vendor" name="customer_vendor" class="form-control" required>
+                                                <option value="">Select Customer/Vendor</option>
+                                                @foreach ($params->customers as $customer)
+                                                    <option value="{{ $customer->name }}" {{ $customer->name == old('customer_vendor', $params->defaults['customer_vendor'] ?? '') ? 'selected' : '' }}>
+                                                        {{ $customer->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <button type="submit" class="btn btn-primary m-t-15 waves-effect">
+                                                {{ __('root.common.update') }}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                            @if(session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+@stop
+
+@push('include-css')
+    <!-- Include your CSS here if needed -->
+    <link href="{{ asset('asset/plugins/bootstrap-select/css/bootstrap-select.css') }}" rel="stylesheet" />
+@endpush
+
+@push('include-js')
+    <!-- Include your JS here if needed -->
+@endpush
