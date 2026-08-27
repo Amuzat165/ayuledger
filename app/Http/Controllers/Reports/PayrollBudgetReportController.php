@@ -13,7 +13,7 @@ class PayrollBudgetReportController extends Controller
 {
     public function payroll()
     {
-        return view('admin.accounts-report.payroll.index', ['branches' => Branch::orderBy('name')->get()]);
+        return view('admin.accounts-report.payroll.index', ['branches' => $this->branchOptions()]);
     }
 
     public function payrollReport(Request $request)
@@ -33,7 +33,7 @@ class PayrollBudgetReportController extends Controller
 
     public function budget()
     {
-        return view('admin.accounts-report.budget.index', ['branches' => Branch::orderBy('name')->get()]);
+        return view('admin.accounts-report.budget.index', ['branches' => $this->branchOptions()]);
     }
 
     public function budgetReport(Request $request)
@@ -87,5 +87,14 @@ class PayrollBudgetReportController extends Controller
         }
 
         return view($view, $data);
+    }
+
+    private function branchOptions()
+    {
+        return Branch::orderBy('name')
+            ->get()
+            ->mapWithKeys(function ($branch) {
+                return [$branch->id => $branch->name];
+            });
     }
 }

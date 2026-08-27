@@ -30,23 +30,21 @@ class UsersTableSeeder extends Seeder
         ]);
         $userSuperAdmin = User::create([
             'name' => 'Super Admin',
-            'email' => 'superadmin@eaccount.xyz',
+            'email' => 'admin@gmail.com',
             'role_manage_id' => $superadmin_roles->id,
             'password' => (env('DEMO_MODE') == true) ?  bcrypt('mamun2074') : bcrypt('123456'),
             'create_by' => 'System',
         ]);
         Profile::create([
             "user_ID" => $userSuperAdmin->id,
-            "first_name" => "S.M",
-            "last_name" => "Abid",
+            "first_name" => "Mohammed",
+            "last_name" => "Abdulhakeem",
             "gender" => 1,
             "designation" => "Software Engineer",
-            "phone_number" => "+8801738578683",
-            "NID" => "199412478654477",
-            "permanent_address" => "PS: Raygonj, District: Sirajgonj",
-            "present_address" => "Dhaka,Bangladesh",
-            'avatar' => 'upload/avatar/avatar.png',
-            "education" => 'B.Sc. in Computer Science & Engineering',
+            "phone_number" => "+2348031327202",
+            "permanent_address" => "Abuja",
+            'avatar' => 'upload/avatar/image.jpeg',
+            "education" => 'B.Sc. in Computer Science & MSc in Software Engineering',
             'description' => ''
         ]);
     }
