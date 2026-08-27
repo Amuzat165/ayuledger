@@ -1206,6 +1206,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     //    Accounts Report Start
 
+    Route::get('/reports', [
+        'uses' => 'ReportsHubController@index',
+        'as' => 'reports.hub'
+    ]);
+
     //    ledger
 
     Route::get('/reports/accounts/ledger', [
@@ -1513,5 +1518,17 @@ Route::group(['middleware' => 'auth'], function () {
         'as' => 'language.configureLangStore'
     ]);
     //    Branch Manage End
+    Route::get('/language/configureLang/{language}', [
+        'uses' => 'LanguageController@configureLangStore',
+        'as' => 'language.configureLangStore'
+    ]);
+    //    Branch Manage End
+
+
+    //    Inventory Start
+    Route::resource('inventories', 'InventoryController')->except(['show']);
+    //    Inventory End
 
 });
+
+

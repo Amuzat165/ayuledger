@@ -26,7 +26,23 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/reports/accounts/budget/report', [\App\Http\Controllers\Reports\PayrollBudgetReportController::class, 'budgetReport'])
         ->name('reports.accounts.budget.report');
 
-    Route::resource('inventories', InventoryController::class);
+    Route::get('/purchases-expenses', [\App\Http\Controllers\PurchasesExpensesHubController::class, 'index'])
+        ->name('purchases.expenses.hub');
+
+    Route::get('/sales', [\App\Http\Controllers\ModuleHubController::class, 'sales'])
+        ->name('sales.hub');
+    Route::get('/administration', [\App\Http\Controllers\ModuleHubController::class, 'administration'])
+        ->name('administration.hub');
+    Route::get('/accounting', [\App\Http\Controllers\ModuleHubController::class, 'accounting'])
+        ->name('accounting.hub');
+    Route::get('/banking-cash', [\App\Http\Controllers\ModuleHubController::class, 'banking'])
+        ->name('banking.cash.hub');
+    Route::get('/inventory-assets', [\App\Http\Controllers\ModuleHubController::class, 'inventory'])
+        ->name('inventory.assets.hub');
+
+    Route::resource('inventories', InventoryController::class)->except([
+        'show'
+    ]);
 
     Route::resource('vendors', VendorController::class);
 

@@ -173,8 +173,8 @@ class DashboardController extends Controller
 
             array_push($total_dr_voucher, $drVoucherCount);
             array_push($total_cr_voucher, $crVoucherCount);
-            array_push($total_cnt_voucher, $jvVoucherCount);
-            array_push($total_jnl_voucher, $cntVoucherCount);
+            array_push($total_cnt_voucher, $cntVoucherCount);
+            array_push($total_jnl_voucher, $jvVoucherCount);
         }
         $data['total_dr_voucher'] = $total_dr_voucher;
         $data['total_cr_voucher'] = $total_cr_voucher;
@@ -239,6 +239,11 @@ class DashboardController extends Controller
                     'name' => $type['name'],
                     'value' => $amount,
                 ];
+            }
+            foreach ($ledger_types as $ledger_type) {
+                if (!array_key_exists($ledger_type, $items)) {
+                    $items[$ledger_type] = ['name' => '', 'value' => 0];
+                }
             }
             // cost of revenue types
             $cost_of_revenue_types = [102, 104, 114, 115];

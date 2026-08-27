@@ -150,8 +150,8 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="phone_number" class="col-sm-2 control-label">Last
-                                                Name</label>
+                                            <label for="phone_number" class="col-sm-2 control-label">Phone
+                                                Number</label>
                                             <div class="col-sm-10">
                                                 <div class="form-line">
                                                     <input type="text" class="form-control" id="phone_number"
@@ -193,20 +193,11 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="NID" class="col-sm-2 control-label">NID</label>
-                                            <div class="col-sm-10">
-                                                <div class="form-line">
-                                                    <input type="text" class="form-control" id="NID" name="NID"
-                                                        placeholder="NID" value="{{ $profile['NID'] }}">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
                                             <label for="education" class="col-sm-2 control-label">Education</label>
                                             <div class="col-sm-10">
                                                 <div class="form-line">
                                                     <input type="text" class="form-control" id="education"
-                                                        name="education" placeholder="NID"
+                                                        name="education" placeholder="Education"
                                                         value="{{ $profile['education'] }}">
                                                 </div>
                                             </div>
