@@ -318,35 +318,6 @@
                         </button>
                     </div>
 
-                    @if (env('DEMO_MODE') == true)
-                        <div class="login-demo">
-                            <table class="table table-bordered table-sm table-hover table-striped">
-                                <thead>
-                                    <tr>
-                                        <th colspan="2">Demo Login</th>
-                                    </tr>
-                                    <tr>
-                                        <th scope="col">Email</th>
-                                        <th scope="col">Password</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>admin@eaccount.xyz</td>
-                                        <td>1234</td>
-                                    </tr>
-                                    <tr>
-                                        <td>projectmanager@eaccount.xyz</td>
-                                        <td>1234</td>
-                                    </tr>
-                                    <tr>
-                                        <td>vouchermanage@eaccount.xyz</td>
-                                        <td>1234</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    @endif
                 </form>
             </section>
         </div>

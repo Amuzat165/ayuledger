@@ -108,6 +108,8 @@
                                                 <option value="Quart (qt)">Quart (qt)</option>
                                                 <option value="Gallon (gal)">Gallon (gal)</option>
                                                 <option value="Crates">Crates</option>
+                                                <option value="Bags">Bags</option>
+                                                <option value="Carton">Carton</option>
                                                 <option value="Pieces">Pieces</option>
                                             </select>
                                         </td>
@@ -129,6 +131,10 @@
                                         <td>
                                             <input id="quantity_at_hand" name="quantity_at_hand" type="number" class="form-control" required>
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="reorder_level">Reorder Level</label></td>
+                                        <td><input id="reorder_level" name="reorder_level" type="number" min="0" value="{{ old('reorder_level', 0) }}" class="form-control" required></td>
                                     </tr>
                                     <tr>
                                         <td><label for="account">Account</label></td>

@@ -14,7 +14,7 @@
                 <form class="actionForm" action="" method="get">
                     @csrf
                     <x-table.table-pagination-with-selected />
-                    <x-table.table-wrapper :thead="['#','Branch','Type', 'Description', 'Sub Item', 'Unit of Measurement', 'Unit Cost', 'Sale Price', 'Qty', 'Account', 'edit','del']">
+                    <x-table.table-wrapper :thead="['#','Branch','Type', 'Description', 'Sub Item', 'Unit of Measurement', 'Unit Cost', 'Sale Price', 'Qty', 'Stock Status', 'Account', 'edit','del']">
                         @forelse ($inventories as $inventory)
                             @php
                                 $sn = $loop->iteration;
@@ -32,6 +32,15 @@
                                 <td style="font-size: 11px;">₦{{ $unit_cost  }}</td>
                                 <td style="font-size: 11px;">₦{{ $sale_price }}</td>
                                 <td style="font-size: 11px;">{{ $inventory->quantity_at_hand }}</td>
+                                <td style="font-size: 11px;">
+                                    @if ($inventory->quantity_at_hand <= 0)
+                                        <span class="label label-danger">Out of Stock</span>
+                                    @elseif ($inventory->quantity_at_hand <= $inventory->reorder_level)
+                                        <span class="label label-warning">Reorder Level</span>
+                                    @else
+                                        <span class="label label-success">In Stock</span>
+                                    @endif
+                                </td>
                                 <td style="font-size: 11px;">{{ $inventory->account }}</td>
 {{--                                <td style="font-size: 11px;">{!! $Bh::date_f($inventory->created_at) !!}</td>--}}
                                 <td>

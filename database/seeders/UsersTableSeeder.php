@@ -32,7 +32,9 @@ class UsersTableSeeder extends Seeder
             'name' => 'Super Admin',
             'email' => 'admin@gmail.com',
             'role_manage_id' => $superadmin_roles->id,
-            'password' => (env('DEMO_MODE') == true) ?  bcrypt('mamun2074') : bcrypt('123456'),
+            'password' => filter_var(env('DEMO_MODE', false), FILTER_VALIDATE_BOOLEAN)
+                ? bcrypt('123456')
+                : bcrypt('123456'),
             'create_by' => 'System',
         ]);
         Profile::create([

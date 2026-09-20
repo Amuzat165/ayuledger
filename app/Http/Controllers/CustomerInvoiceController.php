@@ -10,6 +10,7 @@ use App\Helpers\ControllerHelper;
 use App\IncomeExpenseType;
 use App\Models\Customer;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use App\Models\CustomerInvoice;
 use App\Models\CustomerInvoiceItem;
 use Illuminate\Http\Request;
@@ -114,6 +115,17 @@ class CustomerInvoiceController extends Controller
         DB::beginTransaction();
 
         try {
+            // Lock and validate stock first. This prevents concurrent sales from
+            // taking quantity below zero and ensures every sold item is deducted.
+            foreach ($request->items as $item) {
+                $inventoryItem = Inventory::whereKey($item['item_id'])->lockForUpdate()->firstOrFail();
+                if ($inventoryItem->quantity_at_hand < $item['quantity']) {
+                    throw ValidationException::withMessages([
+                        'items' => ['Insufficient stock for ' . ($inventoryItem->description ?: 'the selected item') . '.'],
+                    ]);
+                }
+            }
+
             // Create a new invoice
             $invoice = new CustomerInvoice([
                 'customer_id' => $request->customer_id,
@@ -139,7 +151,7 @@ class CustomerInvoiceController extends Controller
                 $invoiceItems[] = $invoiceItem;
 
                 // Update inventory quantity at hand
-                $inventoryItem = Inventory::find($item['item_id']);
+                $inventoryItem = Inventory::whereKey($item['item_id'])->lockForUpdate()->first();
                 if ($inventoryItem) {
                     $newQuantity = $inventoryItem->quantity_at_hand - $item['quantity'];
                     $inventoryItem->update(['quantity_at_hand' => $newQuantity]);

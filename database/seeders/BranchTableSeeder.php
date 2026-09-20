@@ -12,25 +12,31 @@ class BranchTableSeeder extends Seeder
      */
     public function run()
     {
-        Branch::create([
-            'name' => 'Head Office',
-            'location' => 'Uttara House Buildings, Dhaka Bangladesh',
-            'description' => ''
-        ]);
-        Branch::create([
-            'name' => 'Rajshahi Branch',
-            'location' => 'Padma Graden',
-            'description' => ''
-        ]);
-        Branch::create([
-            'name' => 'Sirajgonj Branch',
-            'location' => 'S.S Road',
-            'description' => ''
-        ]);
-        Branch::create([
-            'name' => 'Bogra Branch',
-            'location' => 'Jolershari Tala',
-            'description' => ''
-        ]);
+        $legacyNames = [
+            'HQ' => 'Kaduna Branch',
+            'Head Office' => 'Abuja Head Office',
+            'Rajshahi Branch' => 'Port Harcourt Branch',
+            'Sirajgonj Branch' => 'Ibadan Branch',
+            'Bogra Branch' => 'Enugu Branch',
+        ];
+
+        foreach ($legacyNames as $oldName => $newName) {
+            Branch::where('name', $oldName)->update(['name' => $newName]);
+        }
+
+        foreach ([
+            ['name' => 'Abuja Head Office', 'location' => 'Abuja, Nigeria'],
+            ['name' => 'Lagos Branch', 'location' => 'Lagos, Nigeria'],
+            ['name' => 'Kano Branch', 'location' => 'Kano, Nigeria'],
+            ['name' => 'Port Harcourt Branch', 'location' => 'Port Harcourt, Nigeria'],
+            ['name' => 'Ibadan Branch', 'location' => 'Ibadan, Nigeria'],
+            ['name' => 'Enugu Branch', 'location' => 'Enugu, Nigeria'],
+            ['name' => 'Kaduna Branch', 'location' => 'Kaduna, Nigeria'],
+        ] as $branch) {
+            Branch::updateOrCreate(['name' => $branch['name']], [
+                'location' => $branch['location'],
+                'description' => 'Nigerian test branch',
+            ]);
+        }
     }
 }

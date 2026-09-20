@@ -92,9 +92,7 @@ class DashboardController extends Controller
 
         // Cache and retrieve total unit cost
         Cache::forget('total_unit_cost');
-        $data['total_unit_cost'] = CustomerInvoiceItem::join('inventories', 'customer_invoice_items.item_id', '=', 'inventories.id')
-            ->selectRaw('SUM(customer_invoice_items.quantity * inventories.unit_cost) as total_cost')
-            ->value('total_cost');
+        $data['total_unit_cost'] = Inventory::sum('unit_cost');
         Cache::put('total_unit_cost', $data['total_unit_cost'], now()->addSeconds(1));
 
         // Cache and retrieve total gross profit

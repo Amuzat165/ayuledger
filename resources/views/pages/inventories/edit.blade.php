@@ -110,6 +110,8 @@
                                                 <option value="Quart (qt)" {{ $inventory->unit_of_measurement == 'Quart (qt)' ? 'selected' : '' }}>Quart (qt)</option>
                                                 <option value="Gallon (gal)" {{ $inventory->unit_of_measurement == 'Gallon (gal)' ? 'selected' : '' }}>Gallon (gal)</option>
                                                 <option value="Crates" {{ $inventory->unit_of_measurement == 'Crates' ? 'selected' : '' }}>Crates</option>
+                                                <option value="Bags" {{ $inventory->unit_of_measurement == 'Bags' ? 'selected' : '' }}>Bags</option>
+                                                <option value="Carton" {{ $inventory->unit_of_measurement == 'Carton' ? 'selected' : '' }}>Carton</option>
                                                 <option value="Pieces" {{ $inventory->unit_of_measurement == 'Pieces' ? 'selected' : '' }}>Pieces</option>
                                             </select>
                                         </td>
@@ -131,6 +133,10 @@
                                         <td>
                                             <input id="quantity_at_hand" name="quantity_at_hand" type="number" class="form-control" value="{{ $inventory->quantity_at_hand }}" required>
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="reorder_level">Reorder Level</label></td>
+                                        <td><input id="reorder_level" name="reorder_level" type="number" min="0" value="{{ old('reorder_level', $inventory->reorder_level) }}" class="form-control" required></td>
                                     </tr>
                                     <tr>
                                         <td><label for="account">Account</label></td>

@@ -94,26 +94,9 @@ class PayrollController extends Controller
             'other_allowance' => 'required|numeric',
             'deduction_payee' => 'required|numeric',
             'pension' => 'required|numeric',
-            'gross_salary' => 'required|numeric',
-            'net_pay' => 'required|numeric',
         ]);
 
-        // Create Payroll record
-        $payroll = new Payroll([
-            'branch_id' => $request->input('branch_id'),
-            'employee' => $validated['employee'],
-            'basic_salary' => $validated['basic_salary'],
-            'housing_allowance' => $validated['housing_allowance'],
-            'transport_allowance' => $validated['transport_allowance'],
-            'medical_allowance' => $validated['medical_allowance'],
-            'other_allowance' => $validated['other_allowance'],
-            'deduction_payee' => $validated['deduction_payee'],
-            'pension' => $validated['pension'],
-            'gross_salary' => $validated['gross_salary'],
-            'net_pay' => $validated['net_pay'],
-        ]);
-
-        $payroll->save();
+        Payroll::create($this->payrollData($validated));
 
         return redirect()->route('payrolls.index')->with('success', 'Payroll entry added successfully!');
     }
@@ -172,24 +155,9 @@ class PayrollController extends Controller
             'other_allowance' => 'required|numeric',
             'deduction_payee' => 'required|numeric',
             'pension' => 'required|numeric',
-            'gross_salary' => 'required|numeric',
-            'net_pay' => 'required|numeric',
         ]);
 
-        // Update Payroll record
-        $payroll->update([
-            'branch_id' => $request->input('branch_id'),
-            'employee' => $validated['employee'],
-            'basic_salary' => $validated['basic_salary'],
-            'housing_allowance' => $validated['housing_allowance'],
-            'transport_allowance' => $validated['transport_allowance'],
-            'medical_allowance' => $validated['medical_allowance'],
-            'other_allowance' => $validated['other_allowance'],
-            'deduction_payee' => $validated['deduction_payee'],
-            'pension' => $validated['pension'],
-            'gross_salary' => $validated['gross_salary'],
-            'net_pay' => $validated['net_pay'],
-        ]);
+        $payroll->update($this->payrollData($validated));
 
         return redirect()->route('payrolls.index')->with('success', 'Payroll entry updated successfully!');
     }
@@ -204,6 +172,19 @@ class PayrollController extends Controller
         $payroll = Payroll::findOrFail($id);
         $payroll->delete();
         return redirect()->route('payrolls.index')->with('success', 'Payroll deleted successfully.');
+    }
+
+    /** Calculate derived values on the server so form submission is reliable. */
+    private function payrollData(array $data): array
+    {
+        $gross = $data['basic_salary'] + $data['housing_allowance'] + $data['transport_allowance']
+            + $data['medical_allowance'] + $data['other_allowance'];
+        $net = $gross - ($gross * $data['deduction_payee'] / 100) - ($gross * $data['pension'] / 100);
+
+        return array_merge($data, [
+            'gross_salary' => $gross,
+            'net_pay' => $net,
+        ]);
     }
 
 }

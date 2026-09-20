@@ -4,13 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Database\Seeders\UsersTableSeeder;
-use Database\Seeders\BankCashTableSeeder;
 use Database\Seeders\SettingsTableSeeder;
-use Database\Seeders\CrVoucherTableSeeder;
-use Database\Seeders\DrVoucherTableSeeder;
-use Database\Seeders\ContraVoucherTableSeeder;
-use Database\Seeders\IncomeExpenseTableSeeder;
-use Database\Seeders\JournalVoucherTableSeeder;
+use Database\Seeders\ReportDataSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,27 +17,9 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(UsersTableSeeder::class);
-        if (env('DEMO_MODE') == true) {
-            $this->call(RoleManageTableSeeder::class);
-        }
         $this->call(SettingsTableSeeder::class);
-        // default system income expense type
-        if (\App\IncomeExpenseType::count() === 0) {
-            $this->call(IncomeExpenseTableSeeder::class);
-        }
-        if (env('DEMO_MODE') == true) {
-            $this->call(BranchTableSeeder::class);
-            $this->call(IncomeExpenseGroupsTableSeeder::class);
-            $this->call(IncomeExpenseHeadTableSeeder::class);
-        }
-        if (\App\BankCash::count() === 0) {
-            $this->call(BankCashTableSeeder::class);
-        }
-        if (env('DEMO_MODE') == true) {
-            $this->call(DrVoucherTableSeeder::class);
-            $this->call(CrVoucherTableSeeder::class);
-            $this->call(JournalVoucherTableSeeder::class);
-            $this->call(ContraVoucherTableSeeder::class);
-        }
+
+        // Resolve foreign keys by business keys instead of assuming fixed IDs.
+        $this->call(ReportDataSeeder::class);
     }
 }

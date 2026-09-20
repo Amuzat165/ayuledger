@@ -45,7 +45,7 @@ class ExpenseController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'type_id' => 'nullable|exists:expenses_types,id',
+            'type_id' => 'required_without:new_type|nullable|exists:expenses_types,id',
             'branch_id' => 'required|exists:branches,id',
             'new_type' => 'nullable|string|max:255',
             'account' => 'required|string|max:255',
@@ -99,7 +99,7 @@ class ExpenseController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'type_id' => 'nullable|exists:inventory_types,id',
+            'type_id' => 'required_without:new_type|nullable|exists:expenses_types,id',
             'branch_id' => 'required|exists:branches,id',
             'new_type' => 'nullable|string|max:255',
             'account' => 'required|string|max:255',
@@ -114,8 +114,8 @@ class ExpenseController extends Controller
 
         $typeId = $request->input('type_id');
 
-        if (!$typeId && $request->input('new_type')) {
-            $type = ExpensesType::create(['name' => $request->input('new_type')]);
+        if (!$typeId && $request->filled('new_type')) {
+            $type = ExpensesType::firstOrCreate(['name' => $request->input('new_type')]);
             $typeId = $type->id;
         }
 

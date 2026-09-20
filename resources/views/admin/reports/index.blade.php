@@ -29,11 +29,12 @@
                     ['reports.accounts.balance_sheet', 'Financial Position', 'View assets, liabilities, and equity.', 'fa-university', 'StatementOfFinancialPosition'],
                     ['reports.accounts.cash_flow', 'Cash Flow', 'Analyze movement of cash and bank balances.', 'fa-money-bill-alt', 'CashFlow'],
                     ['reports.accounts.retained_earnings', 'Retained Earnings', 'Review changes in retained earnings.', 'fa-chart-pie', 'RetainedEarning'],
+                    ['reports.accounts.retained_earnings', 'Statement of Changes in Equity', 'Review changes in equity over time.', 'fa-chart-pie', 'RetainedEarning'],
                     ['reports.accounts.cost_of_revenue', 'Cost of Revenue', 'Review direct costs against revenue.', 'fa-receipt', 'CostOfRevenue'],
                 ]],
                 ['title' => 'Accounting & Transactions', 'class' => 'accounting', 'items' => [
                     ['reports.accounts.ledger', 'General Ledger', 'Trace account activity and balances.', 'fa-book-open', 'Ledger'],
-                    ['reports.accounts.receive_payment', 'Receive & Payment', 'Review money received and paid.', 'fa-exchange-alt', 'ReceiveAndPayment'],
+                    ['reports.accounts.receive_payment', 'Receipt and Payment', 'Review money received and paid.', 'fa-exchange-alt', 'ReceiveAndPayment'],
                     ['reports.accounts.notes', 'Notes Report', 'Review supporting account notes.', 'fa-sticky-note', 'Notes'],
                     ['reports.general.ledger.type', 'General Ledger Report', 'Analyze ledger activity by date.', 'fa-list', 'GeneralLedger'],
                     ['reports.general.voucher', 'General Voucher Report', 'Review vouchers across transactions.', 'fa-file-alt', 'GeneralVoucher'],

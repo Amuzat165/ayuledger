@@ -20,6 +20,7 @@ class Inventory extends Model
         'unit_cost',
         'sale_price',
         'quantity_at_hand',
+        'reorder_level',
         'account',
     ];
 

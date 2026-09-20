@@ -29,9 +29,9 @@ class StoreCustomerRequest extends FormRequest
             'email' => ['required', 'email', 'unique:customers'], // hi@x.io
             'phone' => ['required', 'min:10'],
             'address' => ['required'],
-            'income_expense_type_id' => ['required', 'exists:App\IncomeExpenseType,id'],
+            'income_expense_type_id' => ['required', 'exists:income_expense_types,id'],
             'terms_of_payment' => ['required'],
-            'terms_of_payment_in_days' => ['nullable'],
+            'terms_of_payment_in_days' => ['nullable', 'integer', 'min:1'],
         ];
     }
 }

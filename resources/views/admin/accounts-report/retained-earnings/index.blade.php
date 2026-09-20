@@ -39,7 +39,7 @@
                                         <div class="form-line">
                                             <select data-live-search="true" class="form-control show-tick"
                                                 name="branch_id">
-                                                <option value="">{{ __('root.reports.select_branch_name') }}</option>
+                                                <option value="">All Branches</option>
                                                 @foreach ($branches as $Branch)
                                                 <option value="{{ $Branch->id }}">{{ $Branch->name }}</option>
                                                 @endforeach

@@ -177,7 +177,10 @@ class Helper
     public static function totalAmountByLedgerType(array $ledger_type, $branch_id = null, $date_from = null, $date_to = null)
     {
         // types
-        $types = IncomeExpenseType::whereIn('code', $ledger_type)->select('name', 'code')->get()->toArray();
+        $types = IncomeExpenseType::whereIn('code', $ledger_type)
+            ->select('name', 'code')
+            ->get()
+            ->keyBy('code');
         // transaction
         $transaction_query = Transaction::query();
         if ($branch_id) {
@@ -192,10 +195,14 @@ class Helper
         $transaction_query->with('IncomeExpenseHead', 'IncomeExpenseHead.IncomeExpenseType');
         $transactions = $transaction_query->get()->groupBy('IncomeExpenseHead.IncomeExpenseType.code');
         $items = [];
-        foreach ($types as $type) {
+        // Reports use a fixed set of ledger-type codes.  A partially configured
+        // chart of accounts must produce a zero balance, rather than an undefined
+        // array key (and a 500 response), for a missing type.
+        foreach ($ledger_type as $code) {
+            $type = $types->get($code);
             $amount = 0;
-            if ($transactions->has($type['code'])) {
-                foreach ($transactions[$type['code']] as $transaction) {
+            if ($transactions->has($code)) {
+                foreach ($transactions[$code] as $transaction) {
                     // dr
                     if ($transaction->IncomeExpenseHead->type == 1) {
                         $amount += $transaction->dr - $transaction->cr;
@@ -204,8 +211,8 @@ class Helper
                     }
                 }
             }
-            $items[$type['code']] = [
-                'name' => $type['name'],
+            $items[$code] = [
+                'name' => $type ? $type->name : 'Ledger Type ' . $code,
                 'value' => $amount,
             ];
         }
@@ -229,12 +236,9 @@ class Helper
     {
         # code... 
         $data = [];
-        if (Cache::get('branches') && Cache::get('branches') != null) {
-            $data['branches'] = Cache::get('branches');
-        } else {
-            $data['branches'] = Branch::all();
-            Cache::put('branches', $data['branches']);
-        }
+        // Branches are used by every report; always read the active list so
+        // newly created or seeded branches are immediately available.
+        $data['branches'] = Branch::all();
         if (Cache::get('bank_cashes') && Cache::get('bank_cashes') != null) {
             $data['bank_cashes'] = Cache::get('bank_cashes');
         } else {

@@ -85,6 +85,19 @@ class FixedAssetScheduleController extends Controller
             ->orderBy('code', 'asc')
             ->get();
 
+        $FixedAssetDetails = [
+            119 => [
+                'headDetails' => [
+                    'StartDate' => [],
+                    'EndDate' => [],
+                    'TotalBalance' => [
+                        'start_balance' => 0,
+                        'end_balance' => 0,
+                    ],
+                ],
+            ],
+        ];
+
         foreach ($CostOfRevenueHeadTypes as $costOfRevenueHeadType) {
             $FixedAssetDetails[$costOfRevenueHeadType->code] = $TransactionsModel->getBalanceByIncExpHeadTypeIdBranchesTwoDate($costOfRevenueHeadType->id, $uniqueBranches, $FixedAssetScheduleStartingDate, $from, $FixedAssetScheduleStartingDate, $to);
         }

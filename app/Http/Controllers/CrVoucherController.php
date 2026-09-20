@@ -483,12 +483,8 @@ class CrVoucherController extends Controller
     {
         # code... 
         $data = [];
-        if (Cache::get('branches') && Cache::get('branches') != null) {
-            $data['branches'] = Cache::get('branches');
-        } else {
-            $data['branches'] = Branch::all();
-            Cache::put('branches', $data['branches']);
-        }
+        // Do not use the shared branch cache here; reports must show new branches immediately.
+        $data['branches'] = Branch::all();
         if (Cache::get('bank_cashes') && Cache::get('bank_cashes') != null) {
             $data['bank_cashes'] = Cache::get('bank_cashes');
         } else {

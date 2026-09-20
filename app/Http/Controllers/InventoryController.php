@@ -36,6 +36,7 @@ class InventoryController extends Controller
             'unit_cost' => 'required|numeric',
             'sale_price' => 'required|numeric',
             'quantity_at_hand' => 'required|integer',
+            'reorder_level' => 'required|integer|min:0',
             'account' => 'required|string',
         ]);
 
@@ -61,6 +62,7 @@ class InventoryController extends Controller
             'unit_cost' => $request->input('unit_cost'),
             'sale_price' => $request->input('sale_price'),
             'quantity_at_hand' => $request->input('quantity_at_hand'),
+            'reorder_level' => $request->input('reorder_level'),
             'account' => $request->input('account'),
         ]);
 
@@ -90,6 +92,7 @@ class InventoryController extends Controller
             'unit_cost' => 'required|numeric',
             'sale_price' => 'required|numeric',
             'quantity_at_hand' => 'required|integer',
+            'reorder_level' => 'required|integer|min:0',
             'account' => 'required|string',
         ]);
 
@@ -111,6 +114,7 @@ class InventoryController extends Controller
             'unit_cost' => $request->input('unit_cost'),
             'sale_price' => $request->input('sale_price'),
             'quantity_at_hand' => $request->input('quantity_at_hand'),
+            'reorder_level' => $request->input('reorder_level'),
             'account' => $request->input('account'),
         ]);
 

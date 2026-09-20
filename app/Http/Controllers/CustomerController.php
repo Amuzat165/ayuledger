@@ -10,6 +10,7 @@ use App\Helpers\ControllerHelper;
 use App\Http\Requests\StoreCustomerRequest;
 use Illuminate\Http\Request;
 use App\IncomeExpenseType;
+use Illuminate\Validation\Rule;
 
 class CustomerController extends Controller
 {
@@ -70,14 +71,17 @@ class CustomerController extends Controller
                 'address' => 'somewhere',
                 'income_expense_type_id' => 4,
                 'terms_of_payment' => "COD",
+                'terms_of_payment_in_days' => null,
             ]
         ]);
     }
 
     public function store(StoreCustomerRequest $request)
     {
-        // dd($validated);
         $validated = $request->validated();
+        $validated['terms_of_payment_in_days'] = $validated['terms_of_payment'] === 'Pay in number of days'
+            ? $validated['terms_of_payment_in_days']
+            : null;
         Customer::create($validated);
 
         return redirect('/customers')->with('success', 'customer created successfully.');
@@ -121,12 +125,17 @@ class CustomerController extends Controller
         $validated = $request->validate([
             'branch_id' => 'required|exists:branches,id',
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => ['required', 'email', Rule::unique('customers', 'email')->ignore($customer->id)],
             'phone' => 'required',
             'address' => 'required',
             'income_expense_type_id' => 'required|exists:income_expense_types,id',
             'terms_of_payment' => 'required',
+            'terms_of_payment_in_days' => 'nullable|integer|min:1',
         ]);
+
+        $validated['terms_of_payment_in_days'] = $validated['terms_of_payment'] === 'Pay in number of days'
+            ? ($validated['terms_of_payment_in_days'] ?? $customer->terms_of_payment_in_days)
+            : null;
 
         $customer->fill($validated)->save();
 
