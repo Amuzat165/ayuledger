@@ -318,6 +318,9 @@ class Helper
     {
         # code...   
         $transaction_query = Transaction::query();
+        if ($bank_cash_id) {
+            $transaction_query->where('bank_cash_id', $bank_cash_id);
+        }
         if ($branch_id) {
             $transaction_query->where('branch_id', $branch_id);
         }

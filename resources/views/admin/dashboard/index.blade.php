@@ -76,7 +76,7 @@
                 <div class="financial-kpi kpi-positive"><div class="kpi-icon"><i class="fas fa-chart-line"></i></div><p class="kpi-label">Total Revenue</p><p class="kpi-value">{{ number_format($total_sales, 2) }}</p></div>
                 <div class="financial-kpi kpi-negative"><div class="kpi-icon"><i class="fas fa-arrow-down"></i></div><p class="kpi-label">Total Expenses</p><p class="kpi-value">{{ number_format($total_expenses, 2) }}</p></div>
                 <div class="financial-kpi kpi-positive"><div class="kpi-icon"><i class="fas fa-balance-scale"></i></div><p class="kpi-label">Net Profit / Loss</p><p class="kpi-value">{{ number_format($total_net_profit, 2) }}</p></div>
-                <div class="financial-kpi"><div class="kpi-icon"><i class="fas fa-university"></i></div><p class="kpi-label">Cash &amp; Bank Balance</p><p class="kpi-value">&mdash;</p></div>
+                <div class="financial-kpi"><div class="kpi-icon"><i class="fas fa-university"></i></div><p class="kpi-label">Cash &amp; Bank Balance</p><p class="kpi-value">{{ number_format($cash_and_bank_balance, 2) }}</p></div>
                 <div class="financial-kpi kpi-positive"><div class="kpi-icon"><i class="fas fa-chart-area"></i></div><p class="kpi-label">Gross Profit</p><p class="kpi-value">{{ number_format($total_gross_profit, 2) }}</p></div>
                 <div class="financial-kpi"><div class="kpi-icon"><i class="fas fa-boxes"></i></div><p class="kpi-label">Total Unit Cost</p><p class="kpi-value">{{ number_format($total_unit_cost, 2) }}</p></div>
             </div>

@@ -17,13 +17,13 @@ class SettingsTableSeeder extends Seeder
         Setting::updateOrCreate([
             'settings_name' => 'General Settings',
         ], [
-            'content' => '{"company_name":"E-Accounts","contract_person":"+8801738578683","email":"mahmud2074office@gmail.com","phone":"+8801521497833","address_1":"Wakil Tower [Level 6] Ta 131 Culsan-Badda Link Road Gulsan 1 Dhaka 1212 Bangladesh","address_2":null,"city":"Dhaka","state":"Gulsan 1","zip_code":"1212","company_logo":"upload\/company-logo\/e.png"}'
+            'content' => '{"company_name":"AYUGLOBAL","contract_person":"+2348031327202","email":"mohammedabdulhakeem5@gmail.com","phone":"+2348031327202","address_1":"Gwarinpa Abuja","address_2":null,"city":"Abuja","state":"FCT","zip_code":"900108","company_logo":"upload\/company-logo\/e.png"}'
         ]);
 
         Setting::updateOrCreate([
             'settings_name' => 'System Settings',
         ], [
-            'content' => '{"date_format":"M d, Y","timezone":"Asia\/Dhaka","currency_code":"BDT","currency_symbol":"\u09f3","is_code":"code","is_rtl":"No","currency_position":"Suffix","fixed_asset_schedule_starting_date":"2000-01-01"}'
+            'content' => '{"date_format":"d m Y","timezone":"Africa\/Lagos","currency_code":"NGN","currency_symbol":"\u20a6","is_code":"code","is_rtl":"No","currency_position":"Prefix","fixed_asset_schedule_starting_date":"2026-10-01"}'
         ]);
     }
 }

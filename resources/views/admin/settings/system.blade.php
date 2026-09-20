@@ -59,6 +59,9 @@ $ParentRouteName = 'settings.system';
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control show-tick"
                                                     name="date_format" id="">
+                                                    <option @if ($settings['date_format']=='d m Y' ) selected="" @endif
+                                                        value="d m Y">dd mm YYYY (05 12 2019)
+                                                    </option>
                                                     <option @if ($settings['date_format']=='d-m-Y' ) selected="" @endif
                                                         value="d-m-Y">dd-mm-YYYY (05-12-2019)
                                                     </option>
@@ -456,29 +459,11 @@ $ParentRouteName = 'settings.system';
                                         <p>Currency Code</p>
                                         <div class="form-group form-float">
                                             <div class="form-line">
-                                                <select name="currency_code" data-live-search="true"
+                                                <select name="currency_code" id="currency_code" data-live-search="true"
                                                     class="form-control show-tick">
-                                                    <option @if ($settings['currency_code']=='NGN' ) selected="" @endif
-                                                        value="NGN">NGN
-                                                    </option>
-                                                    <option @if ($settings['currency_code']=='BDT' ) selected="" @endif
-                                                        value="BDT">BDT
-                                                    </option>
-                                                    <option @if ($settings['currency_code']=='USD' ) selected="" @endif
-                                                        value="USD">USD
-                                                    </option>
-                                                    <option @if ($settings['currency_code']=='INR' ) selected="" @endif
-                                                        value="INR">INR
-                                                    </option>
-                                                    <option @if ($settings['currency_code']=='GBP' ) selected="" @endif
-                                                        value="GBP">GBP
-                                                    </option>
-                                                    <option @if ($settings['currency_code']=='JPY' ) selected="" @endif
-                                                        value="JPY">JPY
-                                                    </option>
-                                                    <option @if ($settings['currency_code']=='NGN' ) selected="" @endif
-                                                        value="NGN">NGN
-                                                    </option>
+                                                    @foreach (config('currencies') as $code => $symbol)
+                                                        <option value="{{ $code }}" @if ($settings['currency_code'] === $code) selected="selected" @endif>{{ $code }} - {{ $symbol }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
@@ -487,24 +472,9 @@ $ParentRouteName = 'settings.system';
                                         <p>Currency Symbol </p>
                                         <div class="form-group form-float">
                                             <div class="form-line">
-                                                <select name="currency_symbol" data-live-search="true"
-                                                    class="form-control show-tick">
-                                                    <option @if ($settings['currency_symbol']=='₦' ) selected="" @endif
-                                                        value="₦">NGN &#8358;
-                                                    </option>
-                                                    <option @if ($settings['currency_symbol']=='$' ) selected="" @endif
-                                                        value="$">USD &#36;
-                                                    </option>
-                                                    <option @if ($settings['currency_symbol']=='₹' ) selected="" @endif
-                                                        value="₹">Rupee &#8377;
-                                                    </option>
-                                                    <option @if ($settings['currency_symbol']=='£' ) selected="" @endif
-                                                        value="£">Pounds sterling &#163;
-                                                    </option>
-                                                    <option @if ($settings['currency_symbol']=='¥' ) selected="" @endif
-                                                        value="¥">Japanese yen &#165;
-                                                    </option>
-                                                </select>
+                                                <input type="text" id="currency_symbol"
+                                                    class="form-control" readonly
+                                                    value="{{ config('currencies.' . $settings['currency_code'], $settings['currency_symbol']) }}">
                                             </div>
                                         </div>
                                     </div>
@@ -645,6 +615,13 @@ $ParentRouteName = 'settings.system';
 
 
 <script>
+    (function () {
+        var currencies = @json(config('currencies'));
+        $('#currency_code').on('change changed.bs.select', function () {
+            $('#currency_symbol').val(currencies[this.value] || '');
+        });
+    })();
+
     @if (Session::has('success'))
             toastr["success"]('{{ Session::get('success') }}');
         @endif

@@ -31,7 +31,7 @@ class InitialIncomeExpenseHeadBalanceController extends Controller
     public function index()
     {
 
-        $items = $this->parentModel::where('voucher_type', $this->voucher_type)->orderBy('id', 'dsc')->paginate(60);
+        $items = $this->parentModel::where('voucher_type', $this->voucher_type)->orderBy('id', 'desc')->paginate(60);
         return view($this->parentView . '.index')->with('items', $items);
     }
 
@@ -86,7 +86,7 @@ class InitialIncomeExpenseHeadBalanceController extends Controller
 
         $voucher_info = $this->parentModel::where('voucher_type', $this->voucher_type)
             ->withTrashed()
-            ->orderBy('voucher_no', 'dsc')
+            ->orderBy('voucher_no', 'desc')
             ->get()
             ->first();
 

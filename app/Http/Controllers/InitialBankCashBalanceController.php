@@ -81,7 +81,7 @@ class InitialBankCashBalanceController extends Controller
 
         $voucher_info = $this->parentModel::where('voucher_type', $this->voucher_type)
             ->withTrashed()
-            ->orderBy('voucher_no', 'dsc')
+            ->orderBy('voucher_no', 'desc')
             ->get()
             ->first();
 

@@ -15,8 +15,8 @@ return [
     */
     
     'developed_label' => 'Powered By',
-    'developed_by' => 'E-Account',
-    'developed_link' => 'http://www.eaccount.xyz',
+    'developed_by' => 'AYUU GLOBAL',
+    'developed_link' => 'http://www.',
     'version' => '1.0.0',
 
     /*
@@ -24,17 +24,17 @@ return [
     |  General Settings Manage
     |--------------------------------------------------------------------------
     */
-    'company_name' => 'E-Accounts',
-    'contract_person' => '+8801737578683',
-    'email' => 'mahmud120520@gmail.com',
-    'phone' => '+8801521497833',
-    'address_1' => 'Gulsan Link Road.',
+    'company_name' => 'ayuglobal',
+    'contract_person' => '+2348031327202',
+    'email' => 'mohammedabdulhakeem5@gmail.com',
+    'phone' => '+2348031327202',
+    'address_1' => 'Gwarinpa Abuja.',
     'address_2' => '',
-    'city' => 'Dhaka',
+    'city' => 'Abuja',
     'state' => '',
-    'zip_code' => '1229',
+    'zip_code' => '900108',
     // 'company_logo' => 'upload/company-logo/e.png',
-    'company_logo' => 'upload/company-logo/k.png',
+    'company_logo' => 'upload/company-logo/e.png',
 
     /*
     |--------------------------------------------------------------------------
@@ -42,11 +42,11 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'date_format' => 'M d, Y',
-    'timezone' => 'Asia/Dhaka',
+    'date_format' => 'd m Y',
+    'timezone' => 'Africa/Lagos',
     'currency_code' => 'NGN',
-    'currency_symbol' => '&#2547;',
+    'currency_symbol' => '₦',
     'is_code' => 'code',
-    'currency_position' => 'Suffix',
-    'fixed_asset_schedule_starting_date' => '2000-01-01',
+    'currency_position' => 'Prefix',
+    'fixed_asset_schedule_starting_date' => '2026-10-01',
 ];

@@ -55,6 +55,12 @@ class DashboardController extends Controller
         $data['total_bank_cashes'] = BankCash::count();
         Cache::put('total_bank_cashes', $data['total_bank_cashes'], now()->addSeconds(1));
 
+        // A bank/cash account increases with credits and decreases with debits.
+        // Eloquent excludes soft-deleted transactions automatically.
+        $data['cash_and_bank_balance'] = (int) Transaction::whereNotNull('bank_cash_id')
+            ->selectRaw('COALESCE(SUM(cr), 0) - COALESCE(SUM(dr), 0) AS balance')
+            ->value('balance');
+
         // Cache and retrieve total users
         Cache::forget('total_users');
         $data['total_users'] = User::count();

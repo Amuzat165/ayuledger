@@ -404,7 +404,7 @@ class ContraVoucherController extends Controller
             })
             ->onlyTrashed()
             ->with('Branch', 'BankCash')
-            ->orderBy('created_at', 'dsc')
+            ->orderBy('created_at', 'desc')
             ->paginate(60);
 
         return view($this->parentView . '.trashed', $data)

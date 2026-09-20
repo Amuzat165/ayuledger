@@ -82,11 +82,20 @@ class SettingsController extends Controller
     public function system_update(Request $request)
     {
         $setting_system = Setting::where('settings_name', 'System Settings')->get()->first();
+        $currencies = config('currencies');
+        $currencyCode = $request->currency_code;
+
+        if (!array_key_exists($currencyCode, $currencies)) {
+            return redirect()->back()->withInput()->withErrors([
+                'currency_code' => 'Please select a valid currency.',
+            ]);
+        }
+
         $data = array(
             'date_format' => $request->date_format,
             'timezone' => $request->timezone,
-            'currency_code' => $request->currency_code,
-            'currency_symbol' => $request->currency_symbol,
+            'currency_code' => $currencyCode,
+            'currency_symbol' => $currencies[$currencyCode],
             'is_code' => $request->is_code,
             'is_rtl' => $request->is_rtl,
             'currency_position' => $request->currency_position,
