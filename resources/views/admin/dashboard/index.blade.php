@@ -587,7 +587,10 @@
 
             function chartConfig(type, datasets) {
                 var config = Helper.configChart(type, labels, datasets);
-                config.options.legend = { position: 'bottom', labels: { usePointStyle: true, padding: 18 } };
+                config.options.legend = {
+                    position: 'bottom',
+                    labels: { boxWidth: 12, usePointStyle: true, padding: 18 }
+                };
                 config.options.tooltips = { mode: 'index', intersect: false };
                 config.options.hover = { mode: 'index', intersect: false };
                 config.options.scales.xAxes = [{ gridLines: { display: false } }];
