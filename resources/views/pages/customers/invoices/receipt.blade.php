@@ -52,7 +52,7 @@
         <a class="btn-back" href="{{ route('customers.invoices.index') }}">Back</a>
     </div>
     <div class="receipt-header">
-        <h1>Specledgers</h1>
+        <h1>{{ config('settings.company_name') }}</h1>
     </div>
     <div class="receipt-details">
         <table>

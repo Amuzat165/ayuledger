@@ -2,7 +2,7 @@
 
 <style>
     :root { --accounting-ink: #183b56; --accounting-teal: #0f766e; --accounting-line: #d9e3e8; --accounting-muted: #6b7c87; }
-    .accounting-sidebar { background: #f8fbfc; border-right: 1px solid var(--accounting-line); box-shadow: none; }
+    .accounting-sidebar { background: #f8fbfc; border-right: 1px solid var(--accounting-line); box-shadow: none; width: 210px; }
     .accounting-sidebar .sidebar-brand { padding: 22px 20px 18px; border-bottom: 1px solid var(--accounting-line); }
     .accounting-sidebar .sidebar-brand strong { color: var(--accounting-ink); font-size: 18px; }
     .accounting-sidebar .sidebar-brand small { display: block; color: var(--accounting-muted); font-size: 11px; margin-top: 4px; }
@@ -29,11 +29,17 @@
     .accounting-sidebar .ml-menu li > a.toggled > i,
     .accounting-sidebar .ml-menu li > a.toggled > span { color: var(--accounting-teal) !important; opacity: 1 !important; filter: none !important; -webkit-font-smoothing: antialiased; }
     .accounting-sidebar .legal { border-top: 1px solid var(--accounting-line); color: var(--accounting-muted); padding: 16px 20px; font-size: 11px; }
-    body.accounting-collapsed .accounting-sidebar { width: 76px; }
+    body.accounting-collapsed .accounting-sidebar { width: 100px; }
     body.accounting-collapsed .accounting-sidebar .sidebar-brand strong, body.accounting-collapsed .accounting-sidebar .sidebar-brand small, body.accounting-collapsed .accounting-sidebar .module-label, body.accounting-collapsed .accounting-sidebar .list span, body.accounting-collapsed .accounting-sidebar .legal { display: none; }
     body.accounting-collapsed .accounting-sidebar .list > li > a { text-align: center; padding: 14px 0; }
     body.accounting-collapsed .accounting-sidebar .list > li > a i { width: auto; }
     body.accounting-collapsed .accounting-sidebar .ml-menu { display: none !important; }
+    @media (min-width: 768px) {
+        section.content { margin-left: 220px; }
+        body.accounting-collapsed section.content { margin-left: 100px; }
+        section.content[dir="rtl"] { margin: 100px 220px 0 15px; }
+        body.accounting-collapsed section.content[dir="rtl"] { margin: 100px 91px 0 15px; }
+    }
     @media (max-width: 767px) { .accounting-sidebar { transform: translateX(-100%); transition: transform .2s ease; z-index: 1001; } body.accounting-drawer-open .accounting-sidebar { transform: translateX(0); } }
 </style>
 

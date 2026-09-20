@@ -28,8 +28,7 @@
                     ['reports.accounts.trial_balance', 'Trial Balance', 'Review debit and credit balances.', 'fa-balance-scale', 'TrialBalance'],
                     ['reports.accounts.balance_sheet', 'Financial Position', 'View assets, liabilities, and equity.', 'fa-university', 'StatementOfFinancialPosition'],
                     ['reports.accounts.cash_flow', 'Cash Flow', 'Analyze movement of cash and bank balances.', 'fa-money-bill-alt', 'CashFlow'],
-                    ['reports.accounts.retained_earnings', 'Retained Earnings', 'Review changes in retained earnings.', 'fa-chart-pie', 'RetainedEarning'],
-                    ['reports.accounts.retained_earnings', 'Statement of Changes in Equity', 'Review changes in equity over time.', 'fa-chart-pie', 'RetainedEarning'],
+                    ['reports.accounts.retained_earnings', 'Statement of Change in Equity', 'Review changes in equity over time.', 'fa-chart-pie', 'RetainedEarning'],
                     ['reports.accounts.cost_of_revenue', 'Cost of Revenue', 'Review direct costs against revenue.', 'fa-receipt', 'CostOfRevenue'],
                 ]],
                 ['title' => 'Accounting & Transactions', 'class' => 'accounting', 'items' => [

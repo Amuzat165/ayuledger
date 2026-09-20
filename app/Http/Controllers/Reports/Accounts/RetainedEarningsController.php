@@ -35,8 +35,8 @@ class RetainedEarningsController extends Controller
         $date = $now->format(Config('settings.date_format') . ' h:i:s');
         $extra = array(
             'current_date_time' => $date,
-            'module_name' => 'Retained Earnings Branch',
-            'voucher_type' => 'RETAINED EARNINGS'
+            'module_name' => 'Statement of Change in Equity',
+            'voucher_type' => 'STATEMENT OF CHANGE IN EQUITY'
         );
         // branches from cache
         $branches = Helper::__getBranchBankCashIncomeExpenseHead()['branches'];
