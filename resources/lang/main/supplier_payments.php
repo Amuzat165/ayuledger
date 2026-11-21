@@ -1,0 +1,27 @@
+<?php
+return [
+    'history_title' => 'Supplier Payment History',
+    'history_intro' => 'Review payments recorded against Supplier Invoices.',
+    'date_from' => 'Payment Date From',
+    'date_to' => 'Payment Date To',
+    'apply_filters' => 'Apply Filters',
+    'reset_filters' => 'Reset Filters',
+    'no_history' => 'No supplier payments have been recorded yet.',
+    'no_matching_payments' => 'No supplier payments match these filters.',
+    'view_supplier_invoice' => 'View Supplier Invoice',
+    'make_payment' => 'Make Payment', 'payment_amount' => 'Payment Amount', 'payment_date' => 'Payment Date',
+    'payment_reference' => 'Payment Reference', 'payment_method' => 'Payment Method', 'amount_paid' => 'Amount Paid',
+    'amount_remaining' => 'Amount Remaining', 'payment_history' => 'Payment History', 'payment_receipt' => 'Payment Receipt',
+    'supplier' => 'Supplier', 'internal_invoice_number' => 'Internal Supplier Invoice Number',
+    'previous_amount_remaining' => 'Previous Amount Remaining', 'new_amount_remaining' => 'New Amount Remaining',
+    'recorded_by' => 'Recorded by', 'select_method' => 'Select a payment method/account', 'not_available' => 'Not available',
+    'no_payments' => 'No payments have been recorded for this Supplier Invoice.',
+    'validation_help' => 'Please review the payment details below.', 'receipt_footer' => 'This receipt confirms the payment recorded above.',
+    'messages' => ['saved' => 'Payment recorded.'],
+    'errors' => [
+        'positive_amount' => 'Payment Amount must be greater than zero.', 'invalid_amount' => 'Enter a valid amount with no more than two decimal places.',
+        'invalid_date' => 'Enter a valid Payment Date.', 'invoice_not_payable' => 'Only an approved Supplier Invoice can receive payment.',
+        'no_balance' => 'This Supplier Invoice has no Amount Remaining.', 'exceeds_balance' => 'Payment Amount cannot exceed Amount Remaining.',
+        'invalid_method' => 'Select an active Payment Method or account.', 'submission_conflict' => 'This payment submission was already used with different details.',
+    ],
+];

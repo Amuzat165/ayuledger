@@ -6,6 +6,7 @@ use App\User;
 use App\Tenant;
 use App\TenantMembership;
 use App\BusinessSetting;
+use App\Profile;
 use App\SubscriptionPlan;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -133,6 +134,11 @@ class RegisterController extends Controller
                     'role_manage_id' => $user->role_manage_id,
                     'status' => 'pending',
                 ]);
+
+                $profile = new Profile();
+                $profile->user_id = $user->id;
+                $profile->business_id = $tenant->id;
+                $profile->save();
 
                 return $user;
             });

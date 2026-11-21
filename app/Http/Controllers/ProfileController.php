@@ -23,7 +23,7 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $profile = auth()->user()->profile;
+        $profile = auth()->user()->profile()->firstOrCreate([]);
         $languages = Language::get();
         $language_id = auth()->user()->language_id;
         return view('admin.profile.index', compact('languages', 'language_id'))->with('profile', $profile);
@@ -87,27 +87,28 @@ class ProfileController extends Controller
         ]);
 
         $user = Auth::user();
-        $user->profile->first_name = $request['first_name'];
-        $user->profile->last_name = $request['last_name'];
-        $user->profile->phone_number = $request['phone_number'];
-        $user->profile->designation = $request['designation'];
-        $user->profile->gender = $request['gender'];
-        $user->profile->NID = $request['NID'];
-        $user->profile->education = $request['education'];
-        $user->profile->permanent_address = $request['permanent_address'];
-        $user->profile->description = $request['description'];
-        $user->profile->present_address = $request['present_address'];
+        $profile = $user->profile()->firstOrCreate([]);
+        $profile->first_name = $request['first_name'];
+        $profile->last_name = $request['last_name'];
+        $profile->phone_number = $request['phone_number'];
+        $profile->designation = $request['designation'];
+        $profile->gender = $request['gender'];
+        $profile->NID = $request['NID'];
+        $profile->education = $request['education'];
+        $profile->permanent_address = $request['permanent_address'];
+        $profile->description = $request['description'];
+        $profile->present_address = $request['present_address'];
 
         if ($request->hasFile('avatar')) {
-            if (!empty($user->profile->avatar)  and $user->profile->avatar != 'upload/avatar/avatar.png') {
-                unlink($user->profile->avatar); // Delete previous image file
+            if (!empty($profile->avatar)  and $profile->avatar != 'upload/avatar/avatar.png') {
+                unlink($profile->avatar); // Delete previous image file
             }
             $company_logo = $request->avatar;
             $temporaryName = time() . $company_logo->getClientOriginalName();
             $company_logo->move("upload/avatar", $temporaryName);
-            $user->profile->avatar = 'upload/avatar/' . $temporaryName;
+            $profile->avatar = 'upload/avatar/' . $temporaryName;
         }
-        $user->profile->save();
+        $profile->save();
         if (!env('DEMO_MODE')) {
             $user->language_id = $request->input('language_id');
             $user->save();

@@ -7,8 +7,7 @@
 !/resources/lang/
 !/resources/lang/main/
 /resources/lang/main/*
-!/resources/lang/main/header.php
-!/resources/lang/main/auth.php
+!/resources/lang/main/*.php
 /storage/*.key
 storage/fonts/dompdf_font_family_cache.php
 
@@ -23,5 +22,3 @@ yarn-error.log
 
 .ignore
 /public/store
-!/resources/lang/main/ui.php
-!/resources/lang/main/financial.php

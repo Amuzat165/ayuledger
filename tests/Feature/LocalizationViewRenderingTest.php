@@ -62,6 +62,7 @@ class LocalizationViewRenderingTest extends TestCase
         ];
         $profileHtml = $this->assertRenderedView('admin.profile.index', ['profile' => $profile, 'languages' => collect(), 'language_id' => null], __('ui.profile.profile_settings'));
         $this->assertStringContainsString('name="first_name"', $profileHtml);
+        $this->assertStringContainsString('<h3>Test Render</h3>', $profileHtml);
 
         $generalSettings = array_merge(config('settings'), [
             'company_name' => 'L05 Render Test', 'contract_person' => 'Test Contact', 'email' => 'render@example.test',

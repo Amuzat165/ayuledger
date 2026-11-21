@@ -69,9 +69,9 @@
 
                         </div>
                         <div class="content-area">
-                            <h3>{{ $profile['last_name'] }} {{ $profile['first_name'] }}</h3>
-                            <p>{{ $profile['designation'] }}</p>
-                            <p>{{ App\User::find($profile['user_id'])->role['name'] }}</p>
+                            <h3>{{ $profile['last_name'] ?? '' }} {{ $profile['first_name'] ?? '' }}</h3>
+                            <p>{{ $profile['designation'] ?? '' }}</p>
+                            <p>{{ data_get(App\User::find($profile['user_id']), 'role.name', '') }}</p>
                         </div>
                     </div>
                 </div>

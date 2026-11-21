@@ -1,65 +1,80 @@
-@extends('layouts.authentication')
+@extends('layouts.etemplate')
 
 @section('auth-body')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('auth.reset_password') }}</div>
+    @include('auth.partials.login-layout-styles')
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('password.update') }}">
-                        @csrf
+    <div class="login-shell">
+        <div class="login-panel">
+            @include('auth.partials.login-hero')
 
-                        <input type="hidden" name="token" value="{{ $token }}">
-
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('auth.email_address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ $email ?? old('email') }}" required autofocus>
-
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('ui.forms.password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('ui.forms.confirm_password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('auth.reset_password') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+            <section class="login-form-area">
+                <div class="login-form-head">
+                    <h2>{{ __('auth.reset_password') }}</h2>
+                    <p>{{ __('Choose a new password for your account.') }}</p>
                 </div>
-            </div>
+
+                @if ($errors->any())
+                    <div class="login-error" role="alert">{{ $errors->first() }}</div>
+                @endif
+
+                <form method="POST" action="{{ route('password.update') }}">
+                    @csrf
+                    <input type="hidden" name="token" value="{{ $token }}">
+
+                    <div class="login-field">
+                        <label for="email">{{ __('auth.email_address') }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                            <input id="email"
+                                   type="email"
+                                   class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}"
+                                   name="email"
+                                   value="{{ $email ?? old('email') }}"
+                                   autocomplete="email"
+                                   autofocus
+                                   required>
+                        </div>
+                        @if ($errors->has('email'))
+                            <span class="login-error" role="alert">{{ $errors->first('email') }}</span>
+                        @endif
+                    </div>
+
+                    <div class="login-field">
+                        <label for="password">{{ __('ui.forms.password') }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-key" aria-hidden="true"></i></span>
+                            <input id="password"
+                                   type="password"
+                                   class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}"
+                                   name="password"
+                                   autocomplete="new-password"
+                                   required>
+                        </div>
+                        @if ($errors->has('password'))
+                            <span class="login-error" role="alert">{{ $errors->first('password') }}</span>
+                        @endif
+                    </div>
+
+                    <div class="login-field">
+                        <label for="password-confirm">{{ __('ui.forms.confirm_password') }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-key" aria-hidden="true"></i></span>
+                            <input id="password-confirm"
+                                   type="password"
+                                   class="form-control"
+                                   name="password_confirmation"
+                                   autocomplete="new-password"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="login-submit">
+                        <button type="submit" class="btn btn-primary">{{ __('auth.reset_password') }}</button>
+                    </div>
+                </form>
+
+                <a class="login-back-link" href="{{ route('login') }}">{{ __('ui.auth.log_in') }}</a>
+            </section>
         </div>
     </div>
-</div>
 @endsection
