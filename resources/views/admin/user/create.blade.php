@@ -60,6 +60,10 @@ $ParentRouteName = 'user';
                                 <div class="alert alert-info">
                                     Tenant users: {{ $tenantUserCount }} of {{ $tenantUserLimit }} allowed
                                 </div>
+                            @else
+                                <div class="alert alert-info">
+                                    Tenant users: {{ $tenantUserCount }} (unlimited by the current plan)
+                                </div>
                             @endif
                             <form class="form" id="form_validation" method="post"
                                 action="{{ route($ParentRouteName.'.store') }}">
@@ -122,7 +126,7 @@ $ParentRouteName = 'user';
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="form-line">
                                             <button type="submit" class="btn btn-primary m-t-15 waves-effect"
-                                                @if($tenantUserCount >= $tenantUserLimit) disabled @endif>
+                                                @if($tenantUserLimit !== null && $tenantUserCount >= $tenantUserLimit) disabled @endif>
                                                 {{ __('root.common.save') }}
                                             </button>
                                         </div>

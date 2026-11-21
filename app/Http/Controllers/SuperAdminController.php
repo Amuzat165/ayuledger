@@ -15,8 +15,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use App\Services\PlatformEmail;
+use App\User;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
+use Carbon\Carbon;
 
 class SuperAdminController extends Controller
 {
@@ -32,9 +35,10 @@ class SuperAdminController extends Controller
     public function index()
     {
         $businesses = BusinessSetting::with('tenant')->orderByDesc('id')->paginate(20);
+        $plansBySlug = SubscriptionPlan::all()->keyBy('slug');
         $payments = BusinessPaymentVerification::with('business')->where('status', 'pending')->latest()->get();
         $allPayments = BusinessPaymentVerification::with('business')->latest()->paginate(30, ['*'], 'payments_page');
-        return view('superadmin.dashboard', compact('businesses', 'payments', 'allPayments'));
+        return view('superadmin.dashboard', compact('businesses', 'plansBySlug', 'payments', 'allPayments'));
     }
 
     public function emailSettings()
@@ -141,6 +145,51 @@ class SuperAdminController extends Controller
         return back()->with('status', $business->business_name . ' was rejected.');
     }
 
+    public function sendSubscriptionReminder(BusinessSetting $business, PlatformEmail $email)
+    {
+        if (!$business->subscription_expires_at) {
+            return back()->with('error', 'This business does not have a subscription expiration date.');
+        }
+
+        $expiresAt = Carbon::parse($business->subscription_expires_at)->startOfDay();
+        $daysUntilExpiry = Carbon::today()->diffInDays($expiresAt, false);
+        if ($daysUntilExpiry > 0) {
+            $expiryMessage = 'Your subscription expires in ' . $daysUntilExpiry . ' day(s), on ' . $expiresAt->toDateString() . '.';
+        } elseif ($daysUntilExpiry === 0) {
+            $expiryMessage = 'Your subscription expires today, ' . $expiresAt->toDateString() . '.';
+        } else {
+            $expiryMessage = 'Your subscription expired ' . abs($daysUntilExpiry) . ' day(s) ago, on ' . $expiresAt->toDateString() . '.';
+        }
+
+        $renewalUrl = URL::temporarySignedRoute(
+            'business.renewal.show',
+            now()->addDays(30),
+            ['business' => $business->id]
+        );
+        $lines = [
+            'Hello,',
+            $expiryMessage,
+            'Renew now to keep your business workspace active and avoid interruption.',
+            'Review your plan, pay online with Paystack, or submit payment details for verification:',
+            $renewalUrl,
+            'This secure renewal link expires in 30 days.',
+        ];
+
+        $user = User::where('business_id', $business->id)->first();
+        $recipients = array_unique(array_filter([$business->business_email, optional($user)->email]));
+        if (!$recipients) {
+            return back()->with('error', 'No business or account email address is available for this reminder.');
+        }
+
+        foreach ($recipients as $recipient) {
+            if (!$email->send($recipient, 'AYULEDGERS subscription renewal reminder', $lines)) {
+                return back()->with('error', 'The reminder could not be sent to ' . $recipient . '. Check the email settings and application log.');
+            }
+        }
+
+        return back()->with('status', 'Subscription reminder sent to ' . implode(', ', $recipients) . '.');
+    }
+
     public function destroyBusiness(BusinessSetting $business, BusinessDataDeletionService $deletion)
     {
         $tenant = Tenant::find($business->tenant_id);
@@ -178,14 +227,51 @@ class SuperAdminController extends Controller
         return back()->with('status', $businessName.' and all associated business data were permanently deleted.');
     }
 
+    public function updateBusinessLimits(Request $request, BusinessSetting $business)
+    {
+        $data = $request->validate([
+            'max_users_override' => 'nullable|integer|min:0|max:100000',
+            'max_branches_override' => 'nullable|integer|min:0|max:100000',
+        ]);
+
+        $business->max_users_override = $data['max_users_override'] ?? null;
+        $business->max_branches_override = $data['max_branches_override'] ?? null;
+        $business->save();
+
+        return back()->with('status', 'Resource limits updated for ' . $business->business_name . '.');
+    }
+
     public function verifyPayment(BusinessPaymentVerification $verification)
     {
-        $verification->update(['status' => 'verified']);
+        if ($verification->status === 'verified') {
+            return back()->with('status', 'This payment was already verified.');
+        }
+
         $business = $verification->business;
+        if (!$business) {
+            return back()->with('error', 'The business for this payment could not be found.');
+        }
+
+        $plan = SubscriptionPlan::where('slug', $business->subscription_plan)->first();
+        if (!$plan) {
+            return back()->with('error', 'The business subscription plan could not be found; the payment was not activated.');
+        }
+
+        $verification->update(['status' => 'verified']);
+        $interval = $business->subscription_interval === 'yearly' ? 'yearly' : 'monthly';
+        $currentExpiry = $business->subscription_expires_at
+            ? Carbon::parse($business->subscription_expires_at)->startOfDay()
+            : null;
+        $startsAt = $currentExpiry && $currentExpiry->greaterThan(Carbon::today())
+            ? $currentExpiry
+            : now();
+        $expiresAt = $interval === 'yearly' ? $startsAt->copy()->addYear() : $startsAt->copy()->addMonth();
         $business->update([
             'subscription_status' => 'active',
-            'subscription_starts_at' => now()->toDateString(),
-            'subscription_expires_at' => ($business->subscription_interval === 'yearly' ? now()->addYear() : now()->addMonth())->toDateString(),
+            'registration_status' => 'approved',
+            'subscription_starts_at' => $business->subscription_starts_at ?: $startsAt->toDateString(),
+            'subscription_expires_at' => $expiresAt->toDateString(),
+            'approved_at' => $business->approved_at ?: now(),
         ]);
         Tenant::whereKey($business->tenant_id)->update(['status' => 'active']);
         TenantMembership::where('tenant_id', $business->tenant_id)->update(['status' => 'active']);
@@ -335,6 +421,7 @@ class SuperAdminController extends Controller
             'monthly_price' => 'required|numeric|min:0',
             'yearly_price' => 'required|numeric|min:0',
             'max_users' => 'required|integer|min:1|max:10000',
+            'max_branches' => 'nullable|integer|min:0|max:100000',
             'description' => 'nullable|string|max:1000',
             'features' => 'nullable|string|max:3000',
             'is_featured' => 'nullable',

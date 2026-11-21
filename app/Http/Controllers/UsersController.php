@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Profile;
 use App\TenantMembership;
-use App\SubscriptionPlan;
+use App\Services\TenantResourceLimits;
 use App\BusinessSetting;
 use App\RoleManage;
 use Illuminate\Http\Request;
@@ -49,7 +49,7 @@ class UsersController extends Controller
         abort_unless($tenantId, 403);
 
         $currentCount = $this->tenantUserCount($tenantId);
-        $limit = $this->tenantUserLimit($tenantId);
+        $limit = app(TenantResourceLimits::class)->forTenant($tenantId)['users'];
 
         return view($this->parentView . '.create')->with([
             'tenantRoles' => RoleManage::withoutGlobalScopes()->orderBy('created_at', 'desc')
@@ -83,12 +83,16 @@ class UsersController extends Controller
             return back()->withInput()->withErrors(['role_manage_id' => 'The selected role is not available to tenants.']);
         }
 
-        if ($this->tenantUserCount($tenantId) >= $this->tenantUserLimit($tenantId)) {
+        $limits = app(TenantResourceLimits::class);
+        $userLimit = $limits->forTenant($tenantId)['users'];
+        if ($userLimit !== null && $this->tenantUserCount($tenantId) >= $userLimit) {
             return back()->withInput()->withErrors(['users' => 'Your subscription user limit has been reached.']);
         }
 
-        \DB::transaction(function () use ($request, $tenantId) {
-            if ($this->tenantUserCount($tenantId) >= $this->tenantUserLimit($tenantId)) {
+        \DB::transaction(function () use ($request, $tenantId, $limits) {
+            $business = BusinessSetting::where('tenant_id', $tenantId)->lockForUpdate()->first();
+            $userLimit = $limits->forBusiness($business)['users'];
+            if ($userLimit !== null && $this->tenantUserCount($tenantId) >= $userLimit) {
                 throw \Illuminate\Validation\ValidationException::withMessages([
                     'users' => 'Your subscription user limit has been reached.',
                 ]);
@@ -129,18 +133,12 @@ class UsersController extends Controller
 
     private function tenantUserCount($tenantId)
     {
-        return TenantMembership::where('tenant_id', $tenantId)
-            ->where('status', 'active')
-            ->whereHas('user')
+        return \DB::table('tenant_memberships')
+            ->join('users', 'users.id', '=', 'tenant_memberships.user_id')
+            ->where('tenant_memberships.tenant_id', $tenantId)
+            ->where('tenant_memberships.status', 'active')
+            ->whereNull('users.deleted_at')
             ->count();
-    }
-
-    private function tenantUserLimit($tenantId)
-    {
-        $business = BusinessSetting::where('tenant_id', $tenantId)->first();
-        if (!$business) return 0;
-        $plan = SubscriptionPlan::where('slug', $business->subscription_plan)->where('is_active', true)->first();
-        return $plan ? (int) $plan->max_users : 0;
     }
 
     /**

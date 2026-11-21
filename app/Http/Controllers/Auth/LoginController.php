@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Services\SubscriptionAccess;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -50,8 +51,20 @@ class LoginController extends Controller
             return redirect()->route('verification.notice')->with('status', 'Please verify your email before continuing.');
         }
 
-        if ($user->business && $user->business->subscription_status !== 'active') {
+        $business = $user->business;
+        $subscriptions = app(SubscriptionAccess::class);
+        if ($subscriptions->isPaymentPending($business)) {
             return redirect()->route('business.payment');
+        }
+
+        if (!$isSuperAdmin && !$subscriptions->hasActiveSubscription($business)) {
+            auth()->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('login')->withErrors([
+                'email' => 'Your subscription is inactive or expired. Use the renewal link sent to your business email to restore access.',
+            ]);
         }
 
         return redirect()->route('dashboard');

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Branch;
+use App\BusinessSetting;
 use App\Services\TenantContext;
 use App\Tenant;
 use App\User;
@@ -75,6 +76,32 @@ class BranchTenantEnforcementTest extends TestCase
         $response->assertRedirect();
         $branch = Branch::where('name', 'T01D7D Temporary Test Branch')->firstOrFail();
         $this->assertSame(1, (int) $branch->tenant_id);
+    }
+
+    public function test_branch_creation_is_blocked_at_the_business_override_limit(): void
+    {
+        BusinessSetting::where('tenant_id', 1)->update(['max_branches_override' => 4]);
+
+        $response = $this->from(route('branch.create'))->post(route('branch.store'), [
+            'name' => 'T01D7D Over-limit Branch',
+        ]);
+
+        $response->assertRedirect(route('branch.create'));
+        $response->assertSessionHasErrors(['branches']);
+        $this->assertSame(4, Branch::where('tenant_id', 1)->count());
+    }
+
+    public function test_branch_restore_is_blocked_when_it_would_exceed_the_limit(): void
+    {
+        BusinessSetting::where('tenant_id', 1)->update(['max_branches_override' => 4]);
+        $branch = Branch::findOrFail(1);
+        $branch->delete();
+
+        $response = $this->post(route('branch.restore', ['id' => $branch->id]));
+
+        $response->assertRedirect();
+        $response->assertSessionHas('error', 'Restoring this branch would exceed your subscription branch limit.');
+        $this->assertTrue(Branch::withTrashed()->findOrFail($branch->id)->trashed());
     }
 
     public function test_global_duplicate_branch_name_has_a_clear_validation_error(): void

@@ -15,6 +15,8 @@
             <file>./tests/Unit/VatConfigurationTest.php</file>
             <file>./tests/Unit/WhtConfigurationTest.php</file>
             <file>./tests/Unit/EnglishSidebarTranslationsTest.php</file>
+            <file>./tests/Unit/TenantResourceLimitsTest.php</file>
+            <file>./tests/Unit/SubscriptionAccessTest.php</file>
         </testsuite>
     </testsuites>
     <coverage processUncoveredFiles="true">

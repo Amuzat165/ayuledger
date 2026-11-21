@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Branch;
+use App\BusinessSetting;
+use App\Services\TenantResourceLimits;
 use App\Services\TenantContext;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Database\QueryException;
@@ -35,6 +37,14 @@ class BranchController extends Controller
     private function queryForTenant(int $tenantId)
     {
         return Branch::query()->where('tenant_id', $tenantId);
+    }
+
+    private function activeBranchCount(int $tenantId): int
+    {
+        return (int) DB::table('branches')
+            ->where('tenant_id', $tenantId)
+            ->whereNull('deleted_at')
+            ->count();
     }
 
     private function findForTenant(Request $request, $id): Branch
@@ -169,9 +179,11 @@ class BranchController extends Controller
 
     public function create(Request $request)
     {
-        $this->tenantId($request);
+        $tenantId = $this->tenantId($request);
+        $tenantBranchLimit = app(TenantResourceLimits::class)->forTenant($tenantId)['branches'];
+        $tenantBranchCount = $this->activeBranchCount($tenantId);
 
-        return view($this->parentView . '.create');
+        return view($this->parentView . '.create', compact('tenantBranchCount', 'tenantBranchLimit'));
     }
 
     public function store(Request $request)
@@ -183,13 +195,23 @@ class BranchController extends Controller
             'description' => ['nullable', 'string'],
         ], ['name.unique' => 'A branch with this name already exists.']);
 
-        $branch = new Branch();
-        $branch->tenant_id = $tenantId;
-        $branch->name = $validated['name'];
-        $branch->location = $validated['location'] ?? null;
-        $branch->description = $validated['description'] ?? null;
-        $branch->create_by = auth()->user()->email;
-        $branch->save();
+        \DB::transaction(function () use ($validated, $tenantId) {
+            $business = BusinessSetting::where('tenant_id', $tenantId)->lockForUpdate()->first();
+            $branchLimit = app(TenantResourceLimits::class)->forBusiness($business)['branches'];
+            if ($branchLimit !== null && $this->activeBranchCount($tenantId) >= $branchLimit) {
+                throw ValidationException::withMessages([
+                    'branches' => 'Your subscription branch limit has been reached.',
+                ]);
+            }
+
+            $branch = new Branch();
+            $branch->tenant_id = $tenantId;
+            $branch->name = $validated['name'];
+            $branch->location = $validated['location'] ?? null;
+            $branch->description = $validated['description'] ?? null;
+            $branch->create_by = auth()->user()->email;
+            $branch->save();
+        });
 
         $this->forgetBranchCaches($tenantId);
         Session::flash('success', 'Successfully Create');
@@ -269,8 +291,23 @@ class BranchController extends Controller
     public function restore(Request $request, $id)
     {
         $tenantId = $this->tenantId($request);
-        $item = $this->queryForTenant($tenantId)->onlyTrashed()->findOrFail($id);
-        $item->restore();
+        try {
+            DB::transaction(function () use ($tenantId, $id) {
+                $business = BusinessSetting::where('tenant_id', $tenantId)->lockForUpdate()->first();
+                $branchLimit = app(TenantResourceLimits::class)->forBusiness($business)['branches'];
+                if ($branchLimit !== null && $this->activeBranchCount($tenantId) >= $branchLimit) {
+                    throw ValidationException::withMessages([
+                        'branches' => 'Restoring this branch would exceed your subscription branch limit.',
+                    ]);
+                }
+
+                $item = $this->queryForTenant($tenantId)->onlyTrashed()->lockForUpdate()->findOrFail($id);
+                $item->restore();
+            });
+        } catch (ValidationException $exception) {
+            return $this->safeMutationFailure('Restoring this branch would exceed your subscription branch limit.');
+        }
+
         $this->forgetBranchCaches($tenantId);
         Session::flash('success', 'Successfully Restore');
 
@@ -363,6 +400,17 @@ class BranchController extends Controller
             DB::transaction(function () use ($tenantId, $ids, $trashed, $command) {
                 $branches = $this->ensureAllBelongToTenant($tenantId, $ids, $trashed);
 
+                if ($trashed && $command === 1) {
+                    $business = BusinessSetting::where('tenant_id', $tenantId)->lockForUpdate()->first();
+                    $branchLimit = app(TenantResourceLimits::class)->forBusiness($business)['branches'];
+                    $activeCount = $this->activeBranchCount($tenantId);
+                    if ($branchLimit !== null && $activeCount + count($branches) > $branchLimit) {
+                        throw ValidationException::withMessages([
+                            'branches' => 'Restoring these branches would exceed your subscription branch limit.',
+                        ]);
+                    }
+                }
+
                 if ($command === 2) {
                     foreach ($branches as $branch) {
                         if ($this->hasHistoricalReferences((int) $branch->getKey())) {
@@ -386,6 +434,8 @@ class BranchController extends Controller
                 throw $e;
             }
             return $this->safeMutationFailure($e->getMessage());
+        } catch (ValidationException $e) {
+            return $this->safeMutationFailure('Restoring these branches would exceed your subscription branch limit.');
         } catch (QueryException $e) {
             return $this->safeMutationFailure('One or more branches are still linked to business records; no changes were made.');
         }

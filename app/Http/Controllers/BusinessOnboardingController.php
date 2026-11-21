@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Http;
 use App\BusinessPaymentVerification;
+use App\BusinessSetting;
 use App\Services\TenantContext;
 use App\SubscriptionPlan;
+use App\User;
 use Illuminate\Http\Request;
 use App\Services\PlatformEmail;
 use App\Tenant;
@@ -13,17 +15,65 @@ use App\TenantMembership;
 
 class BusinessOnboardingController extends Controller
 {
+    private const RENEWAL_BUSINESS_SESSION_KEY = 'subscription_renewal.business_id';
+    private const RENEWAL_EXPIRES_SESSION_KEY = 'subscription_renewal.expires_at';
+    private const RENEWAL_URL_SESSION_KEY = 'subscription_renewal.url';
+
     public function payment(Request $request, TenantContext $tenantContext)
     {
         $settings = $this->settings($request, $tenantContext);
+        return $this->paymentView($settings, $request->user()->email, false);
+    }
+
+    public function renewalPayment(Request $request, BusinessSetting $business)
+    {
+        $request->session()->put(self::RENEWAL_BUSINESS_SESSION_KEY, (int) $business->id);
+        $request->session()->put(self::RENEWAL_EXPIRES_SESSION_KEY, now()->addHours(2)->getTimestamp());
+        $request->session()->put(self::RENEWAL_URL_SESSION_KEY, $request->fullUrl());
+
+        return $this->paymentView($business, $this->accountEmail($business), true);
+    }
+
+    private function paymentView(BusinessSetting $settings, string $payerEmail, bool $renewalAccess)
+    {
         $plan = SubscriptionPlan::where('slug', $settings->subscription_plan)->first()
             ?: SubscriptionPlan::where('slug', $settings->subscription_plan === 'demo' ? 'standard' : 'basic')->first();
-        return view('business.payment', compact('settings', 'plan'));
+        $paymentSubmitRoute = $renewalAccess
+            ? route('business.renewal.submit', $settings)
+            : route('business.payment.submit');
+        $paystackVerifyRoute = $renewalAccess
+            ? route('business.renewal.paystack.verify', $settings)
+            : route('business.payment.paystack.verify');
+
+        return view('business.payment', compact(
+            'settings',
+            'plan',
+            'payerEmail',
+            'paymentSubmitRoute',
+            'paystackVerifyRoute'
+        ));
     }
 
     public function submitPayment(Request $request, TenantContext $tenantContext)
     {
         $settings = $this->settings($request, $tenantContext);
+        return $this->submitPaymentForBusiness($request, $settings, $request->user(), false);
+    }
+
+    public function submitRenewalPayment(Request $request, BusinessSetting $business)
+    {
+        $settings = $this->renewalSettings($request, $business);
+        $user = User::where('business_id', $settings->id)->first();
+
+        return $this->submitPaymentForBusiness($request, $settings, $user, true);
+    }
+
+    private function submitPaymentForBusiness(
+        Request $request,
+        BusinessSetting $settings,
+        ?User $user,
+        bool $renewalAccess
+    ) {
         if (in_array($request->input('payment_method'), ['Card payment', 'Paystack'], true)) {
             return back()->withErrors(['payment_method' => 'Paystack payments are confirmed automatically. Please use Paystack to complete your payment.']);
         }
@@ -65,13 +115,39 @@ class BusinessOnboardingController extends Controller
             'payment_submitted_at' => now(),
         ]);
 
-        app(PlatformEmail::class)->notifyPayment($settings, $request->user(), (object) $validated, 'pending');
+        app(PlatformEmail::class)->notifyPayment($settings, $user, (object) $validated, 'pending');
 
-        return redirect()->route('business.payment')->with('status', 'Payment details submitted for verification.');
+        $redirect = $renewalAccess
+            ? $request->session()->get(self::RENEWAL_URL_SESSION_KEY, route('business.payment'))
+            : route('business.payment');
+
+        return redirect($redirect)->with('status', 'Payment details submitted for verification.');
     }
 
     public function verifyPaystack(Request $request, TenantContext $tenantContext)
     {
+        return $this->verifyPaystackForBusiness(
+            $request,
+            $this->settings($request, $tenantContext),
+            $request->user(),
+            false
+        );
+    }
+
+    public function verifyRenewalPaystack(Request $request, BusinessSetting $business)
+    {
+        $settings = $this->renewalSettings($request, $business);
+        $user = User::where('business_id', $settings->id)->first();
+
+        return $this->verifyPaystackForBusiness($request, $settings, $user, true);
+    }
+
+    private function verifyPaystackForBusiness(
+        Request $request,
+        BusinessSetting $settings,
+        ?User $user,
+        bool $renewalAccess
+    ) {
         $request->validate(['reference' => 'required|string|max:191']);
 
         $secretKey = config('paystack.secret_key');
@@ -90,9 +166,12 @@ class BusinessOnboardingController extends Controller
             ], 422);
         }
 
-        $settings = $this->settings($request, $tenantContext);
         $data = $response->json('data');
-        if (strcasecmp((string) data_get($data, 'customer.email'), (string) $request->user()->email) !== 0
+        $payerEmail = $renewalAccess
+            ? $this->accountEmail($settings)
+            : ($user ? $user->email : $this->accountEmail($settings));
+        if (!$payerEmail
+            || strcasecmp((string) data_get($data, 'customer.email'), $payerEmail) !== 0
             || (isset($data['metadata']['business_id']) && (int) $data['metadata']['business_id'] !== (int) $settings->id)) {
             return response()->json(['success' => false, 'message' => 'This Paystack transaction does not match your account.'], 422);
         }
@@ -114,7 +193,7 @@ class BusinessOnboardingController extends Controller
             return $this->finishPaystackLogin($request, [
                 'reference' => $reference, 'amount' => $paidAmount / 100, 'currency' => $data['currency'],
                 'method' => 'Paystack', 'paid_at' => $data['paid_at'] ?? null, 'already_processed' => true,
-            ]);
+            ], $payerEmail, !$renewalAccess);
         }
         $payment = \App\BusinessPaymentVerification::firstOrCreate(['reference' => $reference, 'business_id' => $settings->id], [
             'payment_method' => 'Paystack', 'amount' => $paidAmount / 100, 'paid_on' => $paidOn, 'status' => 'verified',
@@ -131,7 +210,7 @@ class BusinessOnboardingController extends Controller
         ]);
         Tenant::whereKey($settings->tenant_id)->update(['status' => 'active']);
         TenantMembership::where('tenant_id', $settings->tenant_id)->update(['status' => 'active']);
-        app(PlatformEmail::class)->notifyPayment($settings->fresh(), $request->user(), $payment, 'successful');
+        app(PlatformEmail::class)->notifyPayment($settings->fresh(), $user, $payment, 'successful');
 
         return $this->finishPaystackLogin($request, [
             'reference' => $data['reference'],
@@ -139,15 +218,28 @@ class BusinessOnboardingController extends Controller
             'currency' => $data['currency'],
             'method' => 'Card payment',
             'paid_at' => $data['paid_at'] ?? null,
-        ]);
+        ], $payerEmail, !$renewalAccess);
     }
 
-    private function finishPaystackLogin(Request $request, array $paymentDetails)
-    {
-        $email = $request->user()->email;
-        auth()->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+    private function finishPaystackLogin(
+        Request $request,
+        array $paymentDetails,
+        string $email,
+        bool $invalidateAuthenticatedSession
+    ) {
+        if ($invalidateAuthenticatedSession) {
+            if (auth()->check()) {
+                auth()->logout();
+            }
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        } else {
+            $request->session()->forget([
+                self::RENEWAL_BUSINESS_SESSION_KEY,
+                self::RENEWAL_EXPIRES_SESSION_KEY,
+                self::RENEWAL_URL_SESSION_KEY,
+            ]);
+        }
         $request->session()->flash('status', 'Payment successful. Your subscription is active. Sign in with your registration email and password to continue.');
         $request->session()->flash('payment_login_email', $email);
 
@@ -177,5 +269,24 @@ class BusinessOnboardingController extends Controller
         }
 
         return $request->user()->business;
+    }
+
+    private function renewalSettings(Request $request, BusinessSetting $business): BusinessSetting
+    {
+        $sessionBusinessId = (int) $request->session()->get(self::RENEWAL_BUSINESS_SESSION_KEY, 0);
+        $sessionExpiresAt = (int) $request->session()->get(self::RENEWAL_EXPIRES_SESSION_KEY, 0);
+        abort_unless(
+            $sessionBusinessId === (int) $business->id && $sessionExpiresAt >= now()->getTimestamp(),
+            403
+        );
+
+        return $business;
+    }
+
+    private function accountEmail(BusinessSetting $business): string
+    {
+        $user = User::where('business_id', $business->id)->first();
+
+        return (string) ($business->business_email ?: optional($user)->email ?: '');
     }
 }

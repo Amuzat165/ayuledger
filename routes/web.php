@@ -67,6 +67,14 @@ Route::get('/email/verify/{user}/{code}', [\App\Http\Controllers\Auth\RegisterCo
     ->middleware(['signed', 'throttle:6,1'])
     ->name('verification.email-link');
 
+Route::get('/business/renew/{business}', [\App\Http\Controllers\BusinessOnboardingController::class, 'renewalPayment'])
+    ->middleware('signed')
+    ->name('business.renewal.show');
+Route::post('/business/renew/{business}/payment', [\App\Http\Controllers\BusinessOnboardingController::class, 'submitRenewalPayment'])
+    ->name('business.renewal.submit');
+Route::post('/business/renew/{business}/paystack/verify', [\App\Http\Controllers\BusinessOnboardingController::class, 'verifyRenewalPaystack'])
+    ->name('business.renewal.paystack.verify');
+
 Route::get('/', [\App\Http\Controllers\LandingController::class, 'index'])->name('landing');
 Route::post('/contact', [\App\Http\Controllers\LandingController::class, 'contact'])->name('landing.contact');
 
@@ -89,6 +97,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/console/database', [\App\Http\Controllers\SuperAdminController::class, 'database'])->name('superadmin.database');
     Route::post('/console/business/{business}/approve', [\App\Http\Controllers\SuperAdminController::class, 'approve'])->name('superadmin.business.approve');
     Route::post('/console/business/{business}/reject', [\App\Http\Controllers\SuperAdminController::class, 'reject'])->name('superadmin.business.reject');
+    Route::post('/console/business/{business}/limits', [\App\Http\Controllers\SuperAdminController::class, 'updateBusinessLimits'])->name('superadmin.business.limits');
+    Route::post('/console/business/{business}/reminder', [\App\Http\Controllers\SuperAdminController::class, 'sendSubscriptionReminder'])->name('superadmin.business.reminder');
     Route::delete('/console/business/{business}', [\App\Http\Controllers\SuperAdminController::class, 'destroyBusiness'])->name('superadmin.business.destroy');
     Route::post('/console/payment/{verification}/verify', [\App\Http\Controllers\SuperAdminController::class, 'verifyPayment'])->name('superadmin.payment.verify');
     Route::get('/console/site-builder', [\App\Http\Controllers\SuperAdminController::class, 'siteBuilder'])->name('superadmin.site-builder');

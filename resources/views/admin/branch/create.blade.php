@@ -54,6 +54,14 @@ $ParentRouteName = 'branch';
                             <small>{{ __('Put :value Information', ['value' => $moduleName]) }}</small>
                         </h2>
                         <div class="body">
+                            <div class="alert alert-info">
+                                Branches: {{ $tenantBranchCount }}
+                                @if ($tenantBranchLimit === null)
+                                    (unlimited by the current plan)
+                                @else
+                                    of {{ $tenantBranchLimit }} allowed
+                                @endif
+                            </div>
                             <form class="form" id="form_validation" method="post"
                                 action="{{ route($ParentRouteName . '.store') }}">
                                 {{ csrf_field() }}
@@ -87,7 +95,8 @@ $ParentRouteName = 'branch';
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="form-line">
-                                            <button type="submit" class="btn btn-primary m-t-15 waves-effect">
+                                            <button type="submit" class="btn btn-primary m-t-15 waves-effect"
+                                                @if($tenantBranchLimit !== null && $tenantBranchCount >= $tenantBranchLimit) disabled @endif>
                                                 {{ __('root.common.save') }}
                                             </button>
                                         </div>

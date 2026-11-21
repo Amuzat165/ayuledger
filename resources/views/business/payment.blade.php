@@ -25,7 +25,7 @@
             <div class="card-title"><h1>Complete your subscription payment</h1><p class="text-muted mb-0 mt-2">Submit your transfer details and our team will activate your workspace.</p></div>
             <div class="card-body"><div class="row">
                 <div class="col-lg-8 pr-lg-4">
-                    <form method="POST" action="{{ route('business.payment.submit') }}" enctype="multipart/form-data">@csrf
+                    <form method="POST" action="{{ $paymentSubmitRoute }}" enctype="multipart/form-data">@csrf
                         <div class="mb-3">
                             <button type="button" id="paystack-button" class="btn btn-primary btn-block submit-btn" @if(!config('paystack.public_key')) disabled @endif>
                                 Click Here to Pay Online
@@ -70,13 +70,13 @@ document.getElementById('proof').addEventListener('change',function(){this.nextE
 document.getElementById('paystack-button').addEventListener('click', function () {
     var handler = PaystackPop.setup({
         key: @json(config('paystack.public_key')),
-        email: @json(auth()->user()->email),
+        email: @json($payerEmail),
         amount: {{ (int) round(($settings->subscription_interval === 'yearly' ? ($plan->yearly_price ?? 0) : ($plan->monthly_price ?? 0)) * 100) }},
         currency: 'NGN',
         ref: 'AYU-' + Date.now(),
         metadata: {business_id: {{ (int) $settings->id }}},
         callback: function(response) {
-            fetch(@json(route('business.payment.paystack.verify')), {
+            fetch(@json($paystackVerifyRoute), {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': @json(csrf_token()), 'Accept': 'application/json'},
                 body: JSON.stringify({reference: response.reference})
