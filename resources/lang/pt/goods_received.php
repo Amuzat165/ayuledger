@@ -1,0 +1,12 @@
+<?php
+return [
+    'title' => 'Mercadorias Recebidas', 'breadcrumb' => 'Mercadorias Recebidas', 'record_receipt' => 'Registar Mercadorias Recebidas', 'approve_purchase_order' => 'Aprovar Ordem de Compra', 'approved_by' => 'Aprovado por',
+    'receipt_number' => 'Número do recibo', 'purchase_order' => 'Ordem de Compra', 'supplier' => 'Fornecedor', 'branch' => 'Filial',
+    'received_date' => 'Data de Receção', 'received_by' => 'Recebido por', 'notes' => 'Notas', 'item' => 'Item', 'ordered_quantity' => 'Quantidade Encomendada',
+    'previously_received' => 'Recebido Anteriormente', 'remaining_quantity' => 'Quantidade Restante', 'received_quantity' => 'Quantidade Recebida', 'unit' => 'Unidade',
+    'agreed_price' => 'Preço Unitário Acordado', 'status' => 'Estado', 'actions' => 'Ações', 'draft' => 'Rascunho', 'confirmed' => 'Confirmado',
+    'save_draft' => 'Guardar Rascunho', 'confirm' => 'Confirmar Mercadorias Recebidas', 'view' => 'Ver', 'back' => 'Voltar', 'empty' => 'Ainda não há registos de receção.',
+    'draft_help' => 'Um rascunho não altera o inventário nem o estado da ordem de compra.', 'confirm_help' => 'A confirmação atualiza o inventário elegível e o estado da ordem de compra em conjunto.',
+    'messages' => ['draft_saved' => 'Rascunho de receção guardado.', 'confirmed' => 'Receção confirmada.', 'purchase_order_approved' => 'Ordem de compra aprovada e pronta para receção.'],
+    'errors' => ['only_draft_can_be_approved' => 'Apenas uma ordem de compra em rascunho pode ser aprovada.', 'order_requires_items' => 'Adicione pelo menos um item antes de aprovar.', 'order_not_receivable' => 'A receção exige uma ordem aprovada com quantidades pendentes.', 'invalid_submission' => 'Esta referência já está a ser usada por outra ordem.', 'at_least_one_quantity' => 'Introduza uma quantidade recebida para pelo menos um item.', 'line_not_in_order' => 'Um ou mais itens não pertencem a esta ordem.', 'quantity_must_be_positive' => 'A quantidade recebida deve ser superior a zero.', 'over_receiving' => 'A quantidade excede o saldo restante da ordem.', 'inventory_unavailable' => 'O item de inventário associado já não está disponível.', 'classify_inventory_first' => 'Defina o controlo de stock dos itens associados antes de confirmar.', 'whole_stock_quantity' => 'Itens controlados em stock devem ser recebidos em quantidades inteiras.', 'inventory_branch_mismatch' => 'Um item controlado em stock deve pertencer à filial da ordem.'],
+];

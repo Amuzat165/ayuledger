@@ -48,7 +48,7 @@ $ParentRouteName = 'role-manage';
                     <div class="header">
                         <h2>
                             {{ $createItemName }}
-                            <small>Put {{ $moduleName }} Information</small>
+                            <small>{{ __('ui.forms.put_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
                         <div class="body">
                             <form class="form" id="form_validation" method="post"
@@ -60,7 +60,7 @@ $ParentRouteName = 'role-manage';
                                             <div class="form-line">
                                                 <input autofocus="" value="{{ old('name') }}" name="name" type="text"
                                                     class="form-control">
-                                                <label class="form-label">Name</label>
+                                                <label class="form-label">{{ __('root.user.name') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -73,16 +73,16 @@ $ParentRouteName = 'role-manage';
                                                             class="chk-col-cyan topBottom" />
                                                         <label for="md_checkbox_p"></label>
                                                     </th>
-                                                    <th scope="col" class="text-center">Module Name</th>
-                                                    <th scope="col" class="text-center">All</th>
-                                                    <th scope="col" class="text-center">Show</th>
-                                                    <th scope="col" class="text-center">Create</th>
-                                                    <th scope="col" class="text-center">Edit</th>
-                                                    <th scope="col" class="text-center">Delete</th>
-                                                    <th scope="col" class="text-center">PDF</th>
-                                                    <th scope="col" class="text-center">Trash Show</th>
-                                                    <th scope="col" class="text-center">Restore</th>
-                                                    <th scope="col" class="text-center">Permanently Delete</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.permissions.module_name') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.all') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.actions.show') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.create') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.edit') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.actions.delete') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.permissions.pdf') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.permissions.trash_show') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.restore') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.permanently_delete') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -95,7 +95,7 @@ $ParentRouteName = 'role-manage';
 
                                                     <td class="text-center">
                                                         <input type="hidden" name="user[0]" value="User">
-                                                        User
+                                                        {{ __('User') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -116,7 +116,7 @@ $ParentRouteName = 'role-manage';
 
                                                     <td class="text-center">
                                                         <input type="hidden" name="role_manage[0]" value="Role Manage">
-                                                        Role Manage
+                                                        {{ __('Role Manage') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -138,7 +138,7 @@ $ParentRouteName = 'role-manage';
 
                                                     <td class="text-center">
                                                         <input type="hidden" name="settings[0]" value="Settings">
-                                                        Settings
+                                                        {{ __('Settings') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -159,7 +159,7 @@ $ParentRouteName = 'role-manage';
 
                                                     <td class="text-center">
                                                         <input type="hidden" name="Branch[0]" value="Branch">
-                                                        Branch
+                                                        {{ __('Branch') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -179,7 +179,7 @@ $ParentRouteName = 'role-manage';
                                                     </th>
                                                     <td class="text-center">
                                                         <input type="hidden" name="Language[0]" value="Language">
-                                                        Language
+                                                        {{ __('Language') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -193,6 +193,25 @@ $ParentRouteName = 'role-manage';
                                                 </tr>
                                                 <tr>
                                                     <th class="text-center">
+                                                        <input type="checkbox" id="md_checkbox_inventory" class="chk-col-cyan selects " />
+                                                        <label for="md_checkbox_inventory"></label>
+                                                    </th>
+                                                    <td class="text-center">
+                                                        <input type="hidden" name="Inventory[0]" value="Inventory">
+                                                        {{ __('Inventory') }}
+                                                    </td>
+                                                    @for ($i = 1; $i <= 9; $i++)
+                                                    <td class="text-center">
+                                                        @if (in_array($i, [1, 3, 4, 5], true))
+                                                        <div class="switch"><label><input name="Inventory[{{ $i }}]" type="checkbox"><span class="lever switch-col-cyan"></span></label></div>
+                                                        @else
+                                                        <div class="switch"><label><input type="checkbox" disabled><span class="lever switch-col-cyan"></span></label></div>
+                                                        @endif
+                                                    </td>
+                                                    @endfor
+                                                </tr>
+                                                <tr>
+                                                    <th class="text-center">
                                                         <input type="checkbox" id="md_checkbox_5"
                                                             class="chk-col-cyan selects " />
                                                         <label for="md_checkbox_5"></label>
@@ -200,7 +219,7 @@ $ParentRouteName = 'role-manage';
 
                                                     <td class="text-center">
                                                         <input type="hidden" name="LedgerType[0]" value="Ledger Type">
-                                                        Ledger Type
+                                                        {{ __('Ledger Type') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -221,7 +240,7 @@ $ParentRouteName = 'role-manage';
 
                                                     <td class="text-center">
                                                         <input type="hidden" name="LedgerGroup[0]" value="Ledger Group">
-                                                        Ledger Group
+                                                        {{ __('Ledger Group') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -243,7 +262,7 @@ $ParentRouteName = 'role-manage';
 
                                                     <td class="text-center">
                                                         <input type="hidden" name="LedgerName[0]" value="Ledger Name">
-                                                        Ledger Name
+                                                        {{ __('Ledger Name') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -264,7 +283,7 @@ $ParentRouteName = 'role-manage';
 
                                                     <td class="text-center">
                                                         <input type="hidden" name="BankCash[0]" value="Bank Cash">
-                                                        Bank Cash
+                                                        {{ __('Bank Cash') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -286,7 +305,7 @@ $ParentRouteName = 'role-manage';
                                                     <td class="text-center">
                                                         <input type="hidden" name="InitialIncomeExpenseHeadBalance[0]"
                                                             value="Initial Income Expense Head Balance">
-                                                        Initial Income Expense Head Balance
+                                                        {{ __('Initial Income Expense Head Balance') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -309,7 +328,7 @@ $ParentRouteName = 'role-manage';
                                                     <td class="text-center">
                                                         <input type="hidden" name="InitialBankCashBalance[0]"
                                                             value="Initial Bank Cash Balance">
-                                                        Initial Bank Cash Balance
+                                                        {{ __('Initial Bank Cash Balance') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -331,7 +350,7 @@ $ParentRouteName = 'role-manage';
 
                                                     <td class="text-center">
                                                         <input type="hidden" name="dr_voucher[0]" value="Dr Voucher">
-                                                        Dr Voucher
+                                                        {{ __('Dr Voucher') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -352,7 +371,7 @@ $ParentRouteName = 'role-manage';
 
                                                     <td class="text-center">
                                                         <input type="hidden" name="cr_voucher[0]" value="Cr Voucher">
-                                                        Cr Voucher
+                                                        {{ __('Cr Voucher') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -374,7 +393,7 @@ $ParentRouteName = 'role-manage';
                                                     <td class="text-center">
                                                         <input type="hidden" name="jnl_voucher[0]"
                                                             value="Journal Voucher">
-                                                        Journal Voucher
+                                                        {{ __('Journal Voucher') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -397,7 +416,7 @@ $ParentRouteName = 'role-manage';
                                                     <td class="text-center">
                                                         <input type="hidden" name="cnt_voucher[0]"
                                                             value="Contra Voucher">
-                                                        Contra Voucher
+                                                        {{ __('Contra Voucher') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -419,7 +438,7 @@ $ParentRouteName = 'role-manage';
 
                                                     <td class="text-center">
                                                         <input type="hidden" name="ledger[0]" value="Ledger">
-                                                        Ledger
+                                                        {{ __('Ledger') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -441,7 +460,7 @@ $ParentRouteName = 'role-manage';
                                                     <td class="text-center">
                                                         <input type="hidden" name="trial_balance[0]"
                                                             value="Trial Balance">
-                                                        Trial Balance
+                                                        {{ __('Trial Balance') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -464,7 +483,7 @@ $ParentRouteName = 'role-manage';
                                                     <td class="text-center">
                                                         <input type="hidden" name="cost_Of_revenue[0]"
                                                             value="Cost Of Revenue">
-                                                        Cost Of Revenue
+                                                        {{ __('Cost Of Revenue') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -487,7 +506,7 @@ $ParentRouteName = 'role-manage';
                                                     <td class="text-center">
                                                         <input type="hidden" name="profit_or_loss_account[0]"
                                                             value="Profit Or Loss Account">
-                                                        Profit Or Loss Account
+                                                        {{ __('Profit Or Loss Account') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -510,7 +529,7 @@ $ParentRouteName = 'role-manage';
                                                     <td class="text-center">
                                                         <input type="hidden" name="retained_earning[0]"
                                                             value="Retained Earning">
-                                                        Retained Earning
+                                                        {{ __('Retained Earning') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -533,7 +552,7 @@ $ParentRouteName = 'role-manage';
                                                     <td class="text-center">
                                                         <input type="hidden" name="fixed_assets_schedule[0]"
                                                             value="Fixed Assets Schedule ">
-                                                        Fixed Assets Schedule
+                                                        {{ __('Fixed Assets Schedule') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -556,7 +575,7 @@ $ParentRouteName = 'role-manage';
                                                     <td class="text-center">
                                                         <input type="hidden" name="statement_of_financial_position[0]"
                                                             value="Statement Of Financial Position">
-                                                        Statement Of Financial Position
+                                                        {{ __('Statement Of Financial Position') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -578,7 +597,7 @@ $ParentRouteName = 'role-manage';
 
                                                     <td class="text-center">
                                                         <input type="hidden" name="cash_flow[0]" value="Cash Flow">
-                                                        Cash Flow
+                                                        {{ __('Cash Flow') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -600,7 +619,7 @@ $ParentRouteName = 'role-manage';
                                                     <td class="text-center">
                                                         <input type="hidden" name="receive_and_payment[0]"
                                                             value="Receive And Payment">
-                                                        Receive And Payment
+                                                        {{ __('Receive And Payment') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -622,7 +641,7 @@ $ParentRouteName = 'role-manage';
 
                                                     <td class="text-center">
                                                         <input type="hidden" name="notes[0]" value="Notes">
-                                                        Notes
+                                                        {{ __('Notes') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -644,7 +663,7 @@ $ParentRouteName = 'role-manage';
                                                     <td class="text-center">
                                                         <input type="hidden" name="GeneralBranch[0]"
                                                             value="General Branch Report">
-                                                        General Branch Report
+                                                        {{ __('General Branch Report') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -667,7 +686,7 @@ $ParentRouteName = 'role-manage';
                                                     <td class="text-center">
                                                         <input type="hidden" name="GeneralLedger[0]"
                                                             value="General Ledger Report">
-                                                        General Ledger Report
+                                                        {{ __('General Ledger Report') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -690,7 +709,7 @@ $ParentRouteName = 'role-manage';
                                                     <td class="text-center">
                                                         <input type="hidden" name="GeneralBankCash[0]"
                                                             value="General Bank Cash Report">
-                                                        General Bank Cash Report
+                                                        {{ __('General Bank Cash Report') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -713,7 +732,7 @@ $ParentRouteName = 'role-manage';
                                                     <td class="text-center">
                                                         <input type="hidden" name="GeneralVoucher[0]"
                                                             value="General Voucher Report">
-                                                        General Voucher Report
+                                                        {{ __('General Voucher Report') }}
                                                     </td>
                                                     @for ($i = 1; $i <= 9; $i++) <td class="text-center">
                                                         <div class="switch">
@@ -726,7 +745,17 @@ $ParentRouteName = 'role-manage';
                                                         </td>
                                                         @endfor
                                                 </tr>
-                                            </tbody>
+                                                <tr>
+                                                    <th class="text-center"><input type="checkbox" id="md_checkbox_purchase_order" class="chk-col-cyan selects" /><label for="md_checkbox_purchase_order"></label></th>
+                                                    <td class="text-center"><input type="hidden" name="PurchaseOrder[0]" value="Purchase Order">{{ __('Purchase Order') }}</td>
+                                                    @for ($i = 1; $i <= 9; $i++) <td class="text-center"><div class="switch"><label><input name="PurchaseOrder[{{ $i }}]" type="checkbox"><span class="lever switch-col-cyan"></span></label></div></td>@endfor
+                                                </tr>
+                                            <tr>
+                                                <th class="text-center"><input type="checkbox" id="md_checkbox_supplier_invoice" class="chk-col-cyan selects" /><label for="md_checkbox_supplier_invoice"></label></th>
+                                                <td class="text-center"><input type="hidden" name="SupplierInvoice[0]" value="Supplier Invoice">{{ __('supplier_invoices.title') }}</td>
+                                                @for ($i = 1; $i <= 9; $i++) <td class="text-center"><div class="switch"><label><input name="SupplierInvoice[{{ $i }}]" type="checkbox"><span class="lever switch-col-cyan"></span></label></div></td>@endfor
+                                            </tr>
+                                        </tbody>
                                             <thead>
                                                 <tr>
                                                     <th class="checkbox_custom_style text-center">
@@ -734,16 +763,16 @@ $ParentRouteName = 'role-manage';
                                                             id="md_checkbox_footer" class="chk-col-cyan topBottom" />
                                                         <label for="md_checkbox_footer"></label>
                                                     </th>
-                                                    <th scope="col" class="text-center">Module Name</th>
-                                                    <th scope="col" class="text-center">All</th>
-                                                    <th scope="col" class="text-center">Show</th>
-                                                    <th scope="col" class="text-center">Create</th>
-                                                    <th scope="col" class="text-center">Edit</th>
-                                                    <th scope="col" class="text-center">Delete</th>
-                                                    <th scope="col" class="text-center">PDF</th>
-                                                    <th scope="col" class="text-center">Trash Show</th>
-                                                    <th scope="col" class="text-center">Restore</th>
-                                                    <th scope="col" class="text-center">Permanently Delete</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.permissions.module_name') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.all') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.actions.show') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.create') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.edit') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.actions.delete') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.permissions.pdf') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.permissions.trash_show') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.restore') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.permanently_delete') }}</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -807,10 +836,10 @@ $ParentRouteName = 'role-manage';
 
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)

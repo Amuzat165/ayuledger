@@ -11,16 +11,16 @@
                     <thead>
                         <tr>
                             <th class="text-center">
-                                <h5>Particulars </h5>
+                                <h5>{{ __('financial.labels.particulars') }} </h5>
                             </th>
                             <th class="text-center">
                                 @if ($search_by['start_from'] != null)
-                                    <h5>From {{ $search_by['start_from'] }} To {{ $search_by['start_to'] }}</h5>
+                                    <h5>{{ __('From') }} {{ $search_by['start_from'] }} {{ __('To') }} {{ $search_by['start_to'] }}</h5>
                                 @endif
                             </th>
                             <th class="text-center">
                                 @if ($search_by['end_from'] != null)
-                                    <h5>From {{ $search_by['end_from'] }} To {{ $search_by['end_to'] }}</h5>
+                                    <h5>{{ __('From') }} {{ $search_by['end_from'] }} {{ __('To') }} {{ $search_by['end_to'] }}</h5>
                                 @endif
                             </th>
                         </tr>
@@ -124,7 +124,7 @@
                         </tr>
                         <tr>
                             <th class="text-left" scope="row">
-                                <h4>Cost of revenue </h4>
+                                <h4>{{ __('Cost of revenue') }} </h4>
                             </th>
                             <th scope="row" class="text-right">
                                 <h4>{{ Helper::convertMoneyFormat($particulars['CostOfRevenue']['from_total']) }}

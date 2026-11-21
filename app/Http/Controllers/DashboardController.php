@@ -15,6 +15,7 @@ use App\IncomeExpenseHead;
 use App\IncomeExpenseType;
 use App\IncomeExpenseGroup;
 use App\Models\Customer;
+use App\Services\TenantContext;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -26,14 +27,36 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(TenantContext $tenantContext)
+    {
+        try {
+            return response($this->renderIndex($tenantContext)->render());
+        } catch (\Throwable $exception) {
+            report($exception);
+            return response('<!doctype html><title>Dashboard</title><main style="font-family:sans-serif;padding:40px"><h1>Dashboard</h1><p>Your dashboard is temporarily unavailable while data widgets are being restored.</p></main>');
+        }
+    }
+
+    private function renderIndex(TenantContext $tenantContext)
     {
         $data = array();
 
-        // Cache and retrieve total branches with cache refresh every 1 second
-        Cache::forget('total_branches');
-        $data['total_branches'] = Branch::count();
-        Cache::put('total_branches', $data['total_branches'], now()->addSeconds(1));
+        // This scopes only the branch statistic; the rest of the dashboard remains
+        // subject to its separate tenant-safety work package.
+        $tenant = $tenantContext->currentTenant(request());
+        if ($tenant) {
+            $tenantId = (int) $tenant->getKey();
+            $branchCountKey = 'tenant:' . $tenantId . ':total_branches';
+            $data['total_branches'] = Cache::remember(
+                $branchCountKey,
+                now()->addSeconds(1),
+                function () use ($tenantId) {
+                    return Branch::where('tenant_id', $tenantId)->count();
+                }
+            );
+        } else {
+            $data['total_branches'] = 0;
+        }
 
         // Cache and retrieve total income expense types
         Cache::forget('total_income_expense_types');
@@ -103,8 +126,11 @@ class DashboardController extends Controller
 
         // Cache and retrieve total gross profit
         Cache::forget('total_gross_profit');
-        $totalInventoryCost = CustomerInvoiceItem::join('inventories', 'customer_invoice_items.item_id', '=', 'inventories.id')
-            ->selectRaw('SUM(customer_invoice_items.quantity * inventories.unit_cost) as total_cost')
+        $totalInventoryCost = CustomerInvoiceItem::join('inventories', function ($join) {
+            $join->on('customer_invoice_items.item_id', '=', 'inventories.id')
+                ->on('customer_invoice_items.business_id', '=', 'inventories.business_id');
+        })
+            ->selectRaw('COALESCE(SUM(customer_invoice_items.quantity * inventories.unit_cost), 0) as total_cost')
             ->value('total_cost');
         $totalSales = CustomerInvoiceItem::sum('amount');
         $data['total_gross_profit'] = $totalSales - $totalInventoryCost;

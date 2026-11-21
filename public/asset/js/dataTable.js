@@ -37,13 +37,13 @@ var UiController = (function () {
             }
         },
         confirmDelete: function (e) {
-            var confirm = window.confirm("Do you want to permanently delete?");
+            var confirm = window.confirm(window.ayuUiMessages.confirmPermanentDelete);
             if (confirm == false) {
                 e.preventDefault();
             }
         },
         confirmTrashDelete: function (e) {
-            var confirm = window.confirm("Do you want to Trash?");
+            var confirm = window.confirm(window.ayuUiMessages.confirmTrash);
             if (confirm == false) {
                 e.preventDefault();
             }
@@ -56,7 +56,7 @@ var UiController = (function () {
             
             if (applay_comand_top > 0) {
                 if (CheckedItem < 1) {
-                    alert("Checked At lest One item");
+                    alert(window.ayuUiMessages.selectAtLeastOneItem);
                     e.preventDefault();
                 } else if (applay_comand_top == 2) {
                     this.confirmDelete(e);
@@ -64,7 +64,7 @@ var UiController = (function () {
                     this.confirmTrashDelete(e);
                 }
             } else {
-                alert("Please Select Action");
+                alert(window.ayuUiMessages.selectAction);
                 e.preventDefault();
             }
         },
@@ -72,7 +72,7 @@ var UiController = (function () {
             var Fields = this.getCheckedField();
             var input = Fields.tableSearch;
             if (input.value.length < 1) {
-                alert("Put at least 3 letters");
+                alert(window.ayuUiMessages.minimumSearchLetters);
                 e.preventDefault();
             }
         },

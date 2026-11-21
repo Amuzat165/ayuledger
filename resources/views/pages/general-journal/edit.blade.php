@@ -16,12 +16,12 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <a class="btn btn-sm btn-info waves-effect" href="{{ route('general-journal.index') }}">Back</a>
+                <a class="btn btn-sm btn-info waves-effect" href="{{ route('general-journal.index') }}">{{ __('Back') }}</a>
             </div>
 
             <ol class="breadcrumb breadcrumb-col-cyan pull-right">
-                <li><a href="{{ route('dashboard') }}"><i class="material-icons">home</i> Home</a></li>
-                <li><a href="{{ route('general-journal.index') }}"><i class="fas fa-archive"></i> General Journal</a></li>
+                <li><a href="{{ route('dashboard') }}"><i class="material-icons">home</i> {{ __('Home') }}</a></li>
+                <li><a href="{{ route('general-journal.index') }}"><i class="fas fa-archive"></i> {{ __('General Journal') }}</a></li>
                 <li class="active"><i class="material-icons">archive</i> {{ $params->title }}</li>
             </ol>
 
@@ -30,7 +30,7 @@
                     <div class="card">
                         <div class="header">
                             <h2>{{ $params->title }}</h2>
-                            <small>Enter {{ $params->resource }} Information</small>
+                            <small>{{ __('Enter :value Information', ['value' => $params->resource]) }}</small>
                         </div>
                         <div class="body">
                             <form method="POST" action="{{ $params->action }}" class="form2">
@@ -39,10 +39,10 @@
                                 <table class="table table-bordered">
                                     <tbody>
                                     <tr>
-                                        <td style="width: 25%;"><label for="branch">Branch</label></td>
+                                        <td style="width: 25%;"><label for="branch">{{ __('Branch') }}</label></td>
                                         <td>
                                             <select id="branch_id" class="form-control" name="branch_id" required>
-                                                <option value="">Select Branch</option>
+                                                <option value="">{{ __('Select Branch') }}</option>
                                                 @foreach($params->branches as $branch)
                                                     <option value="{{ $branch->id }}" {{ $branch->id == $params->general_journal->branch_id ? 'selected' : '' }}>
                                                         {{ $branch->name }}
@@ -53,7 +53,7 @@
                                     </tr>
                                     <tr>
                                     <tr>
-                                        <td style="width: 25%;"><label for="account">Debit Account</label></td>
+                                        <td style="width: 25%;"><label for="account">{{ __('Debit Account') }}</label></td>
                                         <td>
                                             <input id="debit_account_id" name="debit_account_id" type="text" class="form-control"
                                                    value="{{ old('account', $params->accounts[$params->defaults['debit_account_id']] ?? '') }}" readonly>
@@ -61,14 +61,14 @@
                                     </tr>
                                     </tr>
                                     <tr>
-                                        <td><label for="debit">Debit</label></td>
+                                        <td><label for="debit">{{ __('Debit') }}</label></td>
                                         <td>
                                             <input id="debit" name="debit" type="number" class="form-control"
                                                    value="{{ old('debit', $params->defaults['debit'] ?? '') }}" required>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width: 25%;"><label for="credit_account">Credit Account</label></td>
+                                        <td style="width: 25%;"><label for="credit_account">{{ __('Credit Account') }}</label></td>
                                         <td>
                                             <input id="credit_account_id" name="credit_account_id" type="text" class="form-control"
                                                    value="{{ old('credit_account', $params->accounts[$params->defaults['credit_account_id']] ?? '') }}" readonly>
@@ -76,24 +76,24 @@
                                     </tr>
 
                                     <tr>
-                                        <td><label for="credit">Credit</label></td>
+                                        <td><label for="credit">{{ __('Credit') }}</label></td>
                                         <td>
                                             <input id="credit" name="credit" type="number" class="form-control"
                                                    value="{{ old('credit', $params->defaults['credit'] ?? '') }}" required>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><label for="memo">Memo</label></td>
+                                        <td><label for="memo">{{ __('Memo') }}</label></td>
                                         <td>
                                             <input id="memo" name="memo" class="form-control" required
                                                    value="{{ old('memo', $params->defaults['memo'] ?? '') }}">
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><label for="customer_vendor">Customer/Vendor</label></td>
+                                        <td><label for="customer_vendor">{{ __('Customer/Vendor') }}</label></td>
                                         <td>
                                             <select id="customer_vendor" name="customer_vendor" class="form-control" required>
-                                                <option value="">Select Customer/Vendor</option>
+                                                <option value="">{{ __('Select Customer/Vendor') }}</option>
                                                 @foreach ($params->customers as $customer)
                                                     <option value="{{ $customer->name }}" {{ $customer->name == old('customer_vendor', $params->defaults['customer_vendor'] ?? '') ? 'selected' : '' }}>
                                                         {{ $customer->name }}
@@ -114,7 +114,7 @@
                             </form>
                             @if(session('success'))
                                 <div class="alert alert-success">
-                                    {{ session('success') }}
+                                    {{ __(session('success')) }}
                                 </div>
                             @endif
                         </div>

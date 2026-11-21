@@ -3,13 +3,17 @@
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::resource('customers', CustomerController::class)->except([
-        'show'
-    ]);
+    Route::middleware(['tenant'])->group(function () {
+        Route::resource('customers', CustomerController::class)->except([
+            'show'
+        ]);
 
-    Route::resource('customers/invoices', CustomerInvoiceController::class)->names("customers.invoices");
+        Route::resource('customers/invoices', CustomerInvoiceController::class)->names("customers.invoices");
 
-    Route::resource('customers/receipts', CustomerReceiptController::class)->names("customers.receipts");
+        Route::resource('customers/receipts', CustomerReceiptController::class)
+            ->only(['create'])
+            ->names("customers.receipts");
+    });
 
     Route::resource('general-journal', GeneralJournalController::class);
 
@@ -42,14 +46,17 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('inventories', InventoryController::class)->except([
         'show'
-    ]);
+    ])->middleware('tenant');
 
-    Route::resource('vendors', VendorController::class);
+    Route::middleware(['tenant'])->group(function () {
+        Route::resource('vendors', VendorController::class);
 
-    Route::resource('vouchers', VoucherController::class);
+        Route::resource('vouchers', VoucherController::class);
 
-    Route::resource('payments', PaymentVoucherController::class);
+        Route::resource('payments', PaymentVoucherController::class);
+    });
 
-    Route::resource('expenses', ExpenseController::class);
+    Route::resource('expenses', ExpenseController::class)
+        ->middleware(['tenant']);
 
 });

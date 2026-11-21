@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 
 class RoleManage extends Model
 {
+    use SupportsTenantIsolation;
     use Notifiable;
     use SoftDeletes;
     protected $dates = ['deleted_at'];

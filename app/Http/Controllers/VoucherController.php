@@ -13,6 +13,7 @@ use App\Models\Inventory;
 use App\Models\Vendor;
 use App\Models\VendorInvoice;
 use App\Models\VendorInvoiceItem;
+use App\Support\VendorWithholdingCalculator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -41,6 +42,7 @@ class VoucherController extends Controller
             return view('pages.vendors.purchase-order-view', [
                 'title' => 'Vendor Invoices',
                 'vendorInvoices' => $vendorInvoices,
+                'currency_symbol' => config('settings.currency_symbol'),
                 'resource' => $resource,
                 'type' => 'list',
             ]);
@@ -85,6 +87,10 @@ class VoucherController extends Controller
                 'vendor_id_options' => $vendors->pluck('name', 'id')->toArray(), // Ensure this returns an array of options
                 'next_invoice_number' => $nextInvoiceNumber,
                 'inventory_items' => $inventory_items,
+                'wht_enabled' => (bool) config('settings.wht_enabled', false),
+                'wht_mode' => config('settings.wht_mode', 'manual'),
+                'wht_manual_rate' => config('settings.wht_manual_rate', 0),
+                'currency_symbol' => config('settings.currency_symbol'),
             ]);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to load invoice creation form. ' . $e->getMessage());
@@ -102,73 +108,92 @@ class VoucherController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the request
         $request->validate([
             'vendor_id' => 'required|exists:vendors,id',
             'invoice_date' => 'required|date',
             'exchange_rate' => 'required|numeric',
-            'items.*.item_id' => 'required|exists:inventories,id',
+            'items' => 'required|array|min:1',
+            'items.*.item_id' => 'required|integer|exists:inventories,id',
             'items.*.description' => 'nullable|string',
-            'items.*.rate' => 'required|numeric|min:0',
             'items.*.quantity' => 'required|integer|min:1',
-            'items.*.amount' => 'required|numeric|min:0',
         ]);
 
-        // Start a transaction
-        DB::beginTransaction();
+        // The form presents Inventory.unit_cost as a read-only rate. Re-read it here;
+        // client amount, rate, total, balance, and WHT fields are never authoritative.
+        $inventoryItems = Inventory::whereIn('id', collect($request->input('items'))->pluck('item_id')->unique())
+            ->get()
+            ->keyBy('id');
+        $calculationLines = [];
+        foreach ($request->input('items') as $item) {
+            $inventoryItem = $inventoryItems->get((int) $item['item_id']);
+            if (!$inventoryItem) {
+                return redirect()->back()->withErrors(['items' => ['A selected inventory item is no longer available.']])->withInput();
+            }
 
+            $calculationLines[] = [
+                'item_id' => $inventoryItem->id,
+                'description' => $item['description'] ?? $inventoryItem->description,
+                'quantity' => $item['quantity'],
+                'rate' => $inventoryItem->unit_cost,
+            ];
+        }
+
+        $financial = app(VendorWithholdingCalculator::class)->calculate($calculationLines, [
+            'wht_enabled' => config('settings.wht_enabled', false),
+            'wht_mode' => config('settings.wht_mode', 'manual'),
+            'wht_manual_rate' => config('settings.wht_manual_rate', '0.00'),
+        ]);
+
+        DB::beginTransaction();
         try {
-            // Create a new invoice
             $invoice = new VendorInvoice([
                 'vendor_id' => $request->vendor_id,
                 'invoice_date' => $request->invoice_date,
                 'exchange_rate' => $request->exchange_rate,
+                // Compatibility amount remains the single authoritative WHT amount for new invoices.
+                'withholding_tax_amount' => $financial['withholding_tax_amount'],
+                'wht_enabled_snapshot' => $financial['wht_enabled_snapshot'],
+                'wht_mode_snapshot' => $financial['wht_mode_snapshot'],
+                'wht_rate_snapshot' => $financial['wht_rate_snapshot'],
+                'wht_base_snapshot' => $financial['wht_base_snapshot'],
+                'wht_balance_due_snapshot' => $financial['wht_balance_due_snapshot'],
+                'wht_calculation_version' => $financial['wht_calculation_version'],
+                'wht_calculated_at' => now(),
             ]);
-
             $invoice->save();
 
-            // Process invoice items and update inventory quantities
             $invoiceItems = [];
-            foreach ($request->items as $item) {
+            foreach ($financial['lines'] as $line) {
                 $invoiceItem = new VendorInvoiceItem([
                     'invoice_id' => $invoice->id,
-                    'item_id' => $item['item_id'],
-                    'description' => $item['description'],
-                    'rate' => $item['rate'],
-                    'quantity' => $item['quantity'],
-                    'amount' => $item['amount'],
+                    'item_id' => $line['item_id'],
+                    'description' => $line['description'],
+                    'rate' => $line['rate'],
+                    'quantity' => $line['quantity'],
+                    'amount' => $line['amount'],
                 ]);
-
                 $invoiceItem->save();
                 $invoiceItems[] = $invoiceItem;
 
-                // Update inventory quantity at hand
-                $inventoryItem = Inventory::find($item['item_id']);
-                if ($inventoryItem) {
-                    $newQuantity = $inventoryItem->quantity_at_hand + $item['quantity'];
-                    $inventoryItem->update(['quantity_at_hand' => $newQuantity]);
-                }
+                $inventoryItem = $inventoryItems->get($line['item_id']);
+                $inventoryItem->update([
+                    'quantity_at_hand' => $inventoryItem->quantity_at_hand + $line['quantity'],
+                ]);
             }
 
-            // Commit transaction
             DB::commit();
 
-            // Prepare receipt data
             $vendor = Vendor::find($request->vendor_id);
-
-            // Calculate total amount for the invoice
-            $totalAmount = collect($invoiceItems)->sum('amount');
-
             return view('pages.vendors.receipt', [
                 'invoice' => $invoice,
                 'vendor' => $vendor,
                 'invoiceItems' => $invoiceItems,
-                'totalAmount' => $totalAmount, // Include total amount in the view
+                'totalAmount' => $financial['vendor_total'],
+                'balanceDue' => $financial['wht_balance_due_snapshot'],
+                'currency_symbol' => config('settings.currency_symbol'),
             ])->with('success', 'Invoice created successfully.');
         } catch (\Exception $e) {
-            // Rollback transaction on error
             DB::rollBack();
-
             return redirect()->back()->with('error', 'Failed to create invoice. ' . $e->getMessage())->withInput();
         }
     }

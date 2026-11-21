@@ -57,20 +57,20 @@ $transaction = new \App\Transaction();
                 <div class="card">
                     <div class="header">
                         <h3>{{ $moduleName }} ( {{ str_pad($items[0]->voucher_no, 4, '0', STR_PAD_LEFT) }} )
-                            Information</h3>
+                            {{ __('financial.labels.information') }}</h3>
                     </div>
 
                     <div class="body">
                         <table class="table  table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <td>Branch Name: {{ App\Transaction::find($items[0]->id)->Branch->name }} ( Dr )
+                                    <td>{{ __('financial.labels.branch_name') }}: {{ App\Transaction::find($items[0]->id)->Branch->name }} ( {{ __('Dr') }} )
                                     </td>
-                                    <td>Branch Name: {{ App\Transaction::find($items[1]->id)->Branch->name }} ( Cr )
+                                    <td>{{ __('financial.labels.branch_name') }}: {{ App\Transaction::find($items[1]->id)->Branch->name }} ( {{ __('Cr') }} )
                                     </td>
-                                    <td>Particulars: &nbsp; <span class="text-bold">{{ $items[0]->particulars }}</span>
+                                    <td>{{ __('financial.labels.particulars') }}: &nbsp; <span class="text-bold">{{ $items[0]->particulars }}</span>
                                     </td>
-                                    <td> Voucher Date: &nbsp; <span class="text-bold">{{
+                                    <td> {{ __('financial.labels.voucher_date') }}: &nbsp; <span class="text-bold">{{
                                             date(config('settings.date_format'), strtotime($items[0]->voucher_date))
                                             }}</span>
                                     </td>
@@ -83,14 +83,14 @@ $transaction = new \App\Transaction();
                         <table class="table  table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>Made Of Payment</th>
+                                    <th>{{ __('financial.labels.payment_account') }}</th>
 
-                                    <th scope="col">Debit (
+                                    <th scope="col">{{ __('Debit') }} (
                                         <?php echo (config('settings.is_code') == 'code') ?
                                             config('settings.currency_code') : config('settings.currency_symbol')  ?>
                                         )
                                     </th>
-                                    <th scope="col">Credit (
+                                    <th scope="col">{{ __('Credit') }} (
                                         <?php echo (config('settings.is_code') == 'code') ?
                                             config('settings.currency_code') : config('settings.currency_symbol')  ?>
                                         )
@@ -122,7 +122,7 @@ $transaction = new \App\Transaction();
                                 </tr>
                                 @endforeach
                                 <tr>
-                                    <th colspan="1" class="text-right">Total=</th>
+                                    <th colspan="1" class="text-right">{{ __('Total') }}=</th>
                                     <th>{{ $transaction->convert_money_format($dr_total_amount) }}=/</th>
                                     <th>{{ $transaction->convert_money_format($cr_total_amount) }}=/</th>
 
@@ -136,17 +136,17 @@ $transaction = new \App\Transaction();
                         <table class="table  table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <td>Created By: &nbsp; <span class="text-bold">{{ $items[0]->created_by }}</span>
+                                    <td>{{ __('Created By') }}: &nbsp; <span class="text-bold">{{ $items[0]->created_by }}</span>
                                     </td>
-                                    <td>Created at: &nbsp; <span class="text-bold">{{
+                                    <td>{{ __('Created at') }}: &nbsp; <span class="text-bold">{{
                                             date(config('settings.date_format')." h:i:s",
                                             strtotime($items[0]->created_at)) }}</span>
                                     </td>
-                                    <td>Deleted By: &nbsp; <span class="text-bold">{{ $items[0]->deleted_by }}</span>
+                                    <td>{{ __('Deleted By') }}: &nbsp; <span class="text-bold">{{ $items[0]->deleted_by }}</span>
                                     </td>
-                                    <td>Modified by: &nbsp; <span class="text-bold">{{ $items[0]->updated_by }}</span>
+                                    <td>{{ __('Modified by') }}: &nbsp; <span class="text-bold">{{ $items[0]->updated_by }}</span>
                                     </td>
-                                    <td>Modified at: &nbsp; <span class="text-bold">{{
+                                    <td>{{ __('Modified at') }}: &nbsp; <span class="text-bold">{{
                                             date(config('settings.date_format')." h:i:s",
                                             strtotime($items[0]->updated_at)) }}</span>
                                     </td>

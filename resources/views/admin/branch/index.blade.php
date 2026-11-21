@@ -69,7 +69,7 @@ $trash_show = config('role_manage.Branch.TrashShow');
                             </form>
                         </ul>
                     </div>
-                    <form class="actionForm" action="{{ route($ParentRouteName . '.active.action') }}" method="get">
+                    <form class="actionForm" action="{{ route($ParentRouteName . '.active.action') }}" method="post">
                         <div class="pagination-and-action-area body">
                             <div>
                                 <div class="select-and-apply-area">
@@ -143,12 +143,12 @@ $trash_show = config('role_manage.Branch.TrashShow');
                                                 data-toggle="tooltip" data-placement="top"
                                                 title="{{ __('root.common.preview') }}"><i
                                                     class="material-icons">pageview</i></a>
-                                            <a @if ($delete==0) class="dis-none" @endif
+                                            @if ($delete)
+                                            <button type="submit" form="branch-delete-{{ $item->id }}"
                                                 class="btn btn-xs btn-danger waves-effect"
-                                                href="{{ route($ParentRouteName . '.destroy', ['id' => $item->id]) }}"
                                                 data-toggle="tooltip" data-placement="top"
-                                                title="{{ __('root.common.trash') }}"> <i
-                                                    class="material-icons">delete</i></a>
+                                                title="{{ __('root.common.trash') }}"><i class="material-icons">delete</i></button>
+                                            @endif
                                             <a @if ($pdf==0) class="dis-none" @endif
                                                 class="btn btn-xs btn-warning waves-effect"
                                                 href="{{ route($ParentRouteName . '.pdf', ['id' => $item->id]) }}"
@@ -217,6 +217,12 @@ $trash_show = config('role_manage.Branch.TrashShow');
                             </div>
                         </div>
                     </form>
+                    @foreach ($items as $item)
+                    <form id="branch-delete-{{ $item->id }}" action="{{ route($ParentRouteName . '.destroy', ['id' => $item->id]) }}" method="post" class="d-none">
+                        {{ csrf_field() }}
+                        @method('DELETE')
+                    </form>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -264,10 +270,10 @@ $trash_show = config('role_manage.Branch.TrashShow');
 <!-- Autosize Plugin Js -->
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)

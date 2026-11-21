@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Purchase Order')
+@section('title', __('Purchase Order'))
 
 @section('top-bar')
     @include('shared.header')
@@ -14,45 +14,54 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <a class="btn btn-sm btn-info waves-effect" href="{{ route('vendors.index') }}">Back</a>
+                <a class="btn btn-sm btn-info waves-effect" href="{{ route('vendors.index') }}">{{ __('financial.labels.back') }}</a>
             </div>
 
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>Purchase Order</h2>
+                            <h2>{{ __('financial.terms.purchase_order') }}</h2>
                         </div>
                         <div class="body">
+                            @if($errors->any())
+                                <div class="alert alert-danger" role="alert">
+                                    <ul class="mb-0">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <form class="form" id="form_validation" method="post" action="{{ route('vouchers.store') }}">
                                 @csrf
                                 <div class="row clearfix">
-                                    <x-form.form-select label="Select Vendor" name="vendor_id" :options="$vendor_id_options" required colspan="3" />
+                                    <x-form.form-select :label="__('Select Vendor')" name="vendor_id" :options="$vendor_id_options" required colspan="3" />
                                 </div>
                                 <div class="row clearfix">
                                     {{-- CUSTOMER INFO --}}
-                                    <x-form.form-input label="Vendor Name" name="name" required colspan="3" />
-                                    <x-form.form-input label="Account" type="text" name="account" required colspan="3" />
-                                    <x-form.form-input label="Phone Number" type="tel" name="phone" required colspan="3" />
-                                    <x-form.form-input label="Home Address" name="address" required colspan="3" />
+                                    <x-form.form-input :label="__('Vendor Name')" name="name" required colspan="3" />
+                                    <x-form.form-input :label="__('Account')" type="text" name="account" required colspan="3" />
+                                    <x-form.form-input :label="__('Phone Number')" type="tel" name="phone" required colspan="3" />
+                                    <x-form.form-input :label="__('Home Address')" name="address" required colspan="3" />
 
                                     {{-- INVOICE INFO --}}
-                                    <x-form.form-input label="Branch" name="branch_name" required colspan="3" />
-                                    <x-form.form-input label="Invoice No." type="number" name="invoice_number" required colspan="3" value="" readonly />
+                                    <x-form.form-input :label="__('Branch')" name="branch_name" required colspan="3" />
+                                    <x-form.form-input :label="__('Invoice No.')" type="number" name="invoice_number" required colspan="3" value="" readonly />
                                     <x-form.form-input label="" type="date" name="invoice_date" required colspan="3" value="" />
-                                    <x-form.form-input label="Exchange Rate" name="exchange_rate" required colspan="3" />
+                                    <x-form.form-input :label="__('Exchange Rate')" name="exchange_rate" required colspan="3" />
 
                                     {{-- INVOICE ITEMS --}}
                                     <div class="col-12">
                                         <table class="table table-bordered" id="invoice_items_table">
                                             <thead>
                                             <tr>
-                                                <th>Item</th>
-                                                <th>Description</th>
-                                                <th>Quantity</th>
-                                                <th>Rate</th>
-                                                <th>Amount</th>
-                                                <th>Action</th>
+                                                <th>{{ __('financial.labels.item') }}</th>
+                                                <th>{{ __('financial.terms.description') }}</th>
+                                                <th>{{ __('financial.terms.quantity') }}</th>
+                                                <th>{{ __('financial.labels.rate') }}</th>
+                                                <th>{{ __('financial.terms.total_amount') }}</th>
+                                                <th>{{ __('Action') }}</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -60,7 +69,7 @@
                                             <tr>
                                                 <td>
                                                     <select name="items[0][item_id]" class="form-control item-select" onchange="setItemDescriptionAndRate(this)">
-                                                        <option value="">Select Item</option>
+                                                        <option value="">{{ __('Select Item') }}</option>
                                                         @foreach($inventory_items as $item)
                                                             <option value="{{ $item->id }}" data-description="{{ $item->description }}" data-rate="{{ $item->unit_cost }}">{{ $item->type_name }}</option>
                                                         @endforeach
@@ -70,29 +79,39 @@
                                                 <td><input type="number" name="items[0][quantity]" class="form-control" oninput="calculateAmount(this)"></td>
                                                 <td><input type="number" name="items[0][rate]" class="form-control rate" readonly></td>
                                                 <td><input type="number" name="items[0][amount]" class="form-control amount" readonly></td>
-                                                <td><button type="button" class="btn btn-danger delete-row">Delete</button></td>
+                                                <td><button type="button" class="btn btn-danger delete-row">{{ __('Delete') }}</button></td>
                                             </tr>
                                             </tbody>
                                             <tfoot>
                                             <tr>
-                                                <td colspan="4" align="right"><strong>Total:</strong></td>
-                                                <td><input type="number" id="total_amount" class="form-control" readonly></td>
+                                                <td colspan="4" align="right"><strong>{{ __('financial.terms.total') }}:</strong></td>
+                                                <td>{{ $currency_symbol }} <input type="number" id="total_amount" class="form-control" readonly></td>
                                                 <td></td>
                                             </tr>
+                                            @if($wht_enabled && $wht_mode === 'manual')
+                                                <tr>
+                                                    <td colspan="4" align="right"><strong>{{ __('Withholding Tax') }} ({{ number_format((float) $wht_manual_rate, 2) }}%):</strong></td>
+                                                    <td>{{ $currency_symbol }} <input type="number" id="withholding_tax_amount" class="form-control" readonly></td>
+                                                    <td></td>
+                                                </tr>
+                                            @endif
                                             <tr>
-                                                <td colspan="4" align="right"><strong>Balance Due:</strong></td>
-                                                <td><input type="number" id="balance_due" class="form-control" readonly></td>
+                                                <td colspan="4" align="right"><strong>{{ __('financial.labels.balance_due') }}:</strong></td>
+                                                <td>{{ $currency_symbol }} <input type="number" id="balance_due" class="form-control" readonly></td>
                                                 <td></td>
                                             </tr>
                                             </tfoot>
                                         </table>
-                                        <button type="button" class="btn btn-primary" id="add_row">Add Row</button>
+                                        <button type="button" class="btn btn-primary" id="add_row">{{ __('financial.screens.add_row') }}</button>
                                     </div>
 
                                     {{-- ACTION --}}
                                     <x-form.form-button as="Create" />
                                 </div>
                             </form>
+                            @if($wht_enabled && $wht_mode === 'rule_based')
+                                <div class="alert alert-warning">{{ __('financial.labels.rule_based_wht_not_configured') }}</div>
+                            @endif
                             <style>
                                 .hidden-label {
                                     display: none;
@@ -100,6 +119,10 @@
                             </style>
 
                             <script>
+                                const whtEnabled = @json($wht_enabled);
+                                const whtMode = @json($wht_mode);
+                                const manualWhtRate = Number(@json($wht_manual_rate));
+
                                 function setItemDescriptionAndRate(select) {
                                     const selectedOption = select.options[select.selectedIndex];
                                     const row = select.closest('tr');
@@ -132,8 +155,14 @@
                                     document.querySelectorAll('input[name$="[amount]"]').forEach(input => {
                                         total += parseFloat(input.value) || 0;
                                     });
+                                    const manualApplies = whtEnabled && whtMode === 'manual';
+                                    const withholdingTaxAmount = manualApplies ? (total * manualWhtRate) / 100 : 0;
+                                    const balanceDue = total - withholdingTaxAmount;
+
                                     document.getElementById('total_amount').value = total.toFixed(2);
-                                    document.getElementById('balance_due').value = total.toFixed(2);
+                                    const withholdingField = document.getElementById('withholding_tax_amount');
+                                    if (withholdingField) withholdingField.value = withholdingTaxAmount.toFixed(2);
+                                    document.getElementById('balance_due').value = whtEnabled && whtMode === 'rule_based' ? '' : balanceDue.toFixed(2);
                                 }
 
                                 document.addEventListener('DOMContentLoaded', function () {

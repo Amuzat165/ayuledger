@@ -6,10 +6,13 @@ use App\Language;
 use Illuminate\Http\Request;
 use App\Profile;
 use App\User;
+use App\Support\LanguagePreference;
+use App\Support\LocaleManager;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
@@ -79,7 +82,8 @@ class ProfileController extends Controller
     {
 
         $request->validate([
-            'avatar' => 'image'
+            'avatar' => 'image',
+            'language_id' => ['nullable', 'integer', Rule::exists('languages', 'id')->whereNull('deleted_at')],
         ]);
 
         $user = Auth::user();
@@ -105,11 +109,18 @@ class ProfileController extends Controller
         }
         $user->profile->save();
         if (!env('DEMO_MODE')) {
-            $user->language_id = $request->language_id;
+            $user->language_id = $request->input('language_id');
             $user->save();
-            Session::flash('success', 'Successfully Updated');
+            $languages = app(LanguagePreference::class)->activeLanguages();
+            $locale = app(LanguagePreference::class)->localeForLanguageId($languages, $user->language_id)
+                ?: LocaleManager::DEFAULT_LOCALE;
+            $request->session()->put('app_locale', $locale);
+            // The saved profile language now takes effect over any unsaved dropdown choice.
+            $request->session()->forget('app_locale_override');
+            app()->setLocale($locale);
+            Session::flash('success', __('ui.messages.updated'));
         }else{
-            Session::flash('success', 'Successfully Updated. But language are disabled in demo mode.');
+            Session::flash('success', __('ui.messages.profile_language_disabled'));
         }
 
         return redirect()->route('profile');
@@ -136,7 +147,7 @@ class ProfileController extends Controller
         ]);
 
         if ($request["NewPassword"] !== $request["NewPasswordConfirm"]) {
-            Session::flash('error', 'Password and Confirm password does not match');
+            Session::flash('error', __('ui.messages.password_confirmation_mismatch'));
             return redirect()->back();
         }
 
@@ -145,11 +156,11 @@ class ProfileController extends Controller
             $user = User::find(Auth::user()->id);
             $user->password = Hash::make($request["NewPassword"]);
             $user->save();
-            Session::flash('success', 'Password Successfully Update');
+            Session::flash('success', __('ui.messages.password_updated'));
             return redirect()->back();
         } else {
 
-            Session::flash('error', 'Old Password Incorrect?');
+            Session::flash('error', __('ui.messages.old_password_incorrect'));
             return redirect()->back();
         }
     }

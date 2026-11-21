@@ -35,14 +35,14 @@ var Helper = {
 
         return new Promise((resolve, reject) => {
             if (typeof type == 'undefined') {
-                toastr["error"]('Please set post type');
+                toastr["error"](window.ayuUiMessages.missingPostType);
                 if (redirect == false) {
                     Helper.uiUnBlock();
                 }
                 reject();
             }
             if (typeof url == 'undefined') {
-                toastr["error"]('Please set url');
+                toastr["error"](window.ayuUiMessages.missingUrl);
                 if (redirect == false) {
                     Helper.uiUnBlock();
                 }
@@ -62,7 +62,7 @@ var Helper = {
                 Helper.uiUnBlock();
                 resolve(resData);
             }).catch((error) => {
-                toastr["error"]('Network error');
+                toastr["error"](window.ayuUiMessages.networkError);
                 if (redirect == false) {
                     Helper.uiUnBlock();
                 }

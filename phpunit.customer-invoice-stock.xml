@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         bootstrap="tests/bootstrap/customer-invoice-stock-safety.php"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         cacheResult="false"
+         colors="true"
+         processIsolation="false"
+         stopOnFailure="true"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+    <testsuites>
+        <testsuite name="Customer invoice duplicate-item stock regressions">
+            <file>tests/Feature/CustomerInvoiceFinancialSnapshotTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>

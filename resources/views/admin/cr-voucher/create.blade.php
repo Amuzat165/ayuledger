@@ -54,7 +54,7 @@ $all = config('role_manage.CrVoucher.All');
                     <div class="header">
                         <h2 class="m-b-20">
                             {{ $createItemName }}
-                            <small>Put {{ $moduleName }} Information</small>
+                            <small>{{ __('financial.labels.enter_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
                         <div class="body">
                             <form class="form" id="form_validation" method="post"
@@ -66,7 +66,7 @@ $all = config('role_manage.CrVoucher.All');
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control show-tick"
                                                     name="branch_id">
-                                                    <option value="0">Select Branch Name</option>
+                                                    <option value="0">{{ __('financial.labels.select_branch') }}</option>
                                                     @foreach ($branches as $project)
                                                     <option @if ($project->id == old('branch_id')) selected @endif
                                                         value="{{ $project->id }}">{{ $project->name }}</option>
@@ -80,7 +80,7 @@ $all = config('role_manage.CrVoucher.All');
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control show-tick"
                                                     name="bank_cash_id" id="">
-                                                    <option value="0"> Select Bank Cash Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_bank_cash') }}</option>
                                                     @foreach ($bank_cashes->sortByDesc('id') as $bank_cash)
                                                     <option @if ($bank_cash->id == old('bank_cash_id')) selected @endif
                                                         value="{{ $bank_cash->id }}">{{ $bank_cash->name }}
@@ -94,7 +94,7 @@ $all = config('role_manage.CrVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="cheque_number" type="text" class="form-control">
-                                                <label class="form-label">Cheque Number</label>
+                                                <label class="form-label">{{ __('financial.labels.cheque_number') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -106,7 +106,7 @@ $all = config('role_manage.CrVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }}</option>
                                                     @foreach ($income_expense_heads->sortByDesc('id') as $HeadOfAccount)
                                                     <option @if ($HeadOfAccount->id == old('income_expense_head_id'))
                                                         selected @endif
@@ -121,7 +121,7 @@ $all = config('role_manage.CrVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount </label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -139,7 +139,7 @@ $all = config('role_manage.CrVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }}</option>
                                                     @foreach ($income_expense_heads->sortByDesc('id') as $HeadOfAccount)
                                                     <option @if ($HeadOfAccount->id == old('income_expense_head_id'))
                                                         selected @endif
@@ -154,7 +154,7 @@ $all = config('role_manage.CrVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount </label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -174,7 +174,7 @@ $all = config('role_manage.CrVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }}</option>
                                                     @foreach ($income_expense_heads as $HeadOfAccount)
                                                     <option @if ($HeadOfAccount->id == old('income_expense_head_id'))
                                                         selected @endif
@@ -189,7 +189,7 @@ $all = config('role_manage.CrVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount </label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -209,7 +209,7 @@ $all = config('role_manage.CrVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }}</option>
                                                     @foreach ($income_expense_heads as $HeadOfAccount)
                                                     <option @if ($HeadOfAccount->id == old('income_expense_head_id'))
                                                         selected @endif
@@ -224,7 +224,7 @@ $all = config('role_manage.CrVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount </label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -244,7 +244,7 @@ $all = config('role_manage.CrVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }}</option>
                                                     @foreach ($income_expense_heads as $HeadOfAccount)
                                                     <option @if ($HeadOfAccount->id == old('head_of_account_id'))
                                                         selected @endif
@@ -259,7 +259,7 @@ $all = config('role_manage.CrVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount </label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -276,7 +276,7 @@ $all = config('role_manage.CrVoucher.All');
                                             <div class="form-line" id="bs_datepicker_container">
                                                 <input autocomplete="off" value="{{ old('voucher_date') }}"
                                                     name="voucher_date" type="text" class="form-control"
-                                                    placeholder="Please choose a date...">
+                                                    placeholder="{{ __('financial.screens.select_date') }}">
                                             </div>
                                         </div>
                                     </div>
@@ -284,7 +284,7 @@ $all = config('role_manage.CrVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <textarea name="particulars" rows="2" class="form-control no-resize"
-                                                    placeholder="Particulars"></textarea>
+                                                    placeholder="{{ __('financial.labels.particulars') }}"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -331,10 +331,10 @@ $all = config('role_manage.CrVoucher.All');
 <script src="{{ asset('asset/js/pages/forms/basic-form-elements.js') }}"></script>
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)
@@ -405,12 +405,12 @@ $all = config('role_manage.CrVoucher.All');
                         Area.style.display = 'block';
                     }
                 },
-                hideHeadAmountArea: function(Field) {
+                hideHead{{ __('financial.labels.amount') }}Area: function(Field) {
                     if (Field) {
                         Field.style.display = 'none';
                     }
                 },
-                showHeadAmountArea: function(Field) {
+                showHead{{ __('financial.labels.amount') }}Area: function(Field) {
                     var DomString = this.getDOMString();
                     Field.querySelector('select').value = 0;
                     Field.querySelector(DomString.amount).value = "";
@@ -442,62 +442,62 @@ $all = config('role_manage.CrVoucher.All');
                 Values = UICnt.getValues();
                 Fields = UICnt.getFields();
                 if (Values.project_id == 0) {
-                    toastr["error"]('Select  branch name');
+                    toastr["error"](@json(__('financial.labels.branch_required')));
                     e.preventDefault();
                 }
                 if (Values.bankcash_id == 0) {
-                    toastr["error"]('Select Bank Cash Name');
+                    toastr["error"]('{{ __('financial.labels.select_bank_cash') }}');
                     e.preventDefault();
                 }
                 if (Fields.get_head_of_account_id[0].querySelector('select').value == 0) {
-                    toastr["error"]('Select Head Of Account');
+                    toastr["error"](@json(__('financial.labels.select_head_of_account')) + '');
                     e.preventDefault();
                 }
                 if (Fields.get_amount[0].value == '') {
-                    toastr["error"]('Put Amount');
+                    toastr["error"]('{{ __('financial.labels.enter_amount') }}');
                     e.preventDefault();
                 }
                 if (Values.date == 0) {
-                    toastr["error"]('Set Date');
+                    toastr["error"](@json(__('financial.screens.select_date')));
                     e.preventDefault();
                 }
                 if (Fields.get_dr[1].style.display == 'block') {
                     if (Fields.get_head_of_account_id[2].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + '');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[1].value == '') {
-                        toastr["error"]('Put Amount');
+                        toastr["error"]('{{ __('financial.labels.enter_amount') }}');
                         e.preventDefault();
                     }
                 }
                 if (Fields.get_dr[2].style.display == 'block') {
                     if (Fields.get_head_of_account_id[4].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + '');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[2].value == '') {
-                        toastr["error"]('Put Amount');
+                        toastr["error"]('{{ __('financial.labels.enter_amount') }}');
                         e.preventDefault();
                     }
                 }
                 if (Fields.get_dr[3].style.display == 'block') {
                     if (Fields.get_head_of_account_id[6].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + '');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[3].value == '') {
-                        toastr["error"]('Put Amount');
+                        toastr["error"]('{{ __('financial.labels.enter_amount') }}');
                         e.preventDefault();
                     }
                 }
                 if (Fields.get_dr[4].style.display == 'block') {
                     if (Fields.get_head_of_account_id[8].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + '');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[4].value == '') {
-                        toastr["error"]('Put Amount');
+                        toastr["error"]('{{ __('financial.labels.enter_amount') }}');
                         e.preventDefault();
                     }
                 }
@@ -545,7 +545,7 @@ $all = config('role_manage.CrVoucher.All');
                     return false;
                 }
                 if (checkUniqueOrNot(head_of_account_Ids)) {
-                    toastr["error"]('Head of Account should unique');
+                    toastr["error"](@json(__('financial.labels.account_head_unique')));
                     e.preventDefault();
                 }
             };
@@ -562,12 +562,12 @@ $all = config('role_manage.CrVoucher.All');
             var addItem = function(index) {
                 var Fields;
                 Fields = UICnt.getFields();
-                UICnt.showHeadAmountArea(Fields.get_dr[index + 1]);
+                UICnt.showHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[index + 1]);
             };
             var removeItem = function(index) {
                 var Fields;
                 Fields = UICnt.getFields();
-                UICnt.hideHeadAmountArea(Fields.get_dr[index + 1]);
+                UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[index + 1]);
             };
             return {
                 init: function() {
@@ -576,10 +576,10 @@ $all = config('role_manage.CrVoucher.All');
                     // Default hide fields
                     var Fields = UICnt.getFields();
                     UICnt.hide(Fields.get_cheque_number);
-                    UICnt.hideHeadAmountArea(Fields.get_dr[1]);
-                    UICnt.hideHeadAmountArea(Fields.get_dr[2]);
-                    UICnt.hideHeadAmountArea(Fields.get_dr[3]);
-                    UICnt.hideHeadAmountArea(Fields.get_dr[4]);
+                    UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[1]);
+                    UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[2]);
+                    UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[3]);
+                    UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[4]);
                 }
             }
 

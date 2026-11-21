@@ -3,10 +3,10 @@
 
 @inject('Bh', 'App\Helpers\BladeHelper')
 
-@section('title', 'Expense List')
+@section('title', __('financial.screens.expense_list'))
 
 @section('container')
-    <x-breadcrumb :level="'Expenses'" :location="'Expense List'" :as="'Index'" />
+    <x-breadcrumb :level="__('financial.terms.expense')" :location="__('financial.screens.expense_list')" :as="__('financial.labels.all')" />
     <div class="row">
         <div class="col-xs-12">
             <div class="card">
@@ -14,7 +14,7 @@
                 <form class="actionForm" action="" method="get">
                     @csrf
                     <x-table.table-pagination-with-selected />
-                    <x-table.table-wrapper :thead="['#', 'Branch','Account','Payment Mode', 'Vendor', 'Expense Date', 'Category', 'Amount', 'Description','Edit','Delete']">
+                    <x-table.table-wrapper :thead="['#', __('financial.labels.branch'), __('financial.terms.account'), __('financial.screens.payment_mode'), __('financial.terms.vendor'), __('financial.screens.expense_date'), __('financial.screens.category'), __('financial.labels.amount_to_pay'), __('financial.terms.description'), __('root.common.edit'), __('root.common.delete')]">
                         @forelse ($expenses as $expense)
                             @php
                                 $sn = $loop->iteration;

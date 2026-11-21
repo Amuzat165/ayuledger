@@ -4,7 +4,7 @@
 
 <?php
 
-$moduleName = " Ledger Type";
+$moduleName = __("financial.labels.ledger_type_management");
 $createItemName = __('root.common.create') . ' ' . $moduleName;
 
 $breadcrumbMainName = $moduleName;
@@ -56,7 +56,7 @@ $ParentRouteName = 'income_expense_type';
                     <div class="header">
                         <h2>
                             {{ $createItemName }}
-                            <small>Put {{ $moduleName }} Information</small>
+                            <small>{{ __('financial.labels.enter_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
 
                         <div class="body">
@@ -71,7 +71,7 @@ $ParentRouteName = 'income_expense_type';
                                             <div class="form-line">
                                                 <input autofocus value="{{ old('name')  }}" name="name" type="text"
                                                     class="form-control">
-                                                <label class="form-label">Name</label>
+                                                <label class="form-label">{{ __('Name') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -81,7 +81,7 @@ $ParentRouteName = 'income_expense_type';
                                             <div class="form-line">
                                                 <input value="{{ old('code')  }}" name="code" type="number"
                                                     class="form-control">
-                                                <label class="form-label">Code</label>
+                                                <label class="form-label">{{ __('Code') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -176,11 +176,11 @@ $ParentRouteName = 'income_expense_type';
 
 <script>
     @if(Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
                 @if(Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
 
@@ -249,12 +249,12 @@ $ParentRouteName = 'income_expense_type';
 
 
                 if (input_values.name == 0) {
-                    toastr["error"]('Ledger Type Name Is Required');
+                    toastr["error"]('{{ __('financial.labels.account_type') }} Is Required');
                     e.preventDefault();
                 }
 
                 if (input_values.code == 0) {
-                    toastr["error"]('Ledger Type Code Is Required');
+                    toastr["error"]('{{ __('financial.labels.account_type') }} Code Is Required');
                     e.preventDefault();
                 }
 

@@ -13,11 +13,12 @@
                 <form class="actionForm" action="" method="get">
                     @csrf
                     <x-table.table-pagination-with-selected />
-                    <x-table.table-wrapper :thead="['#', 'Invoice Number', 'Vendor', 'Invoice Date', 'Total Amount']">
+                    <x-table.table-wrapper :thead="['#', __('financial.labels.invoice_number'), __('financial.terms.vendor'), __('financial.labels.invoice_date'), __('financial.terms.total_amount'), __('financial.labels.withholding_tax'), __('financial.labels.balance_due')]">
                         @forelse ($vendorInvoices as $invoice)
                             @php
                                 $sn = $loop->iteration;
                                 $total_amount = number_format($invoice->total_amount, 2);
+                                $withholding_tax = number_format($invoice->withholding_tax_amount ?? 0, 2);
                             @endphp
                             <tr>
                                 <x-table.table-checkbox :sn="$sn" :item="$invoice" />
@@ -25,7 +26,15 @@
                                 <td style="font-size: 12px;">{{ $invoice->invoice_number }}</td>
                                 <td style="font-size: 12px;">{{ $invoice->vendor->name }}</td>
                                 <td style="font-size: 12px;">{{$invoice->created_at}}</td>
-                                <td style="font-size: 12px;">₦{{ $total_amount }}</td>
+                                <td style="font-size: 12px;">{{ $currency_symbol }}{{ $total_amount }}</td>
+                                <td style="font-size: 12px;">{{ $currency_symbol }}{{ $withholding_tax }}</td>
+                                <td style="font-size: 12px;">
+                                    @if(!is_null($invoice->wht_enabled_snapshot))
+                                        {{ $currency_symbol }}{{ number_format((float) $invoice->wht_balance_due_snapshot, 2) }}
+                                    @else
+                                        &mdash;
+                                    @endif
+                                </td>
 {{--                                <td>--}}
 {{--                                    <a href="{{ route('vouchers.show', $invoice->id) }}" class="btn btn-sm btn-primary">--}}
 {{--                                        <i class="fa fa-eye"></i>--}}
@@ -44,7 +53,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9">
+                                <td colspan="7">
                                     <x-table.table-no-records />
                                 </td>
                             </tr>

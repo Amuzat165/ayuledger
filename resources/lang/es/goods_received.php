@@ -1,0 +1,12 @@
+<?php
+return [
+    'title' => 'Mercancías recibidas', 'breadcrumb' => 'Mercancías recibidas', 'record_receipt' => 'Registrar mercancías recibidas', 'approve_purchase_order' => 'Aprobar orden de compra', 'approved_by' => 'Aprobado por',
+    'receipt_number' => 'Número de recepción', 'purchase_order' => 'Orden de compra', 'supplier' => 'Proveedor', 'branch' => 'Sucursal',
+    'received_date' => 'Fecha de recepción', 'received_by' => 'Recibido por', 'notes' => 'Notas', 'item' => 'Artículo', 'ordered_quantity' => 'Cantidad pedida',
+    'previously_received' => 'Recibido anteriormente', 'remaining_quantity' => 'Cantidad restante', 'received_quantity' => 'Cantidad recibida', 'unit' => 'Unidad',
+    'agreed_price' => 'Precio unitario acordado', 'status' => 'Estado', 'actions' => 'Acciones', 'draft' => 'Borrador', 'confirmed' => 'Confirmado',
+    'save_draft' => 'Guardar borrador', 'confirm' => 'Confirmar mercancías recibidas', 'view' => 'Ver', 'back' => 'Volver', 'empty' => 'Aún no hay registros de recepción.',
+    'draft_help' => 'Un borrador no modifica el inventario ni el estado de la orden de compra.', 'confirm_help' => 'La confirmación actualiza el inventario aplicable y el estado de la orden conjuntamente.',
+    'messages' => ['draft_saved' => 'Borrador de recepción guardado.', 'confirmed' => 'Recepción confirmada.', 'purchase_order_approved' => 'Orden de compra aprobada y lista para recibir mercancías.'],
+    'errors' => ['only_draft_can_be_approved' => 'Solo se puede aprobar una orden de compra en borrador.', 'order_requires_items' => 'Añada al menos un artículo antes de aprobar.', 'order_not_receivable' => 'La recepción requiere una orden aprobada con cantidades pendientes.', 'invalid_submission' => 'Esta referencia ya se usa en otra orden de compra.', 'at_least_one_quantity' => 'Introduzca una cantidad recibida para al menos un artículo.', 'line_not_in_order' => 'Uno o más artículos no pertenecen a esta orden.', 'quantity_must_be_positive' => 'La cantidad recibida debe ser mayor que cero.', 'over_receiving' => 'La cantidad supera el saldo restante de la orden.', 'inventory_unavailable' => 'El artículo de inventario vinculado ya no está disponible.', 'classify_inventory_first' => 'Defina el seguimiento de inventario de los artículos antes de confirmar.', 'whole_stock_quantity' => 'Los artículos con seguimiento de existencias deben recibirse en cantidades enteras.', 'inventory_branch_mismatch' => 'El artículo con seguimiento debe pertenecer a la sucursal de la orden.'],
+];

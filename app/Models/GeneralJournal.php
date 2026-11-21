@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class GeneralJournal extends Model
+class GeneralJournal extends \App\TenantScopedModel
 {
     use HasFactory, SoftDeletes;
 

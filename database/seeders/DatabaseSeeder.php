@@ -18,8 +18,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(UsersTableSeeder::class);
         $this->call(SettingsTableSeeder::class);
+        $this->call(SupportedLanguagesSeeder::class);
 
         // Resolve foreign keys by business keys instead of assuming fixed IDs.
         $this->call(ReportDataSeeder::class);
+        $this->call(TenantDemoSeeder::class);
     }
 }

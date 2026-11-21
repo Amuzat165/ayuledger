@@ -23,7 +23,7 @@
                                 <x-table.table-checkbox :sn="$sn" :item="$item" />
                                 <td style="font-size: 12px;">{{ $sn }}</td>
                                 <td style="font-size: 12px;">{{ $item->reg_number }}</td>
-                                <td style="font-size: 12px;">{{ $item->branch->name ?? 'N/A'  }}</td>
+                                <td style="font-size: 12px;">{{ $item->branch->name ?? __('financial.labels.not_available')  }}</td>
                                 <td style="font-size: 12px;">{{ $item->name }}</td>
                                 <td style="font-size: 12px;">{{ $item->address }}</td>
                                 <td style="font-size: 12px;">{{ $item->phone_number }}</td>

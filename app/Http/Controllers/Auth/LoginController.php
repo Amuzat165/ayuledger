@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -36,6 +37,24 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        $isSuperAdmin = strcasecmp($user->email, config('app.super_admin_email', 'admin@gmail.com')) === 0
+            || ($user->role && strcasecmp($user->role->name, 'Super Admin') === 0);
+
+        if (!$isSuperAdmin && !$user->email_verified_at) {
+            auth()->logout();
+            $request->session()->put('email_verification_user_id', $user->id);
+            return redirect()->route('verification.notice')->with('status', 'Please verify your email before continuing.');
+        }
+
+        if ($user->business && $user->business->subscription_status !== 'active') {
+            return redirect()->route('business.payment');
+        }
+
+        return redirect()->route('dashboard');
     }
 
 }

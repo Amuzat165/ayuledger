@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+Route::post('/locale', 'LocaleController@update')->name('locale.update');
+
 // Route::get('config-clear', function () {
 //     Artisan::call('cache:clear');
 //     Artisan::call('route:clear');
@@ -23,56 +25,112 @@ use Illuminate\Support\Facades\Auth;
 //     dd("Cache is cleared");
 // });
 
-Route::get('/vendors/{vendorId}/invoices', [\App\Http\Controllers\PaymentVoucherController::class, 'getInvoices']);
+Route::middleware('auth')->group(function () {
+    Route::middleware('tenant')->group(function () {
+        Route::get('/vendors/{vendorId}/invoices', [\App\Http\Controllers\PaymentVoucherController::class, 'getInvoices']);
 
-Route::post('/purchases/{invoiceId}/payment', [\App\Http\Controllers\PaymentVoucherController::class, 'submitPayment'])->name('orders.pay');
+        Route::post('/purchases/{invoiceId}/payment', [\App\Http\Controllers\PaymentVoucherController::class, 'submitPayment'])->name('orders.pay');
 
-Route::get('/purchases/{invoiceId}/receipt', [\App\Http\Controllers\PaymentVoucherController::class, 'generateReceiptPdf'])->name('orders.receipt.pdf');
+        Route::get('/purchases/{invoiceId}/receipt', [\App\Http\Controllers\PaymentVoucherController::class, 'generateReceiptPdf'])->name('orders.receipt.pdf');
 
-Route::get('/purchases/view', [\App\Http\Controllers\PaymentVoucherController::class, 'viewReceipts'])->name('vendors.receipts.view');
+        Route::get('/purchases/view', [\App\Http\Controllers\PaymentVoucherController::class, 'viewReceipts'])->name('vendors.receipts.view');
 
-Route::post('/vendors/{paymentId}/pay', [\App\Http\Controllers\PaymentVoucherController::class, 'pay'])->name('vendors.pay');
+        Route::post('/vendors/{paymentId}/pay', [\App\Http\Controllers\PaymentVoucherController::class, 'pay'])->name('vendors.pay');
+    });
 
-Route::get('/customers/{customerId}/invoices', [\App\Http\Controllers\CustomerReceiptController::class, 'getInvoices']);
+    Route::middleware('tenant')->group(function () {
+        Route::get('/customers/{customerId}/invoices', [\App\Http\Controllers\CustomerPaymentController::class, 'getInvoices']);
 
-Route::post('/invoices/{invoiceId}/pay', [\App\Http\Controllers\CustomerReceiptController::class, 'submitPayment'])->name('invoices.pay');
+        Route::post('/invoices/{invoiceId}/pay', [\App\Http\Controllers\CustomerPaymentController::class, 'submitPayment'])->name('invoices.pay');
 
-Route::get('/invoices/{invoiceId}/receipt/pdf', [\App\Http\Controllers\CustomerReceiptController::class, 'generateReceiptPdf'])->name('invoices.receipt.pdf');
+        Route::get('/invoices/{invoiceId}/pdf', [\App\Http\Controllers\CustomerInvoiceController::class, 'pdf'])->name('customers.invoices.pdf');
 
-Route::get('/receipts/view', [\App\Http\Controllers\CustomerReceiptController::class, 'viewReceipts'])->name('customers.receipts.view');
+        Route::get('/receipts/view', [\App\Http\Controllers\CustomerPaymentController::class, 'viewReceipts'])->name('customers.receipts.view');
 
-Route::post('/payments/{paymentId}/pay', [\App\Http\Controllers\CustomerReceiptController::class, 'pay'])->name('payments.pay');
+        Route::post('/payments/{paymentId}/pay', [\App\Http\Controllers\CustomerPaymentController::class, 'pay'])->name('payments.pay');
+        Route::get('/payment-receipts/{receiptId}/pdf', [\App\Http\Controllers\CustomerPaymentController::class, 'receiptPdf'])->name('customer.payment_receipts.pdf');
+        Route::get('/customer-deposits', [\App\Http\Controllers\CustomerDepositController::class, 'index'])->name('customer-deposits.index');
+        Route::get('/customer-deposits/{depositId}/apply', [\App\Http\Controllers\CustomerDepositController::class, 'applyForm'])->name('customer-deposits.apply.form');
+        Route::post('/customer-deposits/{depositId}/apply', [\App\Http\Controllers\CustomerDepositController::class, 'apply'])->name('customer-deposits.apply');
+    });
+});
 
 
 
 
 Auth::routes();
 
+Route::get('/email/verify-code', [\App\Http\Controllers\Auth\RegisterController::class, 'showVerificationForm'])->name('verification.notice');
+Route::post('/email/verify-code', [\App\Http\Controllers\Auth\RegisterController::class, 'verifyCode'])->middleware('throttle:6,1')->name('verification.verify');
+Route::post('/email/verify-code/resend', [\App\Http\Controllers\Auth\RegisterController::class, 'resendVerificationCode'])->middleware('throttle:3,1')->name('verification.resend');
+
+Route::get('/', [\App\Http\Controllers\LandingController::class, 'index'])->name('landing');
+Route::post('/contact', [\App\Http\Controllers\LandingController::class, 'contact'])->name('landing.contact');
+
+Route::get('/favicon.ico', [\App\Http\Controllers\FaviconController::class, 'show'])->name('company.favicon');
+Route::get('/favicon.png', [\App\Http\Controllers\FaviconController::class, 'show']);
+
+Route::middleware('auth')->group(function () {
+    Route::get('/console/email-settings', [\App\Http\Controllers\SuperAdminController::class, 'emailSettings'])->name('superadmin.email-settings');
+    Route::post('/console/email-settings', [\App\Http\Controllers\SuperAdminController::class, 'saveEmailSettings'])->name('superadmin.email-settings.save');
+    Route::post('/console/email-settings/test', [\App\Http\Controllers\SuperAdminController::class, 'testEmailSettings'])->name('superadmin.email-settings.test');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/business/payment', [\App\Http\Controllers\BusinessOnboardingController::class, 'payment'])->name('business.payment');
+    Route::post('/business/payment', [\App\Http\Controllers\BusinessOnboardingController::class, 'submitPayment'])->name('business.payment.submit');
+    Route::post('/business/payment/paystack/verify', [\App\Http\Controllers\BusinessOnboardingController::class, 'verifyPaystack'])->name('business.payment.paystack.verify');
+    Route::post('/business/feedback', [\App\Http\Controllers\BusinessOnboardingController::class, 'feedback'])->name('business.feedback');
+
+    Route::get('/console', [\App\Http\Controllers\SuperAdminController::class, 'index'])->name('superadmin.dashboard');
+    Route::get('/console/database', [\App\Http\Controllers\SuperAdminController::class, 'database'])->name('superadmin.database');
+    Route::post('/console/business/{business}/approve', [\App\Http\Controllers\SuperAdminController::class, 'approve'])->name('superadmin.business.approve');
+    Route::post('/console/business/{business}/reject', [\App\Http\Controllers\SuperAdminController::class, 'reject'])->name('superadmin.business.reject');
+    Route::post('/console/payment/{verification}/verify', [\App\Http\Controllers\SuperAdminController::class, 'verifyPayment'])->name('superadmin.payment.verify');
+    Route::get('/console/site-builder', [\App\Http\Controllers\SuperAdminController::class, 'siteBuilder'])->name('superadmin.site-builder');
+    Route::post('/console/site-builder/settings', [\App\Http\Controllers\SuperAdminController::class, 'saveSiteSettings'])->name('superadmin.site-builder.settings');
+    Route::post('/console/site-builder/slides', [\App\Http\Controllers\SuperAdminController::class, 'saveSlide'])->name('superadmin.site-builder.slide.create');
+    Route::post('/console/site-builder/slides/{slide}', [\App\Http\Controllers\SuperAdminController::class, 'saveSlide'])->name('superadmin.site-builder.slide.update');
+    Route::delete('/console/site-builder/slides/{slide}', [\App\Http\Controllers\SuperAdminController::class, 'deleteSlide'])->name('superadmin.site-builder.slide.delete');
+    Route::post('/console/site-builder/plans/{plan}', [\App\Http\Controllers\SuperAdminController::class, 'savePlan'])->name('superadmin.site-builder.plan.update');
+    Route::post('/console/site-builder/testimonials', [\App\Http\Controllers\SuperAdminController::class, 'saveTestimonial'])->name('superadmin.site-builder.testimonial.create');
+    Route::post('/console/site-builder/testimonials/{testimonial}', [\App\Http\Controllers\SuperAdminController::class, 'saveTestimonial'])->name('superadmin.site-builder.testimonial.update');
+    Route::delete('/console/site-builder/testimonials/{testimonial}', [\App\Http\Controllers\SuperAdminController::class, 'deleteTestimonial'])->name('superadmin.site-builder.testimonial.delete');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/tenant/select', [\App\Http\Controllers\TenantSelectionController::class, 'show'])
+        ->name('tenant.select');
+    Route::post('/tenant/select', [\App\Http\Controllers\TenantSelectionController::class, 'select'])
+        ->name('tenant.select.store');
+});
+
 //Route::get('/', 'HomeController@index')->name('home');
 
 // EXTENDED ROUTES
-include_once __DIR__ . '/web/customers-route.php';
+include __DIR__ . '/web/customers-route.php';
+include __DIR__ . '/purchase-orders-route.php';
 
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('logout', 'Auth\LoginController@logout');
 
     //    Dashboard
-    Route::get('/', [
+    Route::get('/dashboard', [
         'uses' => 'DashboardController@index',
         'as' => 'dashboard'
-    ]);
+    ])->middleware('tenant');
     // graph for total voucher
     Route::get('/total-voucher/{year?}', [
         'uses' => 'DashboardController@graphTotalVoucher',
         'as' => 'total_voucher'
-    ]);
+    ])->middleware('tenant');
 
     // graph for profit loss
     Route::get('/profit-loss/{year?}', [
         'uses' => 'DashboardController@graphProfitLoss',
         'as' => 'graph_profit_loss'
-    ]);
+    ])->middleware('tenant');
 
     //    profile
     Route::get('/profile', [
@@ -282,81 +340,81 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/branch', [
         'uses' => 'BranchController@index',
         'as' => 'branch'
-    ])->middleware('branch.module_show');
+    ])->middleware(['tenant', 'branch.module_show']);
 
     Route::get('/branch/show/{id}', [
         'uses' => 'BranchController@show',
         'as' => 'branch.show'
-    ])->middleware('branch.show');
+    ])->middleware(['tenant', 'branch.show']);
 
     Route::get('/branch/create', [
         'uses' => 'BranchController@create',
         'as' => 'branch.create'
-    ])->middleware('branch.create');
+    ])->middleware(['tenant', 'branch.create']);
 
     Route::post('/branch/store', [
         'uses' => 'BranchController@store',
         'as' => 'branch.store'
-    ])->middleware('branch.create');
+    ])->middleware(['tenant', 'branch.create']);
 
 
     Route::get('/branch/edit/{id}', [
         'uses' => 'BranchController@edit',
         'as' => 'branch.edit'
-    ])->middleware('branch.edit');
+    ])->middleware(['tenant', 'branch.edit']);
     Route::post('/branch/update/{id}', [
         'uses' => 'BranchController@update',
         'as' => 'branch.update'
-    ])->middleware('branch.edit');
+    ])->middleware(['tenant', 'branch.edit']);
 
 
-    Route::get('/branch/destroy/{id}', [
+    Route::delete('/branch/destroy/{id}', [
         'uses' => 'BranchController@destroy',
         'as' => 'branch.destroy'
-    ])->middleware('branch.delete');
+    ])->middleware(['tenant', 'branch.delete']);
 
     Route::get('/branch/pdf/{id}', [
         'uses' => 'BranchController@pdf',
         'as' => 'branch.pdf'
-    ])->middleware('branch.pdf');
+    ])->middleware(['tenant', 'branch.pdf']);
 
 
     Route::get('/branch/trashed', [
         'uses' => 'BranchController@trashed',
         'as' => 'branch.trashed'
-    ])->middleware('branch.trash_show');
+    ])->middleware(['tenant', 'branch.trash_show']);
 
 
-    Route::get('/branch/restore/{id}', [
+    Route::post('/branch/restore/{id}', [
         'uses' => 'BranchController@restore',
         'as' => 'branch.restore'
-    ])->middleware('branch.restore');
+    ])->middleware(['tenant', 'branch.restore']);
 
 
-    Route::get('/branch/kill/{id}', [
+    Route::delete('/branch/kill/{id}', [
         'uses' => 'BranchController@kill',
         'as' => 'branch.kill'
-    ])->middleware('branch.permanently_delete');
+    ])->middleware(['tenant', 'branch.permanently_delete']);
 
     Route::get('/branch/active/search', [
         'uses' => 'BranchController@activeSearch',
         'as' => 'branch.active.search'
-    ]);
+    ])->middleware(['tenant', 'branch.module_show']);
 
     Route::get('/branch/trashed/search', [
         'uses' => 'BranchController@trashedSearch',
         'as' => 'branch.trashed.search'
-    ]);
+    ])->middleware(['tenant', 'branch.trash_show']);
 
-    Route::get('/branch/active/action', [
+    Route::post('/branch/active/action', [
         'uses' => 'BranchController@activeAction',
         'as' => 'branch.active.action'
-    ])->middleware('branch.delete');
+    ])->middleware('tenant');
 
-    Route::get('/branch/trashed/action', [
+    Route::post('/branch/trashed/action', [
         'uses' => 'BranchController@trashedAction',
         'as' => 'branch.trashed.action'
-    ]);
+    ])->middleware('tenant');
     //    Branch Manage End
 
 
@@ -901,7 +959,7 @@ Route::group(['middleware' => 'auth'], function () {
     ])->middleware('dr_voucher.edit');
 
 
-    Route::get('/dr-voucher/destroy/{id}', [
+    Route::post('/dr-voucher/destroy/{id}', [
         'uses' => 'DrVoucherController@destroy',
         'as' => 'dr_voucher.destroy'
     ])->middleware('dr_voucher.delete');
@@ -918,13 +976,13 @@ Route::group(['middleware' => 'auth'], function () {
     ])->middleware('dr_voucher.trash_show');
 
 
-    Route::get('/dr-voucher/restore/{id}', [
+    Route::post('/dr-voucher/restore/{id}', [
         'uses' => 'DrVoucherController@restore',
         'as' => 'dr_voucher.restore'
     ])->middleware('dr_voucher.restore');
 
 
-    Route::get('/dr-voucher/kill/{id}', [
+    Route::post('/dr-voucher/kill/{id}', [
         'uses' => 'DrVoucherController@kill',
         'as' => 'dr_voucher.kill'
     ])->middleware('dr_voucher.permanently_delete');
@@ -939,12 +997,12 @@ Route::group(['middleware' => 'auth'], function () {
         'as' => 'dr_voucher.trashed.search'
     ]);
 
-    Route::get('/dr-voucher/active/action', [
+    Route::post('/dr-voucher/active/action', [
         'uses' => 'DrVoucherController@activeAction',
         'as' => 'dr_voucher.active.action'
-    ])->middleware('dr_voucher.delete');
+    ]);
 
-    Route::get('/dr-voucher/trashed/action', [
+    Route::post('/dr-voucher/trashed/action', [
         'uses' => 'DrVoucherController@trashedAction',
         'as' => 'dr_voucher.trashed.action'
     ]);
@@ -985,7 +1043,7 @@ Route::group(['middleware' => 'auth'], function () {
     ])->middleware('cr_voucher.edit');
 
 
-    Route::get('/cr-voucher/destroy/{id}', [
+    Route::post('/cr-voucher/destroy/{id}', [
         'uses' => 'CrVoucherController@destroy',
         'as' => 'cr_voucher.destroy'
     ])->middleware('cr_voucher.delete');
@@ -1002,13 +1060,13 @@ Route::group(['middleware' => 'auth'], function () {
     ])->middleware('cr_voucher.trash_show');
 
 
-    Route::get('/cr-voucher/restore/{id}', [
+    Route::post('/cr-voucher/restore/{id}', [
         'uses' => 'CrVoucherController@restore',
         'as' => 'cr_voucher.restore'
     ])->middleware('cr_voucher.restore');
 
 
-    Route::get('/cr-voucher/kill/{id}', [
+    Route::post('/cr-voucher/kill/{id}', [
         'uses' => 'CrVoucherController@kill',
         'as' => 'cr_voucher.kill'
     ])->middleware('cr_voucher.permanently_delete');
@@ -1023,12 +1081,12 @@ Route::group(['middleware' => 'auth'], function () {
         'as' => 'cr_voucher.trashed.search'
     ]);
 
-    Route::get('/cr-voucher/active/action', [
+    Route::post('/cr-voucher/active/action', [
         'uses' => 'CrVoucherController@activeAction',
         'as' => 'cr_voucher.active.action'
-    ])->middleware('cr_voucher.delete');
+    ]);
 
-    Route::get('/cr-voucher/trashed/action', [
+    Route::post('/cr-voucher/trashed/action', [
         'uses' => 'CrVoucherController@trashedAction',
         'as' => 'cr_voucher.trashed.action'
     ]);
@@ -1069,7 +1127,7 @@ Route::group(['middleware' => 'auth'], function () {
     ])->middleware('jnl_voucher.edit');
 
 
-    Route::get('/journal-voucher/destroy/{id}', [
+    Route::post('/journal-voucher/destroy/{id}', [
         'uses' => 'JournalVoucherController@destroy',
         'as' => 'jnl_voucher.destroy'
     ])->middleware('jnl_voucher.delete');
@@ -1086,13 +1144,13 @@ Route::group(['middleware' => 'auth'], function () {
     ])->middleware('jnl_voucher.trash_show');
 
 
-    Route::get('/journal-voucher/restore/{id}', [
+    Route::post('/journal-voucher/restore/{id}', [
         'uses' => 'JournalVoucherController@restore',
         'as' => 'jnl_voucher.restore'
     ])->middleware('jnl_voucher.restore');
 
 
-    Route::get('/journal-voucher/kill/{id}', [
+    Route::post('/journal-voucher/kill/{id}', [
         'uses' => 'JournalVoucherController@kill',
         'as' => 'jnl_voucher.kill'
     ])->middleware('jnl_voucher.permanently_delete');
@@ -1107,12 +1165,12 @@ Route::group(['middleware' => 'auth'], function () {
         'as' => 'jnl_voucher.trashed.search'
     ]);
 
-    Route::get('/journal-voucher/active/action', [
+    Route::post('/journal-voucher/active/action', [
         'uses' => 'JournalVoucherController@activeAction',
         'as' => 'jnl_voucher.active.action'
-    ])->middleware('jnl_voucher.delete');
+    ]);
 
-    Route::get('/journal-voucher/trashed/action', [
+    Route::post('/journal-voucher/trashed/action', [
         'uses' => 'JournalVoucherController@trashedAction',
         'as' => 'jnl_voucher.trashed.action'
     ]);
@@ -1153,7 +1211,7 @@ Route::group(['middleware' => 'auth'], function () {
     ])->middleware('contra_voucher.edit');
 
 
-    Route::get('/contra-voucher/destroy/{id}', [
+    Route::post('/contra-voucher/destroy/{id}', [
         'uses' => 'ContraVoucherController@destroy',
         'as' => 'contra_voucher.destroy'
     ])->middleware('contra_voucher.delete');
@@ -1170,13 +1228,13 @@ Route::group(['middleware' => 'auth'], function () {
     ])->middleware('contra_voucher.trash_show');
 
 
-    Route::get('/contra-voucher/restore/{id}', [
+    Route::post('/contra-voucher/restore/{id}', [
         'uses' => 'ContraVoucherController@restore',
         'as' => 'contra_voucher.restore'
     ])->middleware('contra_voucher.restore');
 
 
-    Route::get('/contra-voucher/kill/{id}', [
+    Route::post('/contra-voucher/kill/{id}', [
         'uses' => 'ContraVoucherController@kill',
         'as' => 'contra_voucher.kill'
     ])->middleware('contra_voucher.permanently_delete');
@@ -1191,12 +1249,12 @@ Route::group(['middleware' => 'auth'], function () {
         'as' => 'contra_voucher.trashed.search'
     ]);
 
-    Route::get('/contra-voucher/active/action', [
+    Route::post('/contra-voucher/active/action', [
         'uses' => 'ContraVoucherController@activeAction',
         'as' => 'contra_voucher.active.action'
-    ])->middleware('contra_voucher.delete');
+    ]);
 
-    Route::get('/contra-voucher/trashed/action', [
+    Route::post('/contra-voucher/trashed/action', [
         'uses' => 'ContraVoucherController@trashedAction',
         'as' => 'contra_voucher.trashed.action'
     ]);
@@ -1315,6 +1373,17 @@ Route::group(['middleware' => 'auth'], function () {
         'uses' => 'Reports\Accounts\CashFlowController@branch_wise',
         'as' => 'reports.accounts.cash_flow.report'
     ])->middleware('report.CashFlow.all');
+
+    //  Statement of Changes in Equity
+    Route::get('/reports/accounts/statement-of-changes-in-equity', [
+        'uses' => 'Reports\Accounts\StatementOfChangeOfEquityController@index',
+        'as' => 'reports.accounts.statement_of_changes_in_equity'
+    ])->middleware('report.StatementOfChangesInEquity.all');
+
+    Route::post('/reports/accounts/statement-of-changes-in-equity/report', [
+        'uses' => 'Reports\Accounts\StatementOfChangeOfEquityController@branch_wise',
+        'as' => 'reports.accounts.statement_of_changes_in_equity.report'
+    ])->middleware('report.StatementOfChangesInEquity.all');
 
 
     //  Receive Payment
@@ -1525,10 +1594,4 @@ Route::group(['middleware' => 'auth'], function () {
     //    Branch Manage End
 
 
-    //    Inventory Start
-    Route::resource('inventories', 'InventoryController')->except(['show']);
-    //    Inventory End
-
 });
-
-

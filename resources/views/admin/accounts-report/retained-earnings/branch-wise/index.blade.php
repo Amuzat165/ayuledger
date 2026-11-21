@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="{{ asset('asset/css/main-report.css') }}">
 @endpush
 @section('title')
-    {{ config('settings.company_name') }} -> {{ $extra['module_name'] }}
+    {{ config('settings.company_name') }} -> {{ __('financial.reports.retained_earnings') }}
 @endsection
 @section('content')
     <div class="mid">
@@ -12,7 +12,7 @@
             <h2 class="text-center">{{ config('settings.company_name') }}</h2>
             <h6 class="text-center">{{ config('settings.address_1') }}</h6>
             <br>
-            <h4 class="text-center">{{ $extra['voucher_type'] }}</h4>
+            <h4 class="text-center">{{ __('financial.reports.retained_earnings') }}</h4>
             <hr>
         </div>
     </div>
@@ -22,8 +22,8 @@
                 <table class="table table-bordered table-sm">
                     <thead>
                         <tr>
-                            <td class="text-right">Search By:</td>
-                            <td class="text-right">Branch Name:</td>
+                            <td class="text-right">{{ __('Search By') }}:</td>
+                            <td class="text-right">{{ __('Branch Name') }}:</td>
                             <th>{{ $search_by['branch_name'] }}</th>
                         </tr>
                     </thead>
@@ -38,13 +38,13 @@
                     <thead>
                         <tr>
                             <th class="text-center">
-                                <h5>Particulars </h5>
+                                <h5>{{ __('financial.labels.particulars') }} </h5>
                             </th>
                             <th class="text-center">
-                                <h5>From {{ $search_by['start_from'] }} To {{ $search_by['start_to'] }}</h5>
+                                <h5>{{ __('From') }} {{ $search_by['start_from'] }} {{ __('To') }} {{ $search_by['start_to'] }}</h5>
                             </th>
                             <th class="text-center">
-                                <h5>From {{ $search_by['end_from'] }} To {{ $search_by['end_to'] }}</h5>
+                                <h5>{{ __('From') }} {{ $search_by['end_from'] }} {{ __('To') }} {{ $search_by['end_to'] }}</h5>
                             </th>
                         </tr>
                         <tr>

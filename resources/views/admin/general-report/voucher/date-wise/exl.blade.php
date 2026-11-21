@@ -10,20 +10,20 @@
                     <thead>
                         <tr>
                             <th class="text-center">
-                                Sl.No
+                                {{ __('Sl.No') }}
                             </th>
-                            <th class="text-center">Voucher No</th>
-                            <th class="text-center">Type</th>
-                            <th>Particulars</th>
-                            <th>Branch Name</th>
-                            <th>Date</th>
-                            <th>Ledger Name</th>
-                            <th>Made Of Payment</th>
-                            <th>CHQ. No</th>
-                            <th>Debit ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?>
+                            <th class="text-center">{{ __('financial.labels.voucher_number') }}</th>
+                            <th class="text-center">{{ __('Type') }}</th>
+                            <th>{{ __('financial.labels.particulars') }}</th>
+                            <th>{{ __('financial.labels.branch_name') }}</th>
+                            <th>{{ __('financial.labels.date') }}</th>
+                            <th>{{ __('Ledger Name') }}</th>
+                            <th>{{ __('financial.labels.payment_account') }}</th>
+                            <th>{{ __('CHQ. No') }}</th>
+                            <th>{{ __('Debit') }} ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?>
                                 )
                             </th>
-                            <th>Credit ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?>
+                            <th>{{ __('Credit') }} ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?>
                                 )
                             </th>
                         </tr>

@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
-class Branch extends Model
+class Branch extends TenantScopedModel
 {
     use Notifiable;
     use SoftDeletes;

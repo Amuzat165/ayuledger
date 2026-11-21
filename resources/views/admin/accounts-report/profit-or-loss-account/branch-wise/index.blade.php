@@ -22,8 +22,8 @@
                 <table class="table table-bordered table-sm">
                     <thead>
                         <tr>
-                            <td class="text-right">Search By:</td>
-                            <td class="text-right">Branch Name:</td>
+                            <td class="text-right">{{ __('Search By') }}:</td>
+                            <td class="text-right">{{ __('Branch Name') }}:</td>
                             <th>{{ $search_by['branch_name'] }}</th>
                         </tr>
                     </thead>
@@ -38,16 +38,16 @@
                     <thead>
                         <tr>
                             <th class="text-center">
-                                <h5>Particulars </h5>
+                                <h5>{{ __('financial.labels.particulars') }} </h5>
                             </th>
                             <th class="text-center">
                                 @if ($search_by['start_from'])
-                                    <h5>From {{ $search_by['start_from'] }} To {{ $search_by['start_to'] }}</h5>
+                                    <h5>{{ __('From') }} {{ $search_by['start_from'] }} {{ __('To') }} {{ $search_by['start_to'] }}</h5>
                                 @endif
                             </th>
                             <th class="text-center">
                                 @if ($search_by['end_from'])
-                                    <h5>From {{ $search_by['end_from'] }} To {{ $search_by['end_to'] }}</h5>
+                                    <h5>{{ __('From') }} {{ $search_by['end_from'] }} {{ __('To') }} {{ $search_by['end_to'] }}</h5>
                                 @endif
                             </th>
                         </tr>

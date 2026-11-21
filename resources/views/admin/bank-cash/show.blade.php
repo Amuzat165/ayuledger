@@ -4,7 +4,7 @@
 
 <?php
 
-$moduleName = " Bank Cash";
+$moduleName = __("financial.labels.bank_cash_management");
 $createItemName = __('root.common.create') . ' ' . $moduleName;
 
 $breadcrumbMainName = $moduleName;
@@ -57,7 +57,7 @@ $ParentRouteName = 'bank_cash';
                     <div class="header">
                         <h2>
                             {{ $items->name }}
-                            <small>Details {{ $items->name }} Information</small>
+                            <small>{{ __('financial.labels.module_details', ['module' => $items->name]) }}</small>
                         </h2>
 
                         <div class="body">
@@ -72,17 +72,17 @@ $ParentRouteName = 'bank_cash';
                                         <table class="table  table-bordered table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th scope="col" class="text-center">S.L</th>
-                                                    <th scope="col" class="text-center">Module Name</th>
-                                                    <th scope="col" class="text-center">Module Show</th>
-                                                    <th scope="col" class="text-center">Show</th>
-                                                    <th scope="col" class="text-center">Create</th>
-                                                    <th scope="col" class="text-center">Edit</th>
-                                                    <th scope="col" class="text-center">Delete</th>
+                                                    <th scope="col" class="text-center">{{ __('financial.labels.serial_number') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('financial.labels.module_name') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('Module Show') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('financial.screens.show') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('financial.screens.create') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('Edit') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('Delete') }}</th>
                                                     <th scope="col" class="text-center">PDF</th>
-                                                    <th scope="col" class="text-center">Trash Show</th>
-                                                    <th scope="col" class="text-center">Restore</th>
-                                                    <th scope="col" class="text-center">Permanently Delete</th>
+                                                    <th scope="col" class="text-center">{{ __('Trash Show') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('Restore') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('Permanently Delete') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -111,7 +111,7 @@ $ParentRouteName = 'bank_cash';
 
                                                 @else
                                                 <tr>
-                                                    <th class="text-danger">No Item Available</th>
+                                                    <th class="text-danger">{{ __('No Item Available') }}</th>
                                                 </tr>
                                                 @endif
 

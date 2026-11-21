@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="module_name">
-            <p>Module Name : {{ $extra['module_name']  }}</p>
+            <p>{{ __('Module Name') }} : {{ $extra['module_name']  }}</p>
         </div>
         <div class="card">
             <div class="header">
@@ -44,16 +44,16 @@
                                 <thead>
                                 <tr>
                                     <th scope="col" class="text-center">S.L</th>
-                                    <th scope="col" class="text-center">Module Name</th>
-                                    <th scope="col" class="text-center">Module Show</th>
-                                    <th scope="col" class="text-center">Show</th>
-                                    <th scope="col" class="text-center">Create</th>
-                                    <th scope="col" class="text-center">Edit</th>
-                                    <th scope="col" class="text-center">Delete</th>
-                                    <th scope="col" class="text-center">PDF</th>
-                                    <th scope="col" class="text-center">Trash Show</th>
-                                    <th scope="col" class="text-center">Restore</th>
-                                    <th scope="col" class="text-center">Permanently Delete</th>
+                                    <th scope="col" class="text-center">{{ __('ui.permissions.module_name') }}</th>
+                                    <th scope="col" class="text-center">{{ __('ui.permissions.module_show') }}</th>
+                                    <th scope="col" class="text-center">{{ __('ui.permissions.record_show') }}</th>
+                                    <th scope="col" class="text-center">{{ __('ui.permissions.create') }}</th>
+                                    <th scope="col" class="text-center">{{ __('ui.permissions.edit') }}</th>
+                                    <th scope="col" class="text-center">{{ __('ui.permissions.delete') }}</th>
+                                    <th scope="col" class="text-center">{{ __('ui.permissions.pdf') }}</th>
+                                    <th scope="col" class="text-center">{{ __('ui.permissions.trash_show') }}</th>
+                                    <th scope="col" class="text-center">{{ __('root.common.restore') }}</th>
+                                    <th scope="col" class="text-center">{{ __('root.common.permanently_delete') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -69,9 +69,9 @@
                                                 @if($key==0)
                                                     {{ $value }}
                                                 @elseif($value==1)
-                                                    On
+                                                    {{ __('On') }}
                                                 @else
-                                                    Off
+                                                    {{ __('Off') }}
                                                 @endif
                                             </td>
                                         @endforeach

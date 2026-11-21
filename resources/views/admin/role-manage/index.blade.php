@@ -162,17 +162,6 @@ $trash_show = config('role_manage.RoleManager.TrashShow');
                                     </tr>
                                     <?php $i++; ?>
                                     @endforeach
-                                    <thead>
-                                        <tr>
-                                            <th class="checkbox_custom_style text-center">
-                                                <input name="selectBottom" type="checkbox" id="md_checkbox_footer"
-                                                    class="chk-col-cyan" />
-                                                <label for="md_checkbox_footer"></label>
-                                            </th>
-                                            <th>{{ __('root.role_manage.name') }}</th>
-                                            <th>{{ __('root.role_manage.options') }}</th>
-                                        </tr>
-                                    </thead>
                                 </tbody>
                             </table>
                             @else
@@ -181,7 +170,7 @@ $trash_show = config('role_manage.RoleManager.TrashShow');
                                     <thead>
                                         <tr>
                                             <th colspan="8" class="text-danger text-center">
-                                                {{ __('root.common.no_data_found') }}
+                                                {{ __('ui.messages.no_records_found') }}
                                             </th>
                                         </tr>
                                     </thead>
@@ -270,11 +259,11 @@ $trash_show = config('role_manage.RoleManager.TrashShow');
 
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
         @if ($errors->any())

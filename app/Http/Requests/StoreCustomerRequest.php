@@ -31,7 +31,7 @@ class StoreCustomerRequest extends FormRequest
             'address' => ['required'],
             'income_expense_type_id' => ['required', 'exists:income_expense_types,id'],
             'terms_of_payment' => ['required'],
-            'terms_of_payment_in_days' => ['nullable', 'integer', 'min:1'],
+            'terms_of_payment_in_days' => ['required_if:terms_of_payment,Pay in number of days', 'nullable', 'integer', 'min:1'],
         ];
     }
 }

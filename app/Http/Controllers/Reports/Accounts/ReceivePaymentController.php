@@ -65,8 +65,8 @@ class ReceivePaymentController extends Controller
         $branches = $transactions->groupBy('Branch.name');
         $bank_cashes = $transactions->whereNotNull('bank_cash_id')->groupBy('BankCash.name');
         $search_by = array(
-            'from' => ($request->from) ? date(config('settings.date_format'), strtotime($request->from)) : null,
-            'to' => ($request->to) ? date(config('settings.date_format'), strtotime($request->to)) : null,
+            'from' => ($request->from) ? date('d/m/Y', strtotime($request->from)) : null,
+            'to' => ($request->to) ? date('d/m/Y', strtotime($request->to)) : null,
         );
         $items['branches'] = $branches;
         $items['bank_cashes'] = $bank_cashes;
@@ -76,8 +76,8 @@ class ReceivePaymentController extends Controller
         }
         // Common items
         $search_by = array(
-            'from' => ($request->from) ? date(config('settings.date_format'), strtotime($request->from)) : null,
-            'to' => ($request->to) ? date(config('settings.date_format'), strtotime($request->to)) : null,
+            'from' => ($request->from) ? date('d/m/Y', strtotime($request->from)) : null,
+            'to' => ($request->to) ? date('d/m/Y', strtotime($request->to)) : null,
         );
         // Show Action
         if ($request->action == 'Show') {

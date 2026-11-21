@@ -61,6 +61,17 @@ return [
         'Show' => 1,
         'TrashShow' => 1,
     ],
+    'Inventory' => [
+        'All' => 0,
+        'Create' => 0,
+        'Delete' => 0,
+        'Edit' => 0,
+        'Pdf' => 0,
+        'PermanentlyDelete' => 0,
+        'Restore' => 0,
+        'Show' => 0,
+        'TrashShow' => 0,
+    ],
     'LedgerType' => [
         'All' => 1,
         'TrashShow' => 1,
@@ -250,6 +261,17 @@ return [
         'Show' => 1,
         'TrashShow' => 1,
     ],
+    'StatementOfChangesInEquity' => [
+        'All' => 1,
+        'Create' => 1,
+        'Delete' => 1,
+        'Edit' => 1,
+        'Pdf' => 1,
+        'PermanentlyDelete' => 1,
+        'Restore' => 1,
+        'Show' => 1,
+        'TrashShow' => 1,
+    ],
     'CashFlow' => [
         'All' => 1,
         'Create' => 1,
@@ -326,6 +348,19 @@ return [
         'Restore' => 1,
         'Show' => 1,
         'TrashShow' => 1,
+    ],
+    // Stage 3 permissions are intentionally denied until a role is granted access.
+    'PurchaseOrder' => [
+        'All' => 0, 'Create' => 0, 'Delete' => 0, 'Edit' => 0, 'Pdf' => 0,
+        'PermanentlyDelete' => 0, 'Restore' => 0, 'Show' => 0, 'TrashShow' => 0,
+    ],
+    'SupplierInvoice' => [
+        'All' => 0, 'Create' => 0, 'Delete' => 0, 'Edit' => 0, 'Pdf' => 0,
+        'PermanentlyDelete' => 0, 'Restore' => 0, 'Show' => 0, 'TrashShow' => 0,
+    ],
+    'SupplierPayment' => [
+        'All' => 0, 'Create' => 0, 'Delete' => 0, 'Edit' => 0, 'Pdf' => 0,
+        'PermanentlyDelete' => 0, 'Restore' => 0, 'Show' => 0, 'TrashShow' => 0,
     ],
     'Language' => [
         'All' => 1,

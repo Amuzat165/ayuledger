@@ -21,14 +21,14 @@
                 <table class="table table-bordered table-sm">
                     <thead>
                         <tr>
-                            <td class="text-right">Search By:</td>
-                            <td class="text-right">Bank Cash Name:</td>
+                            <td class="text-right">{{ __('financial.labels.search_by') }}:</td>
+                            <td class="text-right">{{ __('Bank Cash Name') }}:</td>
                             <th>{{ $search_by['bank_cash_name'] }}</th>
-                            <td class="text-right">Branch Name:</td>
+                            <td class="text-right">{{ __('financial.labels.branch_name') }}:</td>
                             <th>{{ $search_by['branch_name'] }}</th>
-                            <td class="text-right">From Date:</td>
+                            <td class="text-right">{{ __('financial.reports.date_start') }}:</td>
                             <th>{{ $search_by['from'] }}</th>
-                            <td class="text-right">To Date:</td>
+                            <td class="text-right">{{ __('financial.reports.date_end') }}:</td>
                             <th>{{ $search_by['to'] }}</th>
                         </tr>
                     </thead>
@@ -46,16 +46,16 @@
                         <table class="table table-bordered table-sm table-hover">
                             <thead>
                                 <tr>
-                                    <th class="text-center" scope="col">SL. No</th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Branch Name</th>
-                                    <th scope="col">Cheque Number</th>
-                                    <th scope="col">Particulars</th>
-                                    <th scope="col">Voucher No</th>
-                                    <th scope="col">Type Of Voucher</th>
-                                    <th class="text-right" scope="col">Dr ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
+                                    <th class="text-center" scope="col">{{ __('SL. No') }}</th>
+                                    <th scope="col">{{ __('financial.labels.date') }}</th>
+                                    <th scope="col">{{ __('financial.labels.branch_name') }}</th>
+                                    <th scope="col">{{ __('financial.labels.cheque_number') }}</th>
+                                    <th scope="col">{{ __('financial.labels.particulars') }}</th>
+                                    <th scope="col">{{ __('financial.labels.voucher_number') }}</th>
+                                    <th scope="col">{{ __('Type Of Voucher') }}</th>
+                                    <th class="text-right" scope="col">{{ __('Dr') }} ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
                                     </th>
-                                    <th class="text-right" scope="col">Cr ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
+                                    <th class="text-right" scope="col">{{ __('Cr') }} ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
                                     </th>
                                 </tr>
                             </thead>
@@ -82,12 +82,12 @@
                                     @endphp
                                 @endforeach
                                 <tr>
-                                    <th class="text-right" colspan="7">Total =</th>
+                                    <th class="text-right" colspan="7">{{ __('Total') }} =</th>
                                     <th class="text-right">{{ Helper::convertMoneyFormat($dr_balance) }}</th>
                                     <th class="text-right">{{ Helper::convertMoneyFormat($cr_balance) }}</th>
                                 </tr>
                                 <tr>
-                                    <th class="text-right" colspan="7">Balance =</th>
+                                    <th class="text-right" colspan="7">{{ __('Balance') }} =</th>
                                     <th class="text-left" colspan="2">
                                         {{ Helper::convertMoneyFormat($cr_balance - $dr_balance) }}</th>
                                 </tr>

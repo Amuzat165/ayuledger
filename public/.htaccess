@@ -5,6 +5,11 @@
 
     RewriteEngine On
 
+    DirectoryIndex index.php
+
+    # Route the document root through Laravel regardless of the host's default index order.
+    RewriteRule ^$ index.php [L]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

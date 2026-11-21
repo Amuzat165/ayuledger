@@ -46,6 +46,7 @@
         }
     },
     "scripts": {
+        "test": "@php bin/phpunit-safe.php",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

@@ -39,6 +39,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
 
             \App\Http\Middleware\Settings::class,
+            \App\Http\Middleware\SetLocale::class,
             \App\Http\Middleware\RoleManage::class,
 
         ],
@@ -58,6 +59,7 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
+        'tenant' => \App\Http\Middleware\RequireTenantContext::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
@@ -100,6 +102,11 @@ class Kernel extends HttpKernel
         'branch.restore' => \App\Http\Middleware\Roles\Branch\Restore::class,
         'branch.trash_show' => \App\Http\Middleware\Roles\Branch\TrashShow::class,
         'branch.permanently_delete' => \App\Http\Middleware\Roles\Branch\PermanentlyDelete::class,
+
+        'inventory.module_show' => \App\Http\Middleware\Roles\Inventory\ModuleShow::class,
+        'inventory.create' => \App\Http\Middleware\Roles\Inventory\Create::class,
+        'inventory.edit' => \App\Http\Middleware\Roles\Inventory\Edit::class,
+        'inventory.delete' => \App\Http\Middleware\Roles\Inventory\Delete::class,
 
         'income_expense_type.all' => \App\Http\Middleware\Roles\IncomeExpenseType\all::class,
         'income_expense_type.show' => \App\Http\Middleware\Roles\IncomeExpenseType\Show::class,
@@ -214,6 +221,8 @@ class Kernel extends HttpKernel
         'report.FixedAssetsSchedule.all' => \App\Http\Middleware\Roles\Report\FixedAssetsSchedule\All::class,
 
         'report.StatementOfFinancialPosition.all' => \App\Http\Middleware\Roles\Report\StatementOfFinancialPosition\All::class,
+
+        'report.StatementOfChangesInEquity.all' => \App\Http\Middleware\Roles\Report\StatementOfChangesInEquity\All::class,
 
         'report.CashFlow.all' => \App\Http\Middleware\Roles\Report\CashFlow\All::class,
 

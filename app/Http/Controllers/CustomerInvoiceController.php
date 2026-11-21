@@ -9,14 +9,19 @@ use App\Helpers\BladeHelper;
 use App\Helpers\ControllerHelper;
 use App\IncomeExpenseType;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use App\Models\CustomerInvoice;
+use App\Services\CustomerInvoiceBalanceService;
+use App\Support\AmountInWordsFormatter;
 use App\Models\CustomerInvoiceItem;
 use Illuminate\Http\Request;
 use App\Models\InventoryType;
 use App\Models\Inventory;
 use App\Branch;
+use App\Support\CustomerInvoiceFinancialCalculator;
+use Barryvdh\DomPDF\Facade\Pdf;
 class CustomerInvoiceController extends Controller
 {
     private $route;
@@ -33,8 +38,17 @@ class CustomerInvoiceController extends Controller
             $customerInvoices = CustomerInvoice::with('customer', 'items')->get();
 
             // Calculate total amount for each invoice
+            $balanceService = app(CustomerInvoiceBalanceService::class);
             foreach ($customerInvoices as $invoice) {
-                $invoice->total_amount = $invoice->items->sum('amount');
+                $invoice->total_amount = $invoice->total_due !== null
+                    ? $invoice->total_due
+                    : $invoice->items->sum('amount');
+
+                try {
+                    $invoice->current_balance_cents = $balanceService->balanceCentsFor($invoice);
+                } catch (ValidationException $e) {
+                    $invoice->current_balance_cents = null;
+                }
             }
 
             return view('pages.customers.invoices.invoice-view', [
@@ -42,6 +56,7 @@ class CustomerInvoiceController extends Controller
                 'customerInvoices' => $customerInvoices,
                 'resource' => 'Customer Invoices',
                 'type' => 'list',
+                'currency' => config('settings.currency_symbol', config('settings.currency_code', '')),
             ]);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to load invoices. ' . $e->getMessage());
@@ -66,6 +81,14 @@ class CustomerInvoiceController extends Controller
                 return $item;
             });
 
+        $vat_percentage = app(\App\Support\VatConfiguration::class)
+            ->validatePercentage(Config::get('settings.vat_percentage'));
+        $discountConfiguration = app(\App\Support\InvoiceDiscountConfiguration::class);
+        $discount_enabled = $discountConfiguration->enabledFromValue(Config::get('settings.discount_enabled', false));
+        $discount_percentage = $discount_enabled
+            ? $discountConfiguration->percentageFromValue(Config::get('settings.discount_percentage', 0))
+            : null;
+
         return ControllerHelper::view([
             'title' => 'Add Invoice',
             'resource' => 'Customers',
@@ -74,6 +97,9 @@ class CustomerInvoiceController extends Controller
             'customers' => $customers,
             'customer_id_options' => BladeHelper::ddl_f($customers),
             'next_invoice_number' => $nextInvoiceNumber,
+            'vat_percentage' => $vat_percentage,
+            'discount_enabled' => $discount_enabled,
+            'discount_percentage' => $discount_percentage,
             'thead' => [
                 '#',
                 'Item',
@@ -111,51 +137,109 @@ class CustomerInvoiceController extends Controller
             'items.*.amount' => 'required|numeric|min:0',
         ]);
 
+        $discountEnabled = app(\App\Support\InvoiceDiscountConfiguration::class)
+            ->enabledFromValue(Config::get('settings.discount_enabled', false));
+        $discountPercentage = $discountEnabled
+            ? app(\App\Support\InvoiceDiscountConfiguration::class)
+                ->percentageFromValue(Config::get('settings.discount_percentage', 0))
+            : null;
+
+        $calculator = new CustomerInvoiceFinancialCalculator();
+        $vatPercentage = app(\App\Support\VatConfiguration::class)
+            ->validatePercentage(Config::get('settings.vat_percentage'));
+
         // Start a transaction
         DB::beginTransaction();
 
         try {
-            // Lock and validate stock first. This prevents concurrent sales from
-            // taking quantity below zero and ensures every sold item is deducted.
+            // Aggregate duplicate lines before checking stock, then lock each
+            // inventory row in a stable order to serialize concurrent sales.
+            $requestedQuantities = [];
             foreach ($request->items as $item) {
-                $inventoryItem = Inventory::whereKey($item['item_id'])->lockForUpdate()->firstOrFail();
-                if ($inventoryItem->quantity_at_hand < $item['quantity']) {
+                $itemId = (int) $item['item_id'];
+                $requestedQuantities[$itemId] = ($requestedQuantities[$itemId] ?? 0) + (int) $item['quantity'];
+            }
+            ksort($requestedQuantities, SORT_NUMERIC);
+
+            $inventoryItemsById = Inventory::whereIn('id', array_keys($requestedQuantities))
+                ->orderBy('id')
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
+
+            foreach ($requestedQuantities as $itemId => $requestedQuantity) {
+                $inventoryItem = $inventoryItemsById->get($itemId);
+                if (!$inventoryItem) {
+                    throw ValidationException::withMessages([
+                        'items' => ['A selected inventory item is no longer available.'],
+                    ]);
+                }
+
+                if ((int) $inventoryItem->quantity_at_hand < $requestedQuantity) {
                     throw ValidationException::withMessages([
                         'items' => ['Insufficient stock for ' . ($inventoryItem->description ?: 'the selected item') . '.'],
                     ]);
                 }
             }
 
+            $calculatedLines = [];
+            foreach ($request->items as $item) {
+                $inventoryItem = $inventoryItemsById->get((int) $item['item_id']);
+
+                if (!$calculator->submittedRateMatches($item['rate'], $inventoryItem->sale_price)) {
+                    throw ValidationException::withMessages([
+                        'items' => ['The selected item price has changed. Reload the invoice and try again.'],
+                    ]);
+                }
+
+                $lineAmount = $calculator->lineAmount($item['quantity'], $inventoryItem->sale_price);
+                $calculatedLines[] = [
+                    'request' => $item,
+                    'rate' => $inventoryItem->sale_price,
+                    'amount' => $lineAmount,
+                ];
+            }
+
+            $snapshot = $calculator->snapshot(
+                array_column($calculatedLines, 'amount'),
+                $vatPercentage,
+                $discountEnabled,
+                $discountPercentage
+            );
+
             // Create a new invoice
             $invoice = new CustomerInvoice([
                 'customer_id' => $request->customer_id,
                 'invoice_date' => $request->invoice_date,
                 'exchange_rate' => $request->exchange_rate,
-            ]);
+            ] + $snapshot);
 
             $invoice->save();
 
             // Process invoice items and update inventory quantities
             $invoiceItems = [];
-            foreach ($request->items as $item) {
+            foreach ($calculatedLines as $line) {
+                $item = $line['request'];
                 $invoiceItem = new CustomerInvoiceItem([
                     'invoice_id' => $invoice->id,
                     'item_id' => $item['item_id'],
-                    'description' => $item['description'],
-                    'rate' => $item['rate'],
+                    'description' => $item['description'] ?? null,
+                    'rate' => $line['rate'],
                     'quantity' => $item['quantity'],
-                    'amount' => $item['amount'],
+                    'amount' => $line['amount'],
                 ]);
 
                 $invoiceItem->save();
                 $invoiceItems[] = $invoiceItem;
+            }
 
-                // Update inventory quantity at hand
-                $inventoryItem = Inventory::whereKey($item['item_id'])->lockForUpdate()->first();
-                if ($inventoryItem) {
-                    $newQuantity = $inventoryItem->quantity_at_hand - $item['quantity'];
-                    $inventoryItem->update(['quantity_at_hand' => $newQuantity]);
-                }
+            // Deduct each item once using the combined quantity validated under
+            // its row lock. The transaction protects both invoice and stock.
+            foreach ($requestedQuantities as $itemId => $requestedQuantity) {
+                $inventoryItem = $inventoryItemsById->get($itemId);
+                $inventoryItem->update([
+                    'quantity_at_hand' => (int) $inventoryItem->quantity_at_hand - $requestedQuantity,
+                ]);
             }
 
             // Commit transaction
@@ -165,20 +249,91 @@ class CustomerInvoiceController extends Controller
             $customer = Customer::find($request->customer_id);
 
             // Calculate total amount for the invoice
-            $totalAmount = collect($invoiceItems)->sum('amount');
+            $totalAmount = $snapshot['subtotal'];
+
+            // Get company settings
+            $headerImage = Config::get('settings.header_image', null);
+            $companyLogo = Config::get('settings.company_logo', 'upload/company-logo/e.png');
+            $companyName = Config::get('settings.company_name', 'AYUGLOBAL');
+            $companyColor = Config::get('settings.company_color', '#00897B');
+            $address_1 = Config::get('settings.address_1', '');
+            $address_2 = Config::get('settings.address_2', '');
+            $city = Config::get('settings.city', '');
+            $phone = Config::get('settings.phone', '');
+            $email = Config::get('settings.email', '');
+            $vat_percentage = $snapshot['vat_percentage'];
 
             return view('pages.customers.invoices.receipt', [
                 'invoice' => $invoice,
                 'customer' => $customer,
                 'invoiceItems' => $invoiceItems,
-                'totalAmount' => $totalAmount, // Include total amount in the view
+                'totalAmount' => $totalAmount,
+                'header_image' => $headerImage,
+                'company_logo' => $companyLogo,
+                'company_name' => $companyName,
+                'contact_person' => Config::get('settings.contract_person', ''),
+                'company_color' => $companyColor,
+                'address_1' => $address_1,
+                'address_2' => $address_2,
+                'city' => $city,
+                'state' => Config::get('settings.state', ''),
+                'zip_code' => Config::get('settings.zip_code', ''),
+                'phone' => $phone,
+                'email' => $email,
+                'vat_percentage' => $vat_percentage,
+                'currency' => config('settings.currency_symbol', config('settings.currency_code', '')),
+                'currency_code' => config('settings.currency_code', ''),
+                'amount_in_words' => app(\App\Support\AmountInWordsFormatter::class)
+                    ->format($invoice->balance_due ?? $invoice->total_due, config('settings.currency_code', '')),
+                'invoice_creation_document' => true,
             ])->with('success', 'Invoice created successfully.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+
+            throw $e;
         } catch (\Exception $e) {
             // Rollback transaction on error
             DB::rollBack();
 
             return redirect()->back()->with('error', 'Failed to create invoice. ' . $e->getMessage())->withInput();
         }
+    }
+
+    /**
+     * Generate an invoice PDF from the invoice's stored values, independent of payment history.
+     */
+    public function pdf($invoiceId)
+    {
+        $invoice = CustomerInvoice::with(['customer.branch', 'items.inventory.type'])->findOrFail($invoiceId);
+        $totalAmount = $invoice->subtotal !== null
+            ? $invoice->subtotal
+            : $invoice->items->sum('amount');
+
+        $invoiceTotal = $invoice->total_due ?? $totalAmount;
+        $balanceDue = $invoice->balance_due ?? $invoiceTotal;
+        $currencyCode = config('settings.currency_code', '');
+        return Pdf::loadView('pages.customers.invoices.receipt', [
+            'invoice' => $invoice,
+            'customer' => $invoice->customer,
+            'invoiceItems' => $invoice->items,
+            'totalAmount' => $totalAmount,
+            'header_image' => config('settings.header_image'),
+            'company_logo' => config('settings.company_logo', 'upload/company-logo/e.png'),
+            'company_name' => config('settings.company_name', 'AYUGLOBAL'),
+            'contact_person' => config('settings.contract_person', ''),
+            'company_color' => config('settings.company_color', '#00897B'),
+            'address_1' => config('settings.address_1', ''),
+            'address_2' => config('settings.address_2', ''),
+            'city' => config('settings.city', ''),
+            'state' => config('settings.state', ''),
+            'zip_code' => config('settings.zip_code', ''),
+            'phone' => config('settings.phone', ''),
+            'email' => config('settings.email', ''),
+            'vat_percentage' => $invoice->vat_percentage,
+            'currency' => config('settings.currency_symbol', $currencyCode),
+            'currency_code' => $currencyCode,
+            'amount_in_words' => app(AmountInWordsFormatter::class)->format($balanceDue, $currencyCode),
+        ])->setPaper('A4')->stream('invoice_' . $invoice->id . '.pdf');
     }
 
     /**

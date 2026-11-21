@@ -17,16 +17,16 @@
                         </tr>
                         <tr>
                             <th>
-                                Sl.No
+                                {{ __('Sl.No') }}
                             </th>
                             <th>
-                                Name
+                                {{ __('financial.labels.name') }}
                             </th>
                             <th>
-                                Account Number
+                                {{ __('financial.labels.account_number') }}
                             </th>
                             <th>
-                                Description
+                                {{ __('financial.terms.description') }}
                             </th>
                         </tr>
                     </thead>

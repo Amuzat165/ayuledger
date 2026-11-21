@@ -50,38 +50,24 @@ $ParentRouteName = 'language';
                     <div class="header">
                         <h2>
                             {{ $createItemName }}
-                            <small>Put {{ $moduleName }} Information</small>
+                            <small>{{ __('Select a language to add') }}</small>
                         </h2>
                         <div class="body">
                             <form class="form" id="form_validation" method="post"
                                 action="{{ route($ParentRouteName . '.store') }}">
                                 {{ csrf_field() }}
                                 <div class="row clearfix">
-                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                         <div class="form-group form-float">
                                             <div class="form-line">
-                                                <input autofocus value="{{ old('name') }}" name="name" type="text"
-                                                    class="form-control">
-                                                <label class="form-label">Name</label>
+                                                <select name="language" class="form-control" required>
+                                                    <option value="">-- {{ __('Select Language') }} --</option>
+                                                    @foreach(['english' => 'English', 'french' => 'French', 'spanish' => 'Spanish', 'chinese' => 'Chinese'] as $key => $label)
+                                                        <option value="{{ $key }}">{{ $label }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                                        <div class="form-group form-float">
-                                            <div class="form-line">
-                                                <input value="{{ old('code') }}" name="code" type="text"
-                                                    class="form-control">
-                                                <label class="form-label">Code</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                                        <div class="form-group form-float">
-                                            <div class="form-line">
-                                                <input value="{{ old('country_name') }}" name="country_name" type="text"
-                                                    class="form-control">
-                                                <label class="form-label">Country name</label>
-                                            </div>
+                                            <label class="form-label">{{ __('Available Languages') }}</label>
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -163,11 +149,11 @@ $ParentRouteName = 'language';
 
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
 

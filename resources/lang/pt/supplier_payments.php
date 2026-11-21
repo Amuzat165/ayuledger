@@ -1,0 +1,21 @@
+<?php
+return [
+    'history_title' => 'Histórico de Pagamentos a Fornecedores',
+    'history_intro' => 'Consulte os pagamentos registados nas faturas de fornecedores.',
+    'date_from' => 'Data inicial',
+    'date_to' => 'Data final',
+    'apply_filters' => 'Aplicar filtros',
+    'reset_filters' => 'Limpar filtros',
+    'no_history' => 'Ainda não foram registados pagamentos a fornecedores.',
+    'no_matching_payments' => 'Nenhum pagamento corresponde a estes filtros.',
+    'view_supplier_invoice' => 'Ver fatura do fornecedor',
+    'make_payment' => 'Efetuar pagamento', 'payment_amount' => 'Valor do pagamento', 'payment_date' => 'Data do pagamento',
+    'payment_reference' => 'Referência do pagamento', 'payment_method' => 'Método de pagamento', 'amount_paid' => 'Valor pago',
+    'amount_remaining' => 'Valor restante', 'payment_history' => 'Histórico de pagamentos', 'payment_receipt' => 'Recibo de pagamento',
+    'supplier' => 'Fornecedor', 'internal_invoice_number' => 'Número interno da fatura do fornecedor',
+    'previous_amount_remaining' => 'Valor restante anterior', 'new_amount_remaining' => 'Novo valor restante',
+    'recorded_by' => 'Registado por', 'select_method' => 'Selecione um método ou conta de pagamento', 'not_available' => 'Indisponível',
+    'no_payments' => 'Não existem pagamentos registados para esta fatura do fornecedor.', 'validation_help' => 'Verifique os dados do pagamento.',
+    'receipt_footer' => 'Este recibo confirma o pagamento indicado.', 'messages' => ['saved' => 'Pagamento registado.'],
+    'errors' => ['positive_amount' => 'O valor do pagamento deve ser superior a zero.', 'invalid_amount' => 'Introduza um valor válido com até duas casas decimais.', 'invalid_date' => 'Introduza uma data de pagamento válida.', 'invoice_not_payable' => 'Só uma fatura de fornecedor aprovada pode receber pagamentos.', 'no_balance' => 'Esta fatura não tem valor restante.', 'exceeds_balance' => 'O pagamento não pode exceder o valor restante.', 'invalid_method' => 'Selecione um método ou conta de pagamento ativo.', 'submission_conflict' => 'Esta submissão já foi utilizada com dados diferentes.'],
+];

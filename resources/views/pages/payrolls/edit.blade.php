@@ -1,7 +1,7 @@
 <!-- resources/views/payrolls/edit.blade.php -->
 @extends('layouts.app')
 
-@section('title', 'Edit Payroll')
+@section('title', __('financial.screens.edit_payroll'))
 
 @section('top-bar')
     @include('shared.header')
@@ -15,21 +15,21 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <a class="btn btn-sm btn-info waves-effect" href="{{ route('payrolls.index') }}">Back</a>
+                <a class="btn btn-sm btn-info waves-effect" href="{{ route('payrolls.index') }}">{{ __('financial.screens.back') }}</a>
             </div>
 
             <ol class="breadcrumb breadcrumb-col-cyan pull-right">
-                <li><a href="{{ route('dashboard') }}"><i class="material-icons">home</i> Home</a></li>
-                <li><a href="{{ route('payrolls.index') }}"><i class="fas fa-archive"></i> Payrolls</a></li>
-                <li class="active"><i class="material-icons">archive</i> Edit Payroll</li>
+                <li><a href="{{ route('dashboard') }}"><i class="material-icons">home</i> {{ __('root.common.home') }}</a></li>
+                <li><a href="{{ route('payrolls.index') }}"><i class="fas fa-archive"></i> {{ __('financial.screens.payrolls') }}</a></li>
+                <li class="active"><i class="material-icons">archive</i> {{ __('financial.screens.edit_payroll') }}</li>
             </ol>
 
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>Edit Payroll</h2>
-                            <small>Update Payroll Information</small>
+                            <h2>{{ __('financial.screens.edit_payroll') }}</h2>
+                            <small>{{ __('financial.screens.payroll_information') }}</small>
                         </div>
                         <div class="body">
                             <form method="POST" action="{{ route('payrolls.update', $payroll->id) }}" class="form2">
@@ -41,7 +41,7 @@
                                             <div class="form-line">
                                                 <input id="employee" name="employee" type="text" class="form-control"
                                                        value="{{ old('employee', $payroll->employee) }}" required>
-                                                <label class="form-label">Employee</label>
+                                                <label class="form-label">{{ __('financial.screens.employee') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -50,7 +50,7 @@
                                             <div class="form-line">
                                                 <input id="basic_salary" name="basic_salary" type="number" class="form-control"
                                                        value="{{ old('basic_salary', $payroll->basic_salary) }}" required>
-                                                <label class="form-label">Basic Salary</label>
+                                                <label class="form-label">{{ __('financial.screens.basic_salary') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -59,7 +59,7 @@
                                             <div class="form-line">
                                                 <input id="housing_allowance" name="housing_allowance" type="number" class="form-control"
                                                        value="{{ old('housing_allowance', $payroll->housing_allowance) }}" required>
-                                                <label class="form-label">Housing Allowance</label>
+                                                <label class="form-label">{{ __('financial.screens.housing') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -68,7 +68,7 @@
                                             <div class="form-line">
                                                 <input id="transport_allowance" name="transport_allowance" type="number" class="form-control"
                                                        value="{{ old('transport_allowance', $payroll->transport_allowance) }}" required>
-                                                <label class="form-label">Transport Allowance</label>
+                                                <label class="form-label">{{ __('financial.screens.transport') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -77,7 +77,7 @@
                                             <div class="form-line">
                                                 <input id="medical_allowance" name="medical_allowance" type="number" class="form-control"
                                                        value="{{ old('medical_allowance', $payroll->medical_allowance) }}" required>
-                                                <label class="form-label">Medical Allowance</label>
+                                                <label class="form-label">{{ __('financial.screens.medical') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -86,7 +86,7 @@
                                             <div class="form-line">
                                                 <input id="other_allowance" name="other_allowance" type="number" class="form-control"
                                                        value="{{ old('other_allowance', $payroll->other_allowance) }}" required>
-                                                <label class="form-label">Other Allowance</label>
+                                                <label class="form-label">{{ __('financial.screens.other_benefits') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -95,7 +95,7 @@
                                             <div class="form-line">
                                                 <input id="deduction_payee" name="deduction_payee" type="number" class="form-control"
                                                        value="{{ old('deduction_payee', $payroll->deduction_payee) }}" required>
-                                                <label class="form-label">Deduction Payee (%)</label>
+                                                <label class="form-label">{{ __('financial.screens.deduction_payee') }} (%)</label>
                                             </div>
                                         </div>
                                     </div>
@@ -104,15 +104,15 @@
                                             <div class="form-line">
                                                 <input id="pension" name="pension" type="number" class="form-control"
                                                        value="{{ old('pension', $payroll->pension) }}" required>
-                                                <label class="form-label">Pension (%)</label>
+                                                <label class="form-label">{{ __('financial.screens.pension') }} (%)</label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <label for="type">Branch</label>
+                                            <label for="type">{{ __('financial.labels.branch') }}</label>
                                             <select id="branch_id" class="form-control" name="branch_id" required>
-                                                <option value="">Select Branch</option>
+                                                <option value="">{{ __('financial.labels.select_branch') }}</option>
                                                 @foreach($branches as $branch)
                                                     <option value="{{ $branch->id }}" {{ $branch->id == $payroll->branch_id ? 'selected' : '' }}>
                                                         {{ $branch->name }}
@@ -123,7 +123,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
                                         <div class="form-group form-float">
-                                            <label for="gross_salary">Gross Salary</label>
+                                            <label for="gross_salary">{{ __('financial.screens.gross_salary') }}</label>
                                             <div class="form-line">
                                                 <input id="gross_salary" name="gross_salary" type="number" class="form-control"
                                                        value="{{ old('gross_salary', $payroll->gross_salary) }}" required readonly>
@@ -132,7 +132,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
                                         <div class="form-group form-float">
-                                            <label for="net_pay">Net Pay</label>
+                                            <label for="net_pay">{{ __('financial.screens.net_pay') }}</label>
                                             <div class="form-line">
                                                 <input id="net_pay" name="net_pay" type="number" class="form-control"
                                                        value="{{ old('net_pay', $payroll->net_pay) }}" required readonly>
@@ -141,14 +141,14 @@
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="form-line">
-                                            <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                                            <button type="submit" class="btn btn-primary m-t-15 waves-effect">{{ __('financial.labels.update') }}</button>
                                         </div>
                                     </div>
                                 </div>
                             </form>
                             @if(session('success'))
                                 <div class="alert alert-success">
-                                    {{ session('success') }}
+                                    {{ __(session('success')) }}
                                 </div>
                             @endif
                         </div>

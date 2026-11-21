@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\BankCash;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Cache;
@@ -55,7 +56,12 @@ class BankCashController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|unique:bank_cashes',
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('bank_cashes', 'name')
+                    ->where('business_id', auth()->user()->business_id),
+            ],
         ]);
         $this->parentModel::create([
             'name' => $request->name,
@@ -110,7 +116,13 @@ class BankCashController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'sometimes|string|unique:bank_cashes,name,' . $id,
+            'name' => [
+                'sometimes',
+                'string',
+                Rule::unique('bank_cashes', 'name')
+                    ->where('business_id', auth()->user()->business_id)
+                    ->ignore($id),
+            ],
         ]);
         $items = $this->parentModel::find($id);
         $items->name = $request->name;

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Reports')
+@section('title', __('sections.reports_hub.title'))
 
 @section('top-bar')
     @include('shared.header')
@@ -14,38 +14,39 @@
 <section @if ($is_rtl) dir="rtl" @endif class="content reports-hub">
     <div class="container-fluid">
         <div class="reports-intro">
-            <p class="reports-eyebrow">Financial intelligence</p>
-            <h1>Reports</h1>
-            <p>Access and manage all your business and financial reports in one place.</p>
+            <p class="reports-eyebrow">{{ __('sections.reports_hub.eyebrow') }}</p>
+            <h1>{{ __('sections.reports_hub.title') }}</h1>
+            <p>{{ __('sections.reports_hub.description') }}</p>
         </div>
 
-        <label class="reports-search"><i class="fas fa-search"></i><input id="report-search" type="search" placeholder="Search reports..." aria-label="Search reports"></label>
+        <label class="reports-search"><i class="fas fa-search"></i><input id="report-search" type="search" placeholder="{{ __('sections.reports_hub.search_placeholder') }}" aria-label="{{ __('sections.reports_hub.search_placeholder') }}"></label>
 
         @php
             $reportCategories = [
-                ['title' => 'Financial Reports', 'class' => 'financial', 'items' => [
-                    ['reports.accounts.profit_or_loss_account', 'Income Statement', 'Income, expenses, and profitability.', 'fa-chart-line', 'ProfitOrLossAccount'],
-                    ['reports.accounts.trial_balance', 'Trial Balance', 'Review debit and credit balances.', 'fa-balance-scale', 'TrialBalance'],
-                    ['reports.accounts.balance_sheet', 'Financial Position', 'View assets, liabilities, and equity.', 'fa-university', 'StatementOfFinancialPosition'],
-                    ['reports.accounts.cash_flow', 'Cash Flow', 'Analyze movement of cash and bank balances.', 'fa-money-bill-alt', 'CashFlow'],
-                    ['reports.accounts.retained_earnings', 'Statement of Change in Equity', 'Review changes in equity over time.', 'fa-chart-pie', 'RetainedEarning'],
-                    ['reports.accounts.cost_of_revenue', 'Cost of Revenue', 'Review direct costs against revenue.', 'fa-receipt', 'CostOfRevenue'],
+                ['title' => __('sections.reports_hub.financial_reports'), 'class' => 'financial', 'items' => [
+                    ['reports.accounts.profit_or_loss_account', __('sections.reports_hub.income_statement'), __('sections.reports_hub.income_statement_desc'), 'fa-chart-line', 'ProfitOrLossAccount'],
+                    ['reports.accounts.trial_balance', __('sections.reports_hub.trial_balance'), __('sections.reports_hub.trial_balance_desc'), 'fa-balance-scale', 'TrialBalance'],
+                    ['reports.accounts.balance_sheet', __('sections.reports_hub.financial_position'), __('sections.reports_hub.financial_position_desc'), 'fa-university', 'StatementOfFinancialPosition'],
+                    ['reports.accounts.cash_flow', __('sections.reports_hub.cash_flow'), __('sections.reports_hub.cash_flow_desc'), 'fa-money-bill-alt', 'CashFlow'],
+                    ['reports.accounts.statement_of_changes_in_equity', __('sections.reports_hub.statement_changes_equity'), __('sections.reports_hub.statement_changes_equity_desc'), 'fa-sitemap', 'StatementOfChangesInEquity'],
+                    ['reports.accounts.retained_earnings', __('sections.reports_hub.retained_earnings'), __('sections.reports_hub.retained_earnings_desc'), 'fa-chart-pie', 'RetainedEarning'],
+                    ['reports.accounts.cost_of_revenue', __('sections.reports_hub.cost_revenue'), __('sections.reports_hub.cost_revenue_desc'), 'fa-receipt', 'CostOfRevenue'],
                 ]],
-                ['title' => 'Accounting & Transactions', 'class' => 'accounting', 'items' => [
-                    ['reports.accounts.ledger', 'General Ledger', 'Trace account activity and balances.', 'fa-book-open', 'Ledger'],
-                    ['reports.accounts.receive_payment', 'Receipt and Payment', 'Review money received and paid.', 'fa-exchange-alt', 'ReceiveAndPayment'],
-                    ['reports.accounts.notes', 'Notes Report', 'Review supporting account notes.', 'fa-sticky-note', 'Notes'],
-                    ['reports.general.ledger.type', 'General Ledger Report', 'Analyze ledger activity by date.', 'fa-list', 'GeneralLedger'],
-                    ['reports.general.voucher', 'General Voucher Report', 'Review vouchers across transactions.', 'fa-file-alt', 'GeneralVoucher'],
+                ['title' => __('sections.reports_hub.accounting_transactions'), 'class' => 'accounting', 'items' => [
+                    ['reports.accounts.ledger', __('sections.reports_hub.general_ledger'), __('sections.reports_hub.general_ledger_desc'), 'fa-book-open', 'Ledger'],
+                    ['reports.accounts.receive_payment', __('sections.reports_hub.receipt_payment'), __('sections.reports_hub.receipt_payment_desc'), 'fa-exchange-alt', 'ReceiveAndPayment'],
+                    ['reports.accounts.notes', __('sections.reports_hub.notes_report'), __('sections.reports_hub.notes_report_desc'), 'fa-sticky-note', 'Notes'],
+                    ['reports.general.ledger.type', __('sections.reports_hub.general_ledger_report'), __('sections.reports_hub.general_ledger_report_desc'), 'fa-list', 'GeneralLedger'],
+                    ['reports.general.voucher', __('sections.reports_hub.general_voucher'), __('sections.reports_hub.general_voucher_desc'), 'fa-file-alt', 'GeneralVoucher'],
                 ]],
-                ['title' => 'Inventory & Assets', 'class' => 'assets', 'items' => [
-                    ['reports.accounts.fixed_asset_schedule', 'Fixed Asset Schedule', 'Review assets and depreciation schedules.', 'fa-briefcase', 'FixedAssetsSchedule'],
+                ['title' => __('sections.reports_hub.inventory_assets'), 'class' => 'assets', 'items' => [
+                    ['reports.accounts.fixed_asset_schedule', __('sections.reports_hub.fixed_asset'), __('sections.reports_hub.fixed_asset_desc'), 'fa-briefcase', 'FixedAssetsSchedule'],
                 ]],
-                ['title' => 'Administration & Planning', 'class' => 'admin', 'items' => [
-                    ['reports.general.branch', 'Branch Report', 'Compare activity across branches.', 'fa-project-diagram', 'GeneralBranch'],
-                    ['reports.general.bank_cash', 'General Bank & Cash', 'Review bank and cash activity.', 'fa-university', 'GeneralBankCash'],
-                    ['reports.accounts.payroll', 'Payroll Report', 'Review payroll information by branch.', 'fa-users', null],
-                    ['reports.accounts.budget', 'Budget Report', 'Review planned financial activity.', 'fa-clipboard-list', null],
+                ['title' => __('sections.reports_hub.administration_planning'), 'class' => 'admin', 'items' => [
+                    ['reports.general.branch', __('sections.reports_hub.branch_report'), __('sections.reports_hub.branch_report_desc'), 'fa-project-diagram', 'GeneralBranch'],
+                    ['reports.general.bank_cash', __('sections.reports_hub.bank_cash'), __('sections.reports_hub.bank_cash_desc'), 'fa-university', 'GeneralBankCash'],
+                    ['reports.accounts.payroll', __('sections.reports_hub.payroll_report'), __('sections.reports_hub.payroll_report_desc'), 'fa-users', null],
+                    ['reports.accounts.budget', __('sections.reports_hub.budget_report'), __('sections.reports_hub.budget_report_desc'), 'fa-clipboard-list', null],
                 ]],
             ];
         @endphp
@@ -53,7 +54,7 @@
         <div class="reports-grid" id="reports-grid">
             @foreach ($reportCategories as $category)
                 <section class="report-category {{ $category['class'] }}">
-                    <div class="category-heading"><h2>{{ $category['title'] }}</h2><span>{{ count($category['items']) }} reports</span></div>
+                    <div class="category-heading"><h2>{{ $category['title'] }}</h2><span>{{ trans_choice('sections.reports_hub.reports_count', count($category['items']), ['count' => count($category['items'])]) }}</span></div>
                     <div class="report-cards">
                         @foreach ($category['items'] as $item)
                             @if (!$item[4] || config('role_manage.' . $item[4] . '.All'))
@@ -68,7 +69,7 @@
                 </section>
             @endforeach
         </div>
-        <p class="reports-empty" id="reports-empty">No reports match your search.</p>
+        <p class="reports-empty" id="reports-empty">{{ __('sections.reports_hub.search_no_match') }}</p>
     </div>
 </section>
 @stop

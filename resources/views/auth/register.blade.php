@@ -1,77 +1,13 @@
-@extends('layouts.authentication')
-
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
-
-                <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
-                        @csrf
-
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required autofocus>
-
-                                @if ($errors->has('name'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
-
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Register') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create your AYULEDGERS account</title>@include('shared.favicon')<link href="{{ asset('asset/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+<style>body{background:#f4f7fb;font-family:Inter,Segoe UI,Arial,sans-serif;color:#101828}.signup-shell{min-height:100vh}.brand-panel{background:linear-gradient(145deg,#071a38,#155eef);color:#fff;padding:55px}.brand-panel .logo{font-weight:800;font-size:22px}.brand-panel h1{font-size:48px;font-weight:800;line-height:1.1;margin-top:120px}.brand-panel p{font-size:18px;color:#dbe6f8}.form-panel{padding:45px 5vw}.form-card{max-width:680px;margin:auto}.form-card h2{font-weight:800}.form-control{height:48px;border-radius:10px;border-color:#d0d5dd}.plan{border:2px solid #eaecf0;border-radius:12px;padding:16px;height:100%;cursor:pointer}.plan input{margin-right:8px}.plan.active{border-color:#155eef;background:#f0f5ff}.submit-btn{height:50px;border-radius:10px;font-weight:700;background:#155eef;border:0}@media(max-width:991px){.brand-panel{padding:30px}.brand-panel h1{font-size:36px;margin-top:60px}.form-panel{padding:35px 20px}}</style></head>
+<body><div class="row no-gutters signup-shell"><aside class="col-lg-5 brand-panel d-none d-lg-block"><div class="logo">AYULEDGERS</div><h1>Better business starts with a clear view.</h1><p class="mt-4">Create a secure workspace for your people, finances and operations.</p></aside><main class="col-lg-7 form-panel"><div class="form-card"><a href="/" class="text-primary">← Back to website</a><h2 class="mt-4">Create your business account</h2><p class="text-muted mb-4">Already have an account? <a href="{{ route('login') }}">Sign in</a></p>
+@if($errors->any())<div class="alert alert-danger">@foreach($errors->all() as $error)<div>{{ $error }}</div>@endforeach</div>@endif
+<form method="POST" action="{{ route('register') }}">@csrf
+<div class="form-row"><div class="form-group col-md-6"><label>Business name</label><input class="form-control" name="business_name" value="{{ old('business_name') }}" required></div><div class="form-group col-md-6"><label>Business contact email</label><input type="email" class="form-control" name="email" value="{{ old('email') }}" required></div></div>
+<div class="form-row"><div class="form-group col-md-6"><label>Your name</label><input class="form-control" name="name" value="{{ old('name') }}" required></div><div class="form-group col-md-6"><label>Phone number</label><input class="form-control" name="phone" value="{{ old('phone') }}" required></div></div>
+<div class="form-row"><div class="form-group col-md-6"><label>Password</label><input type="password" class="form-control" name="password" required></div><div class="form-group col-md-6"><label>Confirm password</label><input type="password" class="form-control" name="password_confirmation" required></div></div>
+<label class="mt-2">Choose your subscription</label><div class="row">@foreach($plans as $plan)<div class="col-md-4 mb-3"><label class="plan {{ old('subscription_plan', request('plan', 'standard')) == $plan->slug ? 'active' : '' }}"><input type="radio" name="subscription_plan" value="{{ $plan->slug }}" {{ old('subscription_plan', request('plan', 'standard')) == $plan->slug ? 'checked' : '' }}> <strong>{{ $plan->name }}</strong><br><span class="text-primary">₦{{ number_format($plan->monthly_price) }}/mo</span><br><small>₦{{ number_format($plan->yearly_price) }}/year</small></label></div>@endforeach</div><label class="mt-2">Billing period</label><div class="mb-3"><label class="mr-4"><input type="radio" name="subscription_interval" value="monthly" {{ old('subscription_interval', request('billing', 'monthly')) === 'monthly' ? 'checked' : '' }}> Monthly</label><label><input type="radio" name="subscription_interval" value="yearly" {{ old('subscription_interval', request('billing', 'monthly')) === 'yearly' ? 'checked' : '' }}> Yearly</label></div>
+<button class="btn btn-primary btn-block submit-btn mt-2">Create account</button><small class="text-muted d-block text-center mt-3">By creating an account, you agree to use AYULEDGERS responsibly.</small>
+</form></div></main></div></body></html>

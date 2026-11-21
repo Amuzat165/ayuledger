@@ -1,0 +1,21 @@
+<?php
+return [
+    'history_title' => 'سجل مدفوعات الموردين',
+    'history_intro' => 'راجع المدفوعات المسجلة على فواتير الموردين.',
+    'date_from' => 'تاريخ الدفع من',
+    'date_to' => 'تاريخ الدفع إلى',
+    'apply_filters' => 'تطبيق عوامل التصفية',
+    'reset_filters' => 'إعادة تعيين عوامل التصفية',
+    'no_history' => 'لم يتم تسجيل أي دفعات للموردين بعد.',
+    'no_matching_payments' => 'لا توجد دفعات موردين تطابق عوامل التصفية هذه.',
+    'view_supplier_invoice' => 'عرض فاتورة المورد',
+    'make_payment' => 'إجراء دفعة', 'payment_amount' => 'مبلغ الدفعة', 'payment_date' => 'تاريخ الدفعة',
+    'payment_reference' => 'مرجع الدفع', 'payment_method' => 'طريقة الدفع', 'amount_paid' => 'المبلغ المدفوع',
+    'amount_remaining' => 'المبلغ المتبقي', 'payment_history' => 'سجل الدفعات', 'payment_receipt' => 'إيصال دفع',
+    'supplier' => 'المورّد', 'internal_invoice_number' => 'الرقم الداخلي لفاتورة المورّد',
+    'previous_amount_remaining' => 'المبلغ المتبقي قبل الدفعة', 'new_amount_remaining' => 'المبلغ المتبقي بعد الدفعة',
+    'recorded_by' => 'سُجّلت بواسطة', 'select_method' => 'اختر طريقة الدفع أو الحساب', 'not_available' => 'غير متاح',
+    'no_payments' => 'لا توجد دفعات مسجلة لهذه الفاتورة.', 'validation_help' => 'يرجى مراجعة تفاصيل الدفعة.',
+    'receipt_footer' => 'يؤكد هذا الإيصال تسجيل الدفعة الموضحة أعلاه.', 'messages' => ['saved' => 'تم تسجيل الدفعة.'],
+    'errors' => ['positive_amount' => 'يجب أن يكون مبلغ الدفعة أكبر من صفر.', 'invalid_amount' => 'أدخل مبلغاً صحيحاً لا يزيد عن منزلتين عشريتين.', 'invalid_date' => 'أدخل تاريخ دفعة صحيحاً.', 'invoice_not_payable' => 'يمكن الدفع للفواتير المعتمدة فقط.', 'no_balance' => 'لا يوجد مبلغ متبقٍ لهذه الفاتورة.', 'exceeds_balance' => 'لا يجوز أن يتجاوز مبلغ الدفعة المبلغ المتبقي.', 'invalid_method' => 'اختر طريقة دفع أو حساباً نشطاً.', 'submission_conflict' => 'سبق استخدام هذا الإرسال بتفاصيل دفع مختلفة.'],
+];

@@ -9,6 +9,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
+use App\Setting;
 
 class DrVoucherController extends Controller
 {
@@ -50,7 +51,12 @@ class DrVoucherController extends Controller
     public function create()
     {
         $crVoucher = new CrVoucherController();
-        return view($this->parentView . '.create', $crVoucher->__getBranchBankCashIncomeExpenseHead());
+        $data = $crVoucher->__getBranchBankCashIncomeExpenseHead();
+        
+        // Fetch settings with VAT percentage (used for Withholding Tax)
+        $data['vat_percentage'] = \Illuminate\Support\Facades\Config::get('settings.vat_percentage', 0);
+        
+        return view($this->parentView . '.create', $data);
     }
 
     /**
@@ -391,6 +397,11 @@ class DrVoucherController extends Controller
             'items' => 'required'
         ]);
         if ($request->apply_comand_top == 3 || $request->apply_comand_bottom == 3) {
+            \App\Support\VoucherBulkActionAuthorization::authorize('dr_voucher', 'active', 3);
+        } elseif ($request->apply_comand_top == 2 || $request->apply_comand_bottom == 2) {
+            \App\Support\VoucherBulkActionAuthorization::authorize('dr_voucher', 'active', 2);
+        }
+        if ($request->apply_comand_top == 3 || $request->apply_comand_bottom == 3) {
             foreach ($request->items["id"] as $id) {
                 $items = $this->parentModel::where('voucher_type', '=', $this->voucher_type)
                     ->where(function ($q) use ($id) {
@@ -429,6 +440,11 @@ class DrVoucherController extends Controller
         $request->validate([
             'items' => 'required'
         ]);
+        if ($request->apply_comand_top == 1 || $request->apply_comand_bottom == 1) {
+            \App\Support\VoucherBulkActionAuthorization::authorize('dr_voucher', 'trashed', 1);
+        } elseif ($request->apply_comand_top == 2 || $request->apply_comand_bottom == 2) {
+            \App\Support\VoucherBulkActionAuthorization::authorize('dr_voucher', 'trashed', 2);
+        }
         if ($request->apply_comand_top == 1 || $request->apply_comand_bottom == 1) {
             foreach ($request->items["id"] as $id) {
                 $items = $this->parentModel::where('voucher_type', '=', $this->voucher_type)

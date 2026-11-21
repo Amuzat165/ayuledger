@@ -6,7 +6,7 @@
     {{ config('settings.company_name')  }} -> {{ $extra['module_name']  }}
 @endsection
 @section('content')
-    <p class="mid">Printing Date & Time: {{ $extra['current_date_time']  }}</p>
+    <p class="mid">{{ __('Printing Date & Time') }}: {{ $extra['current_date_time']  }}</p>
     <div class="mid">
         <div class="col-md-12 col-sm-12 col-lg-12 col-xl-12">
             <br>
@@ -21,14 +21,14 @@
         <table class="table table-bordered table-sm">
             <thead>
             <tr>
-                <td class="text-right">Search By:</td>
-                <td class="text-right">Branch Name:</td>
+                <td class="text-right">{{ __('financial.labels.search_by') }}:</td>
+                <td class="text-right">{{ __('financial.labels.branch_name') }}:</td>
                 <td class="font-weight-bold">{{ $search_by['branch_name']  }}</td>
-                <td class="text-right">Head Of Account:</td>
+                <td class="text-right">{{ __('Head Of Account') }}:</td>
                 <td class="font-weight-bold">{{ $search_by['income_expense_head_name']  }}</td>
-                <td class="text-right">From Date:</td>
+                <td class="text-right">{{ __('financial.reports.date_start') }}:</td>
                 <td class="font-weight-bold">{{ $search_by['from'] }}</td>
-                <td class="text-right">To Date:</td>
+                <td class="text-right">{{ __('financial.reports.date_end') }}:</td>
                 <td class="font-weight-bold">{{ $search_by['to'] }}</td>
             </tr>
             </thead>
@@ -41,17 +41,17 @@
                         <table class="table table-bordered table-sm table-hover">
                             <thead>
                                 <tr>
-                                    <th class="text-center" scope="col">SL. No</th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Head Of Account</th>
-                                    <th scope="col">Mode Of Payment</th>
-                                    <th scope="col">Cheque Number</th>
-                                    <th scope="col">Particulars</th>
-                                    <th scope="col">Voucher No</th>
-                                    <th scope="col">Type Of Voucher</th>
-                                    <th class="text-right" scope="col">Dr ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
+                                    <th class="text-center" scope="col">{{ __('SL. No') }}</th>
+                                    <th scope="col">{{ __('financial.labels.date') }}</th>
+                                    <th scope="col">{{ __('financial.labels.head_of_account') }}</th>
+                                    <th scope="col">{{ __('Mode Of Payment') }}</th>
+                                    <th scope="col">{{ __('financial.labels.cheque_number') }}</th>
+                                    <th scope="col">{{ __('financial.labels.particulars') }}</th>
+                                    <th scope="col">{{ __('financial.labels.voucher_number') }}</th>
+                                    <th scope="col">{{ __('Type Of Voucher') }}</th>
+                                    <th class="text-right" scope="col">{{ __('Dr') }} ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
                                     </th>
-                                    <th class="text-right" scope="col">Cr ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
+                                    <th class="text-right" scope="col">{{ __('Cr') }} ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
                                     </th>
                                 </tr>
                             </thead>
@@ -81,7 +81,7 @@
                                     @endphp
                                 @endforeach
                                 <tr>
-                                    <th class="text-right" colspan="8">Total =</th>
+                                    <th class="text-right" colspan="8">{{ __('Total') }} =</th>
                                     <th class="text-right">{{ Helper::convertMoneyFormat($dr_amount) }}</th>
                                     <th class="text-right">{{ Helper::convertMoneyFormat($cr_amount) }}</th>
                                 </tr>

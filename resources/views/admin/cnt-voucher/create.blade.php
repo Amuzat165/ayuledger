@@ -55,7 +55,7 @@ $all = config('role_manage.ContraVoucher.All');
                     <div class="header">
                         <h2 class="m-b-20">
                             {{ $createItemName }}
-                            <small>Put {{ $moduleName }} Information</small>
+                            <small>{{ __('financial.labels.enter_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
                         <div class="body">
                             <form class="form" id="form_validation" method="post"
@@ -67,7 +67,7 @@ $all = config('role_manage.ContraVoucher.All');
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control show-tick"
                                                     name="branch_id">
-                                                    <option value="0">Select Branch Name</option>
+                                                    <option value="0">{{ __('financial.labels.select_branch') }}</option>
                                                     @foreach ($branches->sortByDesc('id') as $project)
                                                     <option @if ($project->id == old('branch_id')) selected @endif
                                                         value="{{ $project->id }}">{{ $project->name }}</option>
@@ -81,7 +81,7 @@ $all = config('role_manage.ContraVoucher.All');
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control show-tick"
                                                     name="bank_cash_id" id="">
-                                                    <option value="0"> Select Bank Cash Name ( Dr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_bank_cash') }} ( {{ __('Dr') }} )</option>
                                                     @foreach ($bank_cashes->sortByDesc('id') as $bank_cash)
                                                     <option @if ($bank_cash->id == old('bank_cash_id')) selected @endif
                                                         value="{{ $bank_cash->id }}">{{ $bank_cash->name }}
@@ -95,7 +95,7 @@ $all = config('role_manage.ContraVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="cheque_number" type="text" class="form-control">
-                                                <label class="form-label">Cheque Number</label>
+                                                <label class="form-label">{{ __('financial.labels.cheque_number') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -106,7 +106,7 @@ $all = config('role_manage.ContraVoucher.All');
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control show-tick"
                                                     name="bank_cash_id_cr" id="">
-                                                    <option value="0"> Select Bank Cash Name ( Cr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_bank_cash') }} ( {{ __('Cr') }} )</option>
                                                     @foreach ($bank_cashes->sortByDesc('id') as $bank_cash)
                                                     <option @if ($bank_cash->id == old('bank_cash_id_cr')) selected
                                                         @endif
@@ -121,7 +121,7 @@ $all = config('role_manage.ContraVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount" type="number" class="form-control amount">
-                                                <label class="form-label"> Amount </label>
+                                                <label class="form-label"> {{ __('financial.labels.amount') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -130,7 +130,7 @@ $all = config('role_manage.ContraVoucher.All');
                                             <div class="form-line" id="bs_datepicker_container">
                                                 <input autocomplete="off" value="{{ old('voucher_date') }}"
                                                     name="voucher_date" type="text" class="form-control"
-                                                    placeholder="Please choose a date...">
+                                                    placeholder="{{ __('financial.screens.select_date') }}">
                                             </div>
                                         </div>
                                     </div>
@@ -140,7 +140,7 @@ $all = config('role_manage.ContraVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <textarea name="particulars" rows="2" class="form-control no-resize"
-                                                    placeholder="Particulars">{{ old('particulars') }}</textarea>
+                                                    placeholder="{{ __('financial.labels.particulars') }}">{{ old('particulars') }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -186,10 +186,10 @@ $all = config('role_manage.ContraVoucher.All');
 <script src="{{ asset('asset/js/pages/forms/basic-form-elements.js') }}"></script>
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)
@@ -279,28 +279,28 @@ $all = config('role_manage.ContraVoucher.All');
                 Values = UICnt.getValues();
                 Fields = UICnt.getFields();
                 if (Values.project_id == 0) {
-                    toastr["error"]('Select  branch name');
+                    toastr["error"](@json(__('financial.labels.branch_required')));
                     e.preventDefault();
                 }
                 if (Values.bankcash_id == 0) {
-                    toastr["error"]('Select Bank Cash Name ( Dr )');
+                    toastr["error"]('{{ __('financial.labels.select_bank_cash') }} ( Dr )');
                     e.preventDefault();
                 }
                 if (Values.bankcash_id_cr == 0) {
-                    toastr["error"]('Select Bank Cash Name ( Cr )');
+                    toastr["error"]('{{ __('financial.labels.select_bank_cash') }} ( Cr )');
                     e.preventDefault();
                 }
                 if (Values.bankcash_id == Values.bankcash_id_cr && Values.bankcash_id != 0 && Values
                     .bankcash_id_cr != 0) {
-                    toastr["error"]('Bank Cash ( Dr ) and Bank Cash ( Cr ) should not same');
+                    toastr["error"](@json(__('financial.labels.bank_accounts_must_differ')));
                     e.preventDefault();
                 }
                 if (Values.amount == 0) {
-                    toastr["error"]('Amount is required');
+                    toastr["error"]('{{ __('financial.labels.amount') }} is required');
                     e.preventDefault();
                 }
                 if (Values.date == 0) {
-                    toastr["error"]('Date is required');
+                    toastr["error"](@json(__('financial.labels.date_required')));
                     e.preventDefault();
                 }
             };

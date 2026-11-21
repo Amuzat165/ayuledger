@@ -14,13 +14,13 @@
                         </tr>
                         <tr>
                             <th>
-                                <h5>Particulars </h5>
+                                <h5>{{ __('financial.labels.particulars') }} </h5>
                             </th>
                             <th>
-                                <h5>From {{ $search_by['start_from'] }} To {{ $search_by['start_to'] }}</h5>
+                                <h5>{{ __('From') }} {{ $search_by['start_from'] }} {{ __('To') }} {{ $search_by['start_to'] }}</h5>
                             </th>
                             <th>
-                                <h5>From {{ $search_by['end_from'] }} To {{ $search_by['end_to'] }}</h5>
+                                <h5>{{ __('From') }} {{ $search_by['end_from'] }} {{ __('To') }} {{ $search_by['end_to'] }}</h5>
                             </th>
                         </tr>
                         <tr>
@@ -33,7 +33,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td colspan="3">A. Cash flow from Operating actives:</td>
+                            <td colspan="3">{{ __('A. Cash flow from Operating actives') }}:</td>
                         </tr>
                         <tr>
                             <td>
@@ -47,7 +47,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3">Adjustment for:</td>
+                            <td colspan="3">{{ __('Adjustment for') }}:</td>
                         </tr>
                         <tr>
                             <td>
@@ -61,7 +61,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3"><b>(Increase)/Decrease in Current Assets:</b> </td>
+                            <td colspan="3"><b>{{ __('(Increase)/Decrease in Current Assets') }}:</b> </td>
                         </tr>
                         <tr>
                             <td>
@@ -97,7 +97,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3"><b>Increse/(Decrease) in Current Liabilities:</b> </td>
+                            <td colspan="3"><b>{{ __('Increse/(Decrease) in Current Liabilities') }}:</b> </td>
                         </tr>
                         <tr>
                             <td>
@@ -166,7 +166,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3">B. Cash flow from Investing actives: (Increase) / Decrease</td>
+                            <td colspan="3">{{ __('B. Cash flow from Investing actives: (Increase) / Decrease') }}</td>
                         </tr>
                         <tr>
                             <td>
@@ -191,7 +191,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3">C. Cash flow from Financing actives: Increase / (Decrease)</td>
+                            <td colspan="3">{{ __('C. Cash flow from Financing actives: Increase / (Decrease)') }}</td>
                         </tr>
                         <tr>
                             <td>

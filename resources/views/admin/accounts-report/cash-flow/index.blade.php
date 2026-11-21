@@ -4,7 +4,7 @@
 
 
 @section('title')
-{{ __('root.reports.cash_flow_statement') }}
+{{ __('financial.reports.cash_flow') }}
 @stop
 
 @section('top-bar')
@@ -16,8 +16,8 @@
 @section('content')
 
 <section @if ($is_rtl) dir="rtl" @endif class="content">
-    <div class="header">
-        <h2 class="text-center">{{ __('root.reports.cash_flow_statement') }}</h2>
+    <div class="header" style="background-color: transparent !important;">
+        <h2 class="text-center">{{ __('financial.reports.cash_flow') }}</h2>
         <br>
     </div>
     <div class="container-fluid">
@@ -28,8 +28,8 @@
                 <div class="card">
                     <div class="header bg-cyan">
                         <h2>
-                            {{ __('root.reports.branch_wise') }}
-                            <small>{{ __('root.reports.show_all') }}</small>
+                            {{ __('financial.reports.branch_wise') }}
+
                         </h2>
                     </div>
                     <br>
@@ -43,7 +43,7 @@
                                         <div class="form-line">
                                             <select data-live-search="true" class="form-control show-tick"
                                                 name="branch_id">
-                                                <option value="0">All Branches
+                                                <option value="0">{{ __('financial.labels.all_branches') }}
                                                 </option>
                                                 @foreach ($branches as $branch)
                                                 <option value="{{ $branch->id }}">{{ $branch->name }}</option>
@@ -53,30 +53,30 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <h2 class="card-inside-title">{{ __('root.reports.period') }}</h2>
+                                    <h2 class="card-inside-title">{{ __('financial.reports.period') }} 1</h2>
                                     <div class="input-daterange input-group" id="bs_datepicker_range_container">
                                         <div class="form-line">
                                             <input autocomplete="off" name="start_from" type="text" class="form-control"
-                                                placeholder="{{ __('root.reports.date_start') }}...">
+                                                placeholder="{{ __('financial.reports.date_start') }}...">
                                         </div>
-                                        <span class="input-group-addon">{{ __('root.reports.to') }}</span>
+                                        <span class="input-group-addon">{{ __('financial.reports.to') }}</span>
                                         <div class="form-line">
                                             <input autocomplete="off" name="start_to" type="text" class="form-control"
-                                                placeholder="{{ __('root.reports.date_end') }}...">
+                                                placeholder="{{ __('financial.reports.date_end') }}...">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <h2 class="card-inside-title">{{ __('root.reports.period') }}</h2>
+                                    <h2 class="card-inside-title">{{ __('financial.reports.period') }} 2</h2>
                                     <div class="input-daterange input-group" id="bs_datepicker_range_container1">
                                         <div class="form-line">
                                             <input autocomplete="off" name="end_from" type="text" class="form-control"
-                                                placeholder="{{ __('root.reports.date_start') }}...">
+                                                placeholder="{{ __('financial.reports.date_start') }}...">
                                         </div>
-                                        <span class="input-group-addon">{{ __('root.reports.to') }}</span>
+                                        <span class="input-group-addon">{{ __('financial.reports.to') }}</span>
                                         <div class="form-line">
                                             <input autocomplete="off" name="end_to" type="text" class="form-control"
-                                                placeholder="{{ __('root.reports.date_end') }}...">
+                                                placeholder="{{ __('financial.reports.date_end') }}...">
                                         </div>
                                     </div>
                                 </div>
@@ -160,11 +160,11 @@
 
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
 
@@ -235,12 +235,12 @@
 
 
                 if (input_values.start_from == 0) {
-                    toastr["error"]('Set {{ __('root.reports.period') }} Date');
+                    toastr["error"]('Set {{ __('financial.reports.period') }} Date');
                     e.preventDefault();
                 }
 
                 if (input_values.end_from == 0) {
-                    toastr["error"]('Set {{ __('root.reports.period') }} Date');
+                    toastr["error"]('Set {{ __('financial.reports.period') }} Date');
                     e.preventDefault();
                 }
 

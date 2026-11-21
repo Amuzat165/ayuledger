@@ -15,6 +15,12 @@
         <div class="col-xs-12">
             <div class="card">
                 <x-table.table-search-bar :all="count($params->tbody)" :trash="0" />
+                @foreach ($params->tbody as $customer)
+                    <form id="delete-customer-{{ $customer->id }}" action="{{ route('customers.destroy', $customer->id) }}" method="POST" class="d-none">
+                        @csrf
+                        @method('DELETE')
+                    </form>
+                @endforeach
                 {{-- --}}
                 <form class="actionForm" action="" method="get">
                     @csrf
@@ -33,7 +39,7 @@
                                 <x-table.table-checkbox :sn="$sn" :item="$item" />
                                 {{-- Display customer details --}}
                                 <td style="font-size: 12px;">{{ $sn }}</td>
-                                <td style="font-size: 12px;">{{ $item->branch->name ?? 'N/A'}}</td>
+                                <td style="font-size: 12px;">{{ $item->branch->name ?? __('financial.labels.not_available')}}</td>
                                 <td style="font-size: 12px;">{{ $item->name }}</td>
                                 <td style="font-size: 12px;">{!! $Bh::email_f($item->email) !!}</td>
                                 <td style="font-size: 12px;">{{ $item->phone }}</td>
@@ -52,13 +58,9 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <form action="{{ route('customers.destroy', $item->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </form>
+                                    <button type="submit" form="delete-customer-{{ $item->id }}" class="btn btn-sm btn-danger">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                         @empty

@@ -52,8 +52,8 @@ class NotesController extends Controller
         $search_by = array(
             'branch_name' => ($request->branch_id) ? $branches->where('id', $request->branch_id)->first()->name : 'All Branch',
             'type_name' => ($request->income_expense_type_id) ? $income_expense_types->where('id', $request->income_expense_type_id)->first()->name : 'All types',
-            'start_from' => ($request->start_from) ?  date(config('settings.date_format'), strtotime($request->start_from)) : null,
-            'start_to' => ($request->start_to) ?  date(config('settings.date_format'), strtotime($request->start_to)) : null
+            'start_from' => ($request->start_from) ?  date('d/m/Y', strtotime($request->start_from)) : null,
+            'start_to' => ($request->start_to) ?  date('d/m/Y', strtotime($request->start_to)) : null
         );
 
         // Show Action
@@ -112,8 +112,8 @@ class NotesController extends Controller
         $search_by = array(
             'branch_name' => ($request->branch_id) ? $branches->where('id', $request->branch_id)->first()->name : 'All Branch',
             'group_name' => ($request->income_expense_group_id) ? $income_expense_groups->where('id', $request->income_expense_group_id)->first()->name : 'All Groups',
-            'start_from' => ($request->start_from) ?  date(config('settings.date_format'), strtotime($request->start_from)) : null,
-            'start_to' => ($request->start_to) ?  date(config('settings.date_format'), strtotime($request->start_to)) : null
+            'start_from' => ($request->start_from) ?  date('d/m/Y', strtotime($request->start_from)) : null,
+            'start_to' => ($request->start_to) ?  date('d/m/Y', strtotime($request->start_to)) : null
         );
         
         // Show Action

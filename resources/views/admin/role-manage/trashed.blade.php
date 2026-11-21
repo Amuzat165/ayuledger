@@ -132,16 +132,16 @@ $trash_show = config('role_manage.RoleManager.TrashShow');
                                             <a @if ($restore==0) class="dis-none" @endif
                                                 class="btn btn-xs btn-info waves-effect"
                                                 href="{{ route($ParentRouteName . '.restore', ['id' => $item->id]) }}"
-                                                data-toggle="tooltip" data-placement="top" title="Restore"><i
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('root.common.restore') }}"><i
                                                     class="material-icons">restore</i></a>
                                             <a data-target="#largeModal"
                                                 class="dis-none btn btn-xs btn-success waves-effect ajaxCall" href="#"
-                                                data-toggle="tooltip" data-placement="top" title="Preview"><i
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('ui.messages.preview') }}"><i
                                                     class="material-icons">pageview</i></a>
                                             <a @if ($permanently_delete==0) class="dis-none" @endif
                                                 class="btn btn-xs btn-danger waves-effect"
                                                 href="{{ route($ParentRouteName . '.kill', ['id' => $item->id]) }}"
-                                                data-toggle="tooltip" data-placement="top" title="Parmanently Delete?">
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('ui.messages.permanently_delete') }}">
                                                 <i class="material-icons">delete</i></a>
                                         </td>
                                     </tr>
@@ -166,7 +166,7 @@ $trash_show = config('role_manage.RoleManager.TrashShow');
                                     <thead>
                                         <tr>
                                             <th colspan="8" class="text-danger text-center">
-                                                {{ __('root.common.no_data_found') }}
+                                                {{ __('ui.messages.no_records_found') }}
                                             </th>
                                         </tr>
                                     </thead>
@@ -225,28 +225,28 @@ $trash_show = config('role_manage.RoleManager.TrashShow');
                 </div>
             </div>
             <div class="modal-header">
-                <h4 class="modal-title" id="largeModalLabel">Modal title</h4>
+                <h4 class="modal-title" id="largeModalLabel">{{ __('ui.fields.details') }}</h4>
             </div>
             <div class="modal-body">
                 <div class="row modal-content-data">
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th scope="col">Items</th>
-                                <th scope="col">Description</th>
+                                <th scope="col">{{ __('ui.fields.items') }}</th>
+                                <th scope="col">{{ __('ui.fields.description') }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Id</td>
-                                <td>Name</td>
+                                <td>{{ __('ui.fields.id') }}</td>
+                                <td>{{ __('ui.fields.name') }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">{{ __('ui.actions.close') }}</button>
             </div>
         </div>
     </div>
@@ -263,10 +263,10 @@ $trash_show = config('role_manage.RoleManager.TrashShow');
 <!-- Autosize Plugin Js -->
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)

@@ -4,7 +4,7 @@
 
 
 @section('title')
-Branch
+Ledger Report
 @stop
 
 @section('top-bar')
@@ -16,8 +16,8 @@ Branch
 @section('content')
 
 <section @if($is_rtl) dir="rtl" @endif class="content">
-    <div class="header">
-        <h2 class="text-center">Ledger Report</h2>
+    <div class="header" style="background-color: transparent !important;">
+        <h2 class="text-center">{{ __('Ledger Report') }}</h2>
     </div>
     <div class="container-fluid">
         <!-- Inline Layout | With Floating Label -->
@@ -46,7 +46,7 @@ Branch
 {{--                                            <input autocomplete="off" name="from" type="text" class="form-control"--}}
 {{--                                                placeholder="Date start...">--}}
 {{--                                        </div>--}}
-{{--                                        <span class="input-group-addon">to</span>--}}
+{{--                                        <span class="input-group-addon">{{ __('financial.reports.to') }}</span>--}}
 {{--                                        <div class="form-line">--}}
 {{--                                            <input autocomplete="off" name="to" type="text" class="form-control"--}}
 {{--                                                placeholder="Date end...">--}}
@@ -97,7 +97,7 @@ Branch
 {{--                                            <input autocomplete="off" name="from" type="text" class="form-control"--}}
 {{--                                                placeholder="Date start...">--}}
 {{--                                        </div>--}}
-{{--                                        <span class="input-group-addon">to</span>--}}
+{{--                                        <span class="input-group-addon">{{ __('financial.reports.to') }}</span>--}}
 {{--                                        <div class="form-line">--}}
 {{--                                            <input autocomplete="off" name="to" type="text" class="form-control"--}}
 {{--                                                placeholder="Date end...">--}}
@@ -128,8 +128,7 @@ Branch
                 <div class="card">
                     <div class="header bg-cyan">
                         <h2>
-                            GENERAL LEDGER
-                            <small>Anything is select show all</small>
+                            {{ __('GENERAL LEDGER') }}
                         </h2>
                     </div>
                     <br>
@@ -144,10 +143,11 @@ Branch
                                 <div class="col-lg-6 col-md-6
                                  col-sm-12 col-xs-12">
                                     <div class="form-group form-float">
+                                        <label>{{ __('financial.labels.branch') }}</label>
                                         <div class="form-line">
                                             <select data-live-search="true" class="form-control show-tick"
                                                     name="branch_id">
-                                                <option value="">All Branches</option>
+                                                <option value="">{{ __('financial.labels.all_branches') }}</option>
                                                 @foreach ($branches as $Branch)
                                                     <option value="{{ $Branch->id }}">{{ $Branch->name }}</option>
                                                 @endforeach
@@ -159,12 +159,12 @@ Branch
                                     <div class="input-daterange input-group" id="bs_datepicker_range_container2">
                                         <div class="form-line">
                                             <input autocomplete="off" name="from" type="text" class="form-control"
-                                                placeholder="Date start...">
+                                                placeholder="{{ __('Date start...') }}">
                                         </div>
-                                        <span class="input-group-addon">to</span>
+                                        <span class="input-group-addon">{{ __('financial.reports.to') }}</span>
                                         <div class="form-line">
                                             <input autocomplete="off" name="to" type="text" class="form-control"
-                                                placeholder="Date end...">
+                                                placeholder="{{ __('Date end...') }}">
                                         </div>
                                     </div>
                                 </div>
@@ -265,11 +265,11 @@ Branch
 
 <script>
     @if(Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
                 @if(Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
 

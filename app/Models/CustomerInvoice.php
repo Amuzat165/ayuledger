@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Concerns\GeneratesInvoiceNumber;
 
-class CustomerInvoice extends Model
+class CustomerInvoice extends \App\TenantScopedModel
 {
     use SoftDeletes;
     use GeneratesInvoiceNumber;
@@ -28,4 +28,3 @@ class CustomerInvoice extends Model
     }
 
 }
-

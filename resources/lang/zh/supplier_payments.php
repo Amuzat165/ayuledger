@@ -1,0 +1,21 @@
+<?php
+return [
+    'history_title' => '供应商付款记录',
+    'history_intro' => '查看供应商发票已记录的付款。',
+    'date_from' => '付款日期起',
+    'date_to' => '付款日期止',
+    'apply_filters' => '应用筛选',
+    'reset_filters' => '重置筛选',
+    'no_history' => '尚未记录供应商付款。',
+    'no_matching_payments' => '没有符合这些筛选条件的供应商付款。',
+    'view_supplier_invoice' => '查看供应商发票',
+    'make_payment' => '付款', 'payment_amount' => '付款金额', 'payment_date' => '付款日期',
+    'payment_reference' => '付款参考', 'payment_method' => '付款方式', 'amount_paid' => '已付金额',
+    'amount_remaining' => '剩余金额', 'payment_history' => '付款记录', 'payment_receipt' => '付款收据',
+    'supplier' => '供应商', 'internal_invoice_number' => '供应商发票内部编号',
+    'previous_amount_remaining' => '付款前剩余金额', 'new_amount_remaining' => '付款后剩余金额',
+    'recorded_by' => '记录人', 'select_method' => '选择付款方式或账户', 'not_available' => '不可用',
+    'no_payments' => '此供应商发票暂无付款记录。', 'validation_help' => '请检查付款信息。',
+    'receipt_footer' => '本收据确认以上记录的付款。', 'messages' => ['saved' => '付款已记录。'],
+    'errors' => ['positive_amount' => '付款金额必须大于零。', 'invalid_amount' => '请输入最多两位小数的有效金额。', 'invalid_date' => '请输入有效的付款日期。', 'invoice_not_payable' => '只有已批准的供应商发票可以付款。', 'no_balance' => '此供应商发票没有剩余金额。', 'exceeds_balance' => '付款金额不能超过剩余金额。', 'invalid_method' => '请选择有效的付款方式或账户。', 'submission_conflict' => '此提交标识已用于不同的付款信息。'],
+];

@@ -47,7 +47,7 @@ $ParentRouteName = 'cr_voucher';
                     <div class="header">
                         <h2 class="m-b-20">
                             {{ $createItemName }}
-                            <small>Edit {{ $moduleName }} Information</small>
+                            <small>{{ __('financial.labels.edit_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
                         <div class="body">
                             <form class="form" id="form_validation" method="post"
@@ -59,7 +59,7 @@ $ParentRouteName = 'cr_voucher';
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control show-tick"
                                                     name="branch_id">
-                                                    <option value="0">Select Branch Name</option>
+                                                    <option value="0">{{ __('financial.labels.select_branch') }}</option>
                                                     @foreach ($branches->sortByDesc('id') as $branch)
                                                     <option @if ($branch->id == $item[0]->branch_id) )
                                                         selected @endif
@@ -74,7 +74,7 @@ $ParentRouteName = 'cr_voucher';
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control show-tick"
                                                     name="bank_cash_id" id="">
-                                                    <option value="0"> Select Bank Cash Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_bank_cash') }}</option>
                                                     @foreach ($bank_cashes->sortByDesc('id') as $bank_cash)
                                                     <option @if ($bank_cash->id == $item[0]->bank_cash_id) )
                                                         selected @endif
@@ -90,7 +90,7 @@ $ParentRouteName = 'cr_voucher';
                                             <div class="form-line">
                                                 <input value="{{ $item[0]->cheque_number }}" name="cheque_number"
                                                     type="text" class="form-control">
-                                                <label class="form-label">Cheque Number</label>
+                                                <label class="form-label">{{ __('financial.labels.cheque_number') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -102,7 +102,7 @@ $ParentRouteName = 'cr_voucher';
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }}</option>
                                                     @foreach ($income_expense_heads->sortByDesc('id') as $HeadOfAccount)
                                                     <option @if ($HeadOfAccount->id == $item[0]->income_expense_head_id)
                                                         selected @endif
@@ -118,7 +118,7 @@ $ParentRouteName = 'cr_voucher';
                                             <div class="form-line">
                                                 <input value="{{ $item[0]->amount }}" name="amount[]" type="number"
                                                     class="form-control amount">
-                                                <label class="form-label">Amount </label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -147,7 +147,7 @@ $ParentRouteName = 'cr_voucher';
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }}</option>
                                                     @foreach ($income_expense_heads as $HeadOfAccount)
                                                     <option @if ($HeadOfAccount->id == $headOfAccountID1) selected
                                                         @endif
@@ -163,7 +163,7 @@ $ParentRouteName = 'cr_voucher';
                                             <div class="form-line">
                                                 <input value="{{ $amount1 }}" name="amount[]" type="number"
                                                     class="form-control amount">
-                                                <label class="form-label">Amount </label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -193,7 +193,7 @@ $ParentRouteName = 'cr_voucher';
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }}</option>
                                                     @foreach ($income_expense_heads as $HeadOfAccount)
                                                     <option @if ($HeadOfAccount->id == $headOfAccountID2) selected
                                                         @endif
@@ -209,7 +209,7 @@ $ParentRouteName = 'cr_voucher';
                                             <div class="form-line">
                                                 <input value="{{ $amount2 }}" name="amount[]" type="number"
                                                     class="form-control amount">
-                                                <label class="form-label">Amount </label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -239,7 +239,7 @@ $ParentRouteName = 'cr_voucher';
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }}</option>
                                                     @foreach ($income_expense_heads as $HeadOfAccount)
                                                     <option @if ($HeadOfAccount->id == $headOfAccountID3) selected
                                                         @endif
@@ -255,7 +255,7 @@ $ParentRouteName = 'cr_voucher';
                                             <div class="form-line">
                                                 <input value="{{ $amount3 }}" name="amount[]" type="number"
                                                     class="form-control amount">
-                                                <label class="form-label">Amount </label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -285,7 +285,7 @@ $ParentRouteName = 'cr_voucher';
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }}</option>
                                                     @foreach ($income_expense_heads as $HeadOfAccount)
                                                     <option @if ($HeadOfAccount->id == $headOfAccountID4) selected
                                                         @endif
@@ -301,7 +301,7 @@ $ParentRouteName = 'cr_voucher';
                                             <div class="form-line">
                                                 <input value="{{ $amount4 }}" name="amount[]" type="number"
                                                     class="form-control amount">
-                                                <label class="form-label">Amount </label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -319,7 +319,7 @@ $ParentRouteName = 'cr_voucher';
                                                 <input autocomplete="off"
                                                     value="{{ date('m/d/Y', strtotime($item[0]->voucher_date)) }}"
                                                     name="voucher_date" type="text" class="form-control"
-                                                    placeholder="Please choose a date...">
+                                                    placeholder="{{ __('Please choose a date...') }}">
                                             </div>
                                         </div>
                                     </div>
@@ -327,7 +327,7 @@ $ParentRouteName = 'cr_voucher';
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <textarea name="particulars" rows="2" class="form-control no-resize"
-                                                    placeholder="Particulars">{{ $item[0]->particulars }}</textarea>
+                                                    placeholder="{{ __('financial.labels.particulars') }}">{{ $item[0]->particulars }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -374,10 +374,10 @@ $ParentRouteName = 'cr_voucher';
 <script src="{{ asset('asset/js/pages/forms/basic-form-elements.js') }}"></script>
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)
@@ -488,62 +488,62 @@ $ParentRouteName = 'cr_voucher';
                 Values = UICnt.getValues();
                 Fields = UICnt.getFields();
                 if (Values.project_id == 0) {
-                    toastr["error"]('Select  Project');
+                    toastr["error"](@json(__('financial.labels.select_project'))) ;
                     e.preventDefault();
                 }
                 if (Values.bankcash_id == 0) {
-                    toastr["error"]('Select Bank Cash Name');
+                    toastr["error"](@json(__('financial.labels.select_bank_cash')) + '');
                     e.preventDefault();
                 }
                 if (Fields.get_head_of_account_id[0].querySelector('select').value == 0) {
-                    toastr["error"]('Select Head Of Account');
+                    toastr["error"](@json(__('financial.labels.select_head_of_account')) + '');
                     e.preventDefault();
                 }
                 if (Fields.get_amount[0].value == '') {
-                    toastr["error"]('Put Amount');
+                    toastr["error"](@json(__('financial.labels.enter_amount')) + '');
                     e.preventDefault();
                 }
                 if (Values.date == 0) {
-                    toastr["error"]('Set Date');
+                    toastr["error"](@json(__('financial.screens.select_date')));
                     e.preventDefault();
                 }
                 if (Fields.get_dr[1].style.display == 'block') {
                     if (Fields.get_head_of_account_id[2].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + '');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[1].value == '') {
-                        toastr["error"]('Put Amount');
+                        toastr["error"](@json(__('financial.labels.enter_amount')) + '');
                         e.preventDefault();
                     }
                 }
                 if (Fields.get_dr[2].style.display == 'block') {
                     if (Fields.get_head_of_account_id[4].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + '');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[2].value == '') {
-                        toastr["error"]('Put Amount');
+                        toastr["error"](@json(__('financial.labels.enter_amount')) + '');
                         e.preventDefault();
                     }
                 }
                 if (Fields.get_dr[3].style.display == 'block') {
                     if (Fields.get_head_of_account_id[6].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + '');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[3].value == '') {
-                        toastr["error"]('Put Amount');
+                        toastr["error"](@json(__('financial.labels.enter_amount')) + '');
                         e.preventDefault();
                     }
                 }
                 if (Fields.get_dr[4].style.display == 'block') {
                     if (Fields.get_head_of_account_id[8].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + '');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[4].value == '') {
-                        toastr["error"]('Put Amount');
+                        toastr["error"](@json(__('financial.labels.enter_amount')) + '');
                         e.preventDefault();
                     }
                 }
@@ -593,7 +593,7 @@ $ParentRouteName = 'cr_voucher';
                 }
 
                 if (checkUniqueOrNot(head_of_account_Ids)) {
-                    toastr["error"]('Head of Account should unique');
+                    toastr["error"](@json(__('financial.labels.account_head_unique')));
                     e.preventDefault();
                 }
             };

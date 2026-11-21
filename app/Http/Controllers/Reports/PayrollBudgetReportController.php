@@ -6,8 +6,10 @@ use App\Branch;
 use App\Http\Controllers\Controller;
 use App\Models\Budget;
 use App\Models\Payroll;
+use App\Exports\PayrollBudgetReport;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PayrollBudgetReportController extends Controller
 {
@@ -56,7 +58,7 @@ class PayrollBudgetReportController extends Controller
             'branch_id' => 'nullable|integer|exists:branches,id',
             'from' => 'nullable|date',
             'to' => 'nullable|date|after_or_equal:from',
-            'action' => 'required|in:Show,Pdf',
+            'action' => 'required|in:Show,Pdf,Excel',
         ]);
     }
 
@@ -84,6 +86,12 @@ class PayrollBudgetReportController extends Controller
 
         if ($request->input('action') === 'Pdf') {
             return PDF::loadView($view, $data)->setPaper('a4', 'landscape')->download($title . '.pdf');
+        }
+
+        if ($request->input('action') === 'Excel') {
+            config(['excel.temporary_files.local_path' => storage_path('framework/cache/laravel-excel')]);
+
+            return Excel::download(new PayrollBudgetReport($view, $data), $title . '.xlsx');
         }
 
         return view($view, $data);

@@ -1,8 +1,8 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title')
     <?php $ApplicationName = Config::get('settings.company_name'); ?>
-    {{ $ApplicationName }} -> Dashboard
+    {{ $ApplicationName }} -> {{ __('financial.screens.dashboard') }}
 @stop
 
 @section('top-bar')
@@ -70,15 +70,15 @@
     <section @if ($is_rtl) dir="rtl" @endif class="content accounting-dashboard">
         <div class="container-fluid">
             <div class="block-header">
-                <h2> {{ __('root.dashboard.name') }} </h2>
+                <h2> {{ __('financial.screens.dashboard') }} </h2>
             </div>
             <div class="financial-kpis">
-                <div class="financial-kpi kpi-positive"><div class="kpi-icon"><i class="fas fa-chart-line"></i></div><p class="kpi-label">Total Revenue</p><p class="kpi-value">{{ number_format($total_sales, 2) }}</p></div>
-                <div class="financial-kpi kpi-negative"><div class="kpi-icon"><i class="fas fa-arrow-down"></i></div><p class="kpi-label">Total Expenses</p><p class="kpi-value">{{ number_format($total_expenses, 2) }}</p></div>
-                <div class="financial-kpi kpi-positive"><div class="kpi-icon"><i class="fas fa-balance-scale"></i></div><p class="kpi-label">Net Profit / Loss</p><p class="kpi-value">{{ number_format($total_net_profit, 2) }}</p></div>
-                <div class="financial-kpi"><div class="kpi-icon"><i class="fas fa-university"></i></div><p class="kpi-label">Cash &amp; Bank Balance</p><p class="kpi-value">{{ number_format($cash_and_bank_balance, 2) }}</p></div>
-                <div class="financial-kpi kpi-positive"><div class="kpi-icon"><i class="fas fa-chart-area"></i></div><p class="kpi-label">Gross Profit</p><p class="kpi-value">{{ number_format($total_gross_profit, 2) }}</p></div>
-                <div class="financial-kpi"><div class="kpi-icon"><i class="fas fa-boxes"></i></div><p class="kpi-label">Total Unit Cost</p><p class="kpi-value">{{ number_format($total_unit_cost, 2) }}</p></div>
+                <div class="financial-kpi kpi-positive"><div class="kpi-icon"><i class="fas fa-chart-line"></i></div><p class="kpi-label">{{ __('ui.dashboard.total_revenue') }}</p><p class="kpi-value">{{ number_format($total_sales, 2) }}</p></div>
+                <div class="financial-kpi kpi-negative"><div class="kpi-icon"><i class="fas fa-arrow-down"></i></div><p class="kpi-label">{{ __('ui.dashboard.total_expenses') }}</p><p class="kpi-value">{{ number_format($total_expenses, 2) }}</p></div>
+                <div class="financial-kpi kpi-positive"><div class="kpi-icon"><i class="fas fa-balance-scale"></i></div><p class="kpi-label">{{ __('ui.dashboard.net_profit_loss') }}</p><p class="kpi-value">{{ number_format($total_net_profit, 2) }}</p></div>
+                <div class="financial-kpi"><div class="kpi-icon"><i class="fas fa-university"></i></div><p class="kpi-label">{{ __('ui.dashboard.cash_and_bank_balance') }}</p><p class="kpi-value">{{ number_format($cash_and_bank_balance, 2) }}</p></div>
+                <div class="financial-kpi kpi-positive"><div class="kpi-icon"><i class="fas fa-chart-area"></i></div><p class="kpi-label">{{ __('ui.dashboard.gross_profit') }}</p><p class="kpi-value">{{ number_format($total_gross_profit, 2) }}</p></div>
+                <div class="financial-kpi"><div class="kpi-icon"><i class="fas fa-boxes"></i></div><p class="kpi-label">{{ __('ui.dashboard.total_unit_cost') }}</p><p class="kpi-value">{{ number_format($total_unit_cost, 2) }}</p></div>
             </div>
             <!-- Widgets -->
             <div class="row clearfix legacy-dashboard-widgets">
@@ -93,7 +93,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">{{ __('root.dashboard.branch') }}</p>
+                                        <p class="card-category">{{ __('financial.labels.branch') }}</p>
                                         <h4 class="card-title">{{ $total_branches }}</h4>
                                     </div>
                                 </div>
@@ -112,7 +112,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">{{ __('root.dashboard.ledger_type') }}</p>
+                                        <p class="card-category">{{ __('financial.screens.account_type') }}</p>
                                         <h4 class="card-title">{{ $total_income_expense_types }}</h4>
                                     </div>
                                 </div>
@@ -131,7 +131,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">{{ __('root.dashboard.ledger_group') }}</p>
+                                        <p class="card-category">{{ __('financial.screens.account_group') }}</p>
                                         <h4 class="card-title">{{ $total_income_expense_groups }}</h4>
                                     </div>
                                 </div>
@@ -150,7 +150,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">{{ __('root.dashboard.ledger') }}</p>
+                                        <p class="card-category">{{ __('financial.terms.chart_of_accounts') }}</p>
                                         <h4 class="card-title">{{ $total_income_expense_heads }}</h4>
                                     </div>
                                 </div>
@@ -169,7 +169,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">{{ __('root.dashboard.bank_or_cash') }}</p>
+                                        <p class="card-category">{{ __('financial.screens.cash_and_bank') }}</p>
                                         <h4 class="card-title">{{ $total_bank_cashes }}</h4>
                                     </div>
                                 </div>
@@ -188,7 +188,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">{{ __('root.dashboard.user') }}</p>
+                                        <p class="card-category">{{ __('financial.screens.user') }}</p>
                                         <h4 class="card-title">{{ $total_users }}</h4>
                                     </div>
                                 </div>
@@ -209,8 +209,8 @@
                                     </div>
                                     <div class="col col-stats ms-3 ms-sm-0">
                                         <div class="numbers">
-{{--                                            <p class="card-category">{{ __('root.dashboard.role_manage') }}</p>--}}
-                                            <p class="card-category">Role Manager</p>
+{{--                                            <p class="card-category">{{ __('financial.screens.role_manager') }}</p>--}}
+                                            <p class="card-category">{{ __('financial.screens.role_manager') }}</p>
                                             <h4 class="card-title">{{ $total_role_manages }}</h4>
                                         </div>
                                     </div>
@@ -229,8 +229,8 @@
                                     </div>
                                     <div class="col col-stats ms-3 ms-sm-0">
                                         <div class="numbers">
-{{--                                            <p class="card-category">{{ __('root.dashboard.report') }}</p>--}}
-                                            <p class="card-category">Reports</p>
+{{--                                            <p class="card-category">{{ __('financial.screens.report_count') }}</p>--}}
+                                            <p class="card-category">{{ __('financial.screens.report_count') }}</p>
                                             <h4 class="card-title">14</h4>
                                         </div>
                                     </div>
@@ -249,7 +249,7 @@
                                     </div>
                                     <div class="col col-stats ms-3 ms-sm-0">
                                         <div class="numbers">
-                                            <p class="card-category">{{ __('root.dashboard.customers') }}</p>
+                                            <p class="card-category">{{ __('financial.screens.customers') }}</p>
                                             <h4 class="card-title">{{ $total_customers }}</h4>
                                         </div>
                                     </div>
@@ -268,7 +268,7 @@
                                     </div>
                                     <div class="col col-stats ms-3 ms-sm-0">
                                         <div class="numbers">
-                                            <p class="card-category">{{ __('root.dashboard.vendors') }}</p>
+                                            <p class="card-category">{{ __('financial.screens.vendors') }}</p>
                                             <h4 class="card-title">{{ $total_vendors }}</h4>
                                         </div>
                                     </div>
@@ -287,8 +287,8 @@
                                     </div>
                                     <div class="col col-stats ms-3 ms-sm-0">
                                         <div class="numbers">
-                                            {{--                                            <p class="card-category">{{ __('root.dashboard.report') }}</p>--}}
-                                            <p class="card-category">{{__('root.dashboard.asset')}}</p>
+                                            {{--                                            <p class="card-category">{{ __('financial.screens.report_count') }}</p>--}}
+                                            <p class="card-category">{{__('financial.screens.assets')}}</p>
                                             <h4 class="card-title">{{ $total_asset }}</h4>
                                         </div>
                                     </div>
@@ -307,7 +307,7 @@
                                     </div>
                                     <div class="col col-stats ms-3 ms-sm-0">
                                         <div class="numbers">
-                                            <p class="card-category">{{ __('root.dashboard.inventory') }}</p>
+                                            <p class="card-category">{{ __('financial.terms.inventory') }}</p>
                                             <h4 class="card-title">{{ $total_inventory }}</h4>
                                         </div>
                                     </div>
@@ -328,7 +328,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">{{ __('root.dashboard.expenses') }}</p>
+                                        <p class="card-category">{{ __('financial.screens.expenses') }}</p>
                                         <h4 class="card-title">{{ number_format($total_expenses,2) }}</h4>
                                     </div>
                                 </div>
@@ -347,7 +347,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">{{ __('root.dashboard.unit') }}</p>
+                                        <p class="card-category">{{ __('financial.screens.unit') }}</p>
                                         <h4 class="card-title">{{ number_format($total_unit_cost,2)  }}</h4>
                                     </div>
                                 </div>
@@ -366,7 +366,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">{{ __('root.dashboard.sales') }}</p>
+                                        <p class="card-category">{{ __('financial.terms.sales') }}</p>
                                         <h4 class="card-title">{{ number_format($total_sales, 2) }}</h4>
                                     </div>
                                 </div>
@@ -385,7 +385,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">{{ __('root.dashboard.gross') }}</p>
+                                        <p class="card-category">{{ __('financial.terms.gross_profit') }}</p>
                                         <h4 class="card-title">{{ number_format($total_gross_profit, 2) }}</h4>
                                     </div>
                                 </div>
@@ -404,7 +404,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">{{ __('root.dashboard.net') }}</p>
+                                        <p class="card-category">{{ __('financial.terms.net_profit') }}</p>
                                         <h4 class="card-title">{{ number_format($total_net_profit,2)  }}</h4>
                                     </div>
                                 </div>
@@ -421,56 +421,56 @@
                     <div class="card quick-actions">
                         <div class="header">
                             <h2>
-                                {{ __('root.dashboard.quick_access') }}
+                                {{ __('financial.screens.quick_access') }}
                             </h2>
                         </div>
                         <div class="body">
                             <div class="button-demo">
                                 <a href="{{ route('reports.accounts.ledger') }}" type="button"
-                                   class="btn bg-teal waves-effect">{{ __('root.dashboard.quick_access_ledger') }}</a>
+                                   class="btn bg-teal waves-effect">{{ __('financial.screens.quick_access_chart_accounts') }}</a>
                                 <a href="{{ route('reports.accounts.trial_balance') }}" type="button"
-                                   class="btn bg-green waves-effect">{{ __('root.dashboard.quick_access_trial_balance')
+                                   class="btn bg-green waves-effect">{{ __('financial.reports.trial_balance')
                                 }}</a>
                                 <a href="{{ route('reports.accounts.cost_of_revenue') }}" type="button"
-                                   class="btn bg-orange waves-effect">{{ __('root.dashboard.quick_access_cost_of_revenue')
+                                   class="btn bg-orange waves-effect">{{ __('financial.reports.cost_of_revenue')
                                 }}</a>
                                 <a href="{{ route('reports.accounts.profit_or_loss_account') }}" type="button"
                                    class="btn bg-deep-purple waves-effect">{{
-                                __('root.dashboard.quick_access_profit_or_loss_account') }}</a>
+                                __('financial.reports.income_statement') }}</a>
                                 <a href="{{ route('reports.accounts.retained_earnings') }}" type="button"
-                                   class="btn bg-blue waves-effect">{{ __('root.dashboard.quick_access_retained_earnings')
+                                   class="btn bg-blue waves-effect">{{ __('financial.reports.retained_earnings')
                                 }}</a>
                                 <a href="{{ route('reports.accounts.fixed_asset_schedule') }}" type="button"
                                    class="btn bg-light-green waves-effect">{{
-                                __('root.dashboard.quick_access_fixed_asset_schedule') }}</a>
+                                __('financial.reports.fixed_asset_schedule') }}</a>
                                 <a href="{{ route('reports.accounts.balance_sheet') }}" type="button"
                                    class="btn bg-light-blue waves-effect">{{
-                                __('root.dashboard.quick_access_balance_sheet') }}</a>
+                                __('financial.reports.balance_sheet') }}</a>
                                 <a href="{{ route('reports.accounts.cash_flow') }}" type="button"
-                                   class="btn bg-cyan waves-effect">{{ __('root.dashboard.quick_access_cash_flow') }}</a>
+                                   class="btn bg-cyan waves-effect">{{ __('financial.reports.cash_flow') }}</a>
                                 <a href="{{ route('reports.accounts.receive_payment') }}" type="button"
-                                   class="btn bg-teal waves-effect">{{ __('root.dashboard.quick_access_receive_payment')
+                                   class="btn bg-teal waves-effect">{{ __('financial.terms.payment')
                                 }}</a>
                                 <a href="{{ route('income_expense_type') }}" type="button"
-                                   class="btn bg-light-green waves-effect">{{ __('root.dashboard.quick_access_ledger_type')
+                                   class="btn bg-light-green waves-effect">{{ __('financial.screens.account_type')
                                 }}</a>
                                 <a href="{{ route('income_expense_group') }}" type="button"
-                                   class="btn bg-orange waves-effect">{{ __('root.dashboard.quick_access_ledger_group')
+                                   class="btn bg-orange waves-effect">{{ __('financial.screens.account_group')
                                 }}</a>
 
                                 <a href="{{ route('dr_voucher') }}" type="button" class="btn bg-lime waves-effect">{{
-                                __('root.dashboard.quick_access_debit_voucher') }}</a>
+                                __('financial.screens.quick_access_debit_voucher') }}</a>
                                 <a href="{{ route('cr_voucher') }}" type="button" class="btn bg-brown waves-effect">{{
-                                __('root.dashboard.quick_access_credit_voucher') }}</a>
+                                __('financial.screens.quick_access_credit_voucher') }}</a>
                                 <a href="{{ route('jnl_voucher') }}" type="button"
                                    class="btn bg-deep-orange waves-effect">{{
-                                __('root.dashboard.quick_access_journal_voucher') }}</a>
+                                __('financial.screens.quick_access_journal_voucher') }}</a>
                                 <a href="{{ route('contra_voucher') }}" type="button" class="btn bg-orange waves-effect">{{
-                                __('root.dashboard.quick_access_contra_voucher') }}</a>
-                                <a href="" type="button" class="btn bg-purple waves-effect">Invoice</a>
-                                <a href="" type="button" class="btn bg-light-green waves-effect">Receipt</a>
+                                __('financial.screens.quick_access_contra_voucher') }}</a>
+                                <a href="" type="button" class="btn bg-purple waves-effect">{{ __('financial.terms.invoice') }}</a>
+                                <a href="" type="button" class="btn bg-light-green waves-effect">{{ __('financial.terms.receipt') }}</a>
                             </div>
-                            <button type="button" class="view-all-actions" aria-expanded="false">View all actions <i class="fas fa-chevron-down"></i></button>
+                            <button type="button" class="view-all-actions" aria-expanded="false">{{ __('ui.dashboard.view_all_actions') }} <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
                 </div>
@@ -483,14 +483,14 @@
                         <div class="header">
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                    <h2>{{ __('root.dashboard.graph_profit_or_loss') }}</h2>
+                                    <h2>{{ __('financial.screens.graph_profit_loss') }}</h2>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 float-r">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <select data-live-search="true" class="form-control  show-tick" name="year"
                                                     id="profit_or_loss_year">
-                                                <option value="0">Select year</option>
+                                                <option value="0">{{ __('ui.dashboard.select_year') }}</option>
                                                 @foreach ($years as $year)
                                                     <option @if ($year==date('Y')) selected @endif value="{{ $year }}">{{ $year
                                                 }}</option>
@@ -513,14 +513,14 @@
                         <div class="header">
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                    <h2>{{ __('root.dashboard.graph_total_voucher') }}</h2>
+                                    <h2>{{ __('financial.screens.total_voucher') }}</h2>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 float-r">
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             <select data-live-search="true" class="form-control  show-tick" name="year"
                                                     id="voucher_year">
-                                                <option value="0">Select year</option>
+                                                <option value="0">{{ __('ui.dashboard.select_year') }}</option>
                                                 @foreach ($years as $year)
                                                     <option @if ($year==date('Y')) selected @endif value="{{ $year }}">{{ $year
                                                 }}</option>
@@ -550,15 +550,15 @@
             var actions = document.querySelector('.quick-actions');
             var expanded = actions.classList.toggle('is-expanded');
             this.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-            this.innerHTML = expanded ? 'Show fewer actions <i class="fas fa-chevron-up"></i>' : 'View all actions <i class="fas fa-chevron-down"></i>';
+            this.innerHTML = expanded ? @json(__('ui.dashboard.show_fewer_actions')) + ' <i class="fas fa-chevron-up"></i>' : @json(__('ui.dashboard.view_all_actions')) + ' <i class="fas fa-chevron-down"></i>';
         });
         @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
             @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
-            @if ($errors->any())
+            @if (isset($errors) && $errors->any())
             @foreach ($errors->all() as $error)
             toastr["error"]('{{ $error }}');
         @endforeach
@@ -605,22 +605,22 @@
                     Helper.ajaxRequest('GET', `total-voucher/${year}`).then((res) => {
                         let data = res.data;
                         datasets = [{
-                            label: "{{ __('root.dashboard.graph_total_dr_voucher') }}",
+                            label: "{{ __('financial.screens.graph_debit_voucher') }}",
                             data: data.total_dr_voucher,
                             backgroundColor: '#0f766e'
                         },
                             {
-                                label: "{{ __('root.dashboard.graph_total_cr_voucher') }}",
+                                label: "{{ __('financial.screens.graph_credit_voucher') }}",
                                 data: data.total_cr_voucher,
                                 backgroundColor: '#2f80a8'
                             },
                             {
-                                label: "{{ __('root.dashboard.graph_total_cnt_voucher') }}",
+                                label: "{{ __('financial.screens.graph_contra_voucher') }}",
                                 data: data.total_cnt_voucher,
                                 backgroundColor: '#d18b36'
                             },
                             {
-                                label: "{{ __('root.dashboard.graph_total_jnl_voucher') }}",
+                                label: "{{ __('financial.screens.graph_journal_voucher') }}",
                                 data: data.total_jnl_voucher,
                                 backgroundColor: '#183b56'
                             }
@@ -638,12 +638,12 @@
                     Helper.ajaxRequest('GET', `profit-loss/${year}`).then((res) => {
                         let res_data = res.data;
                         datasets = [{
-                            label: "{{ __('root.dashboard.graph_revenue') }}",
+                            label: "{{ __('financial.screens.graph_revenue') }}",
                             data: res_data.revenue,
                             borderColor: '#0f766e', backgroundColor: 'rgba(15,118,110,.10)', fill: true,
                         },
                             {
-                                label: "{{ __('root.dashboard.graph_net_profit_loss') }}",
+                                label: "{{ __('financial.terms.net_profit') }}",
                                 data: res_data.NetProfitOrLoss,
                                 borderColor: '#0f766e', backgroundColor: 'rgba(15,118,110,.10)', fill: true,
                                 tension: 0.25,

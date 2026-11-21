@@ -25,8 +25,8 @@
                 <table class="table table-bordered table-sm">
                     <thead>
                         <tr>
-                            <td class="text-right">Search By:</td>
-                            <td class="text-right">Branch Name:</td>
+                            <td class="text-right">{{ __('Search By') }}:</td>
+                            <td class="text-right">{{ __('Branch Name') }}:</td>
                             <th>{{ $search_by['branch_name'] }}</th>
                         </tr>
                     </thead>
@@ -41,13 +41,13 @@
                     <thead>
                         <tr>
                             <th class="text-center">
-                                <h5>Particulars </h5>
+                                <h5>{{ __('financial.labels.particulars') }} </h5>
                             </th>
                             <th class="text-center">
-                                <h5>From {{ $search_by['start_from'] }} To {{ $search_by['start_to'] }}</h5>
+                                <h5>{{ __('From') }} {{ $search_by['start_from'] }} {{ __('To') }} {{ $search_by['start_to'] }}</h5>
                             </th>
                             <th class="text-center">
-                                <h5>From {{ $search_by['end_from'] }} To {{ $search_by['end_to'] }}</h5>
+                                <h5>{{ __('From') }} {{ $search_by['end_from'] }} {{ __('To') }} {{ $search_by['end_to'] }}</h5>
                             </th>
                         </tr>
                         <tr>
@@ -67,7 +67,7 @@
                         <tr>
                             <td>
                                 <b>{{ $particulars['AuthorizedCapital']['name'] }} </b>
-                                <p>1,00,000 Ordinary Share Of Tk. 100 each</p>
+                                <p>1,00,000 {{ __('Ordinary Share Of Tk. 100 each') }}</p>
                             </td>
                             <td class="font-w-b text-right">
                                 {{ Helper::convertMoneyFormat($particulars['AuthorizedCapital']['balance']['start_balance']) }}
@@ -78,7 +78,7 @@
                         </tr>
                         <tr>
                             <td class="font-w-b">
-                                ISSUED, SUBSCRIBED &amp; {{ $particulars['IssuedSubscribedAndPaidUpCapital']['name'] }}
+                                {{ __('ISSUED, SUBSCRIBED') }} &amp; {{ $particulars['IssuedSubscribedAndPaidUpCapital']['name'] }}
                             </td>
                             <td class="font-w-b text-right">
                                 {{ Helper::convertMoneyFormat($particulars['IssuedSubscribedAndPaidUpCapital']['balance']['start_balance']) }}

@@ -12,19 +12,19 @@
                         <table class="table table-bordered table-sm table-hover">
                             <thead>
                                 <tr>
-                                    <th class="text-center" scope="col">SL. No</th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Branch Name</th>
-                                    <th scope="col">Mode Of Payment</th>
-                                    <th scope="col">Cheque Number</th>
-                                    <th scope="col">Particulars</th>
-                                    <th scope="col">Voucher No</th>
-                                    <th scope="col">Type Of Voucher</th>
-                                    <th class="text-right" scope="col">Dr ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
+                                    <th class="text-center" scope="col">{{ __('SL. No') }}</th>
+                                    <th scope="col">{{ __('financial.labels.date') }}</th>
+                                    <th scope="col">{{ __('financial.labels.branch_name') }}</th>
+                                    <th scope="col">{{ __('Mode Of Payment') }}</th>
+                                    <th scope="col">{{ __('financial.labels.cheque_number') }}</th>
+                                    <th scope="col">{{ __('financial.labels.particulars') }}</th>
+                                    <th scope="col">{{ __('financial.labels.voucher_number') }}</th>
+                                    <th scope="col">{{ __('Type Of Voucher') }}</th>
+                                    <th class="text-right" scope="col">{{ __('Dr') }} ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
                                     </th>
-                                    <th class="text-right" scope="col">Cr ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
+                                    <th class="text-right" scope="col">{{ __('Cr') }} ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
                                     </th>
-                                    <th class="text-right" scope="col">Balance
+                                    <th class="text-right" scope="col">{{ __('Balance') }}
                                         ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
                                     </th>
                                 </tr>
@@ -58,7 +58,7 @@
                                     </tr>
                                 @endforeach
                                 <tr>
-                                    <th class="text-right" colspan="10">Total =</th>
+                                    <th class="text-right" colspan="10">{{ __('Total') }} =</th>
                                     <th class="text-right">{{ Helper::convertMoneyFormat($balance) }}</th>
                                 </tr>
                             </tbody>

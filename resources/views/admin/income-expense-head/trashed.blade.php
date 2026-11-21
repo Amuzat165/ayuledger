@@ -2,7 +2,7 @@
 
 <?php
 
-$moduleName = __('root.ledger_name.ledger_name_manage');
+$moduleName = __('financial.labels.ledger_account_management');
 $createItemName = __('root.common.create') .' '. $moduleName;
 
 $breadcrumbMainName = $moduleName;
@@ -111,12 +111,12 @@ $trash_show = config('role_manage.LedgerName.TrashShow');
                                                 class="chk-col-cyan" />
                                             <label for="md_checkbox_p"></label>
                                         </th>
-                                        <th>{{ __('root.ledger_name.name') }}</th>
-                                        <th>{{ __('root.ledger_name.ledger_type_name') }}</th>
-                                        <th>{{ __('root.ledger_name.ledger_group_name') }}</th>
-                                        <th>{{ __('root.ledger_name.unit') }}</th>
-                                        <th>{{ __('root.ledger_name.dr') }}</th>
-                                        <th>{{ __('root.ledger_name.options') }}</th>
+                                        <th>{{ __('financial.labels.name') }}</th>
+                                        <th>{{ __('financial.labels.account_type') }}</th>
+                                        <th>{{ __('financial.labels.account_group') }}</th>
+                                        <th>{{ __('financial.labels.unit_of_measurement') }}</th>
+                                        <th>{{ __('financial.labels.debit_nature') }}</th>
+                                        <th>{{ __('financial.labels.actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -139,16 +139,16 @@ $trash_show = config('role_manage.LedgerName.TrashShow');
                                             <a @if ($restore==0) class="dis-none" @endif
                                                 class="btn btn-xs btn-info waves-effect"
                                                 href="{{ route($ParentRouteName . '.restore', ['id' => $item->id]) }}"
-                                                data-toggle="tooltip" data-placement="top" title="Restore"><i
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('Restore') }}"><i
                                                     class="material-icons">restore</i></a>
                                             <a class="dis-none" data-target="#largeModal"
                                                 class="btn btn-xs btn-success waves-effect ajaxCall" href="#"
-                                                data-toggle="tooltip" data-placement="top" title="Preview"><i
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('Preview') }}"><i
                                                     class="material-icons">pageview</i></a>
                                             <a @if ($permanently_delete==0) class="dis-none" @endif
                                                 class="btn btn-xs btn-danger waves-effect"
                                                 href="{{ route($ParentRouteName . '.kill', ['id' => $item->id]) }}"
-                                                data-toggle="tooltip" data-placement="top" title="Parmanently Delete?">
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('Parmanently Delete?') }}">
                                                 <i class="material-icons">delete</i></a>
                                         </td>
                                     </tr>
@@ -161,12 +161,12 @@ $trash_show = config('role_manage.LedgerName.TrashShow');
                                                     class="chk-col-cyan" />
                                                 <label for="md_checkbox_footer"></label>
                                             </th>
-                                            <th>{{ __('root.ledger_name.name') }}</th>
-                                            <th>{{ __('root.ledger_name.ledger_type_name') }}</th>
-                                            <th>{{ __('root.ledger_name.ledger_group_name') }}</th>
-                                            <th>{{ __('root.ledger_name.unit') }}</th>
-                                            <th>{{ __('root.ledger_name.dr') }}</th>
-                                            <th>{{ __('root.ledger_name.options') }}</th>
+                                            <th>{{ __('financial.labels.name') }}</th>
+                                            <th>{{ __('financial.labels.account_type') }}</th>
+                                            <th>{{ __('financial.labels.account_group') }}</th>
+                                            <th>{{ __('financial.labels.unit_of_measurement') }}</th>
+                                            <th>{{ __('financial.labels.debit_nature') }}</th>
+                                            <th>{{ __('financial.labels.actions') }}</th>
                                         </tr>
                                     </thead>
                                 </tbody>
@@ -230,10 +230,10 @@ $trash_show = config('role_manage.LedgerName.TrashShow');
 @push('include-js')
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)

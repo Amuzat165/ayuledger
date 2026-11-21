@@ -7,6 +7,7 @@ use App\Branch;
 use App\Transaction;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
 
@@ -27,28 +28,48 @@ class TrialBalanceController extends Controller
 
     public function branch_wise(Request $request)
     {
+        $validated = $request->validate([
+            'from' => 'nullable|date_format:d/m/Y|required_with:to',
+            'to' => 'nullable|date_format:d/m/Y|required_with:from',
+        ]);
+
+        $from = isset($validated['from']) ? $this->normalizeDate($validated['from']) : null;
+        $to = isset($validated['to']) ? $this->normalizeDate($validated['to']) : null;
+
+        if ($from && $to && $from > $to) {
+            throw ValidationException::withMessages([
+                'to' => 'The end date must be on or after the start date.',
+            ]);
+        }
+
+        $selectedBranch = $request->filled('branch_id') ? Branch::find($request->branch_id) : null;
+        $branchScope = $request->filled('branch_id')
+            ? ($selectedBranch ? $selectedBranch->name : 'Branch ' . $request->branch_id)
+            : __('financial.labels.all_branches');
+
         $now = new \DateTime();
         $date = $now->format(Config('settings.date_format') . ' h:i:s');
+        $moduleName = 'Trial Balance Report - ' . $branchScope;
         $extra = array(
             'current_date_time' => $date,
-            'module_name' => 'Trial Balance Report',
-            'voucher_type' => 'TRIAL BALANCE REPORT'
+            'module_name' => $moduleName,
+            'voucher_type' => 'TRIAL BALANCE REPORT - ' . $branchScope
         );
         
         $transaction_query = Transaction::query();
         if ($request->branch_id) {
             $transaction_query->where('branch_id', $request->branch_id);
         }
-        if ($request->from && $request->to) {
-            $transaction_query->whereBetween('voucher_date', [date("Y-m-d", strtotime($request->from)), date("Y-m-d", strtotime($request->to))]);
+        if ($from && $to) {
+            $transaction_query->whereBetween('voucher_date', [$from, $to]);
         }
         $transaction_query->with('Branch', 'IncomeExpenseHead', 'BankCash');
         $transactions = $transaction_query->orderBy('voucher_date', 'DESC')->get();
         $branches = $transactions->groupBy('Branch.name');
         $bank_cashes = $transactions->whereNotNull('bank_cash_id')->groupBy('BankCash.name');
         $search_by = array(
-            'from' => ($request->from) ? date(config('settings.date_format'), strtotime($request->from)) : null,
-            'to' => ($request->to) ? date(config('settings.date_format'), strtotime($request->to)) : null,
+            'from' => $from,
+            'to' => $to,
         );
         $items['branches'] = $branches;
         $items['bank_cashes'] = $bank_cashes;
@@ -83,5 +104,12 @@ class TrialBalanceController extends Controller
             ]);
             return Excel::download($BranchWise, $extra['current_date_time'] . '_' . $extra['module_name'] . '.xlsx');
         }
+    }
+
+    private function normalizeDate($value)
+    {
+        $date = \DateTime::createFromFormat('!d/m/Y', $value);
+
+        return $date && $date->format('d/m/Y') === $value ? $date->format('Y-m-d') : null;
     }
 }

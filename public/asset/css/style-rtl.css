@@ -1,9 +1,11 @@
 .rs-closed .sidebar {
     margin-right: -300px;
+    transform: translateX(calc(100% + 2px));
 }
 
 .overlay-rtl-open .sidebar {
     margin-right: 0px;
+    transform: translateX(0);
     z-index: 99999999;
 }
 
@@ -63,7 +65,7 @@ section.content {
 
 .sidebar {
     right: 2px;
-    left: inherit;
+    left: auto;
 }
 
 @media (max-width: 1025px) {
@@ -131,4 +133,50 @@ section.content {
 
 th {
     text-align: right;
+}
+
+/* Keep the mobile RTL menu control clickable; its icon is drawn by an absolutely positioned pseudo-element. */
+@media (max-width: 1169px) {
+    .rs-closed .navbar-header .bars {
+        display: block;
+        flex: 0 0 40px;
+        height: 40px;
+        position: relative;
+        width: 40px;
+    }
+
+    .rs-closed .navbar-header .bars:before,
+    .rs-closed .navbar-header .bars:after {
+        margin-right: 0;
+        right: 8px;
+        top: 8px;
+    }
+}
+
+/* In RTL, isolate horizontal table scrolling so wide tables do not enlarge the page. */
+html[dir="rtl"] .table-responsive {
+    direction: ltr;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+html[dir="rtl"] .table-responsive > table {
+    direction: rtl;
+}
+
+/* Materialize hides form inputs off-canvas at left:-9999px; in RTL this creates page-wide scroll overflow. */
+html[dir="rtl"] input[type="checkbox"]:not(:checked),
+html[dir="rtl"] input[type="checkbox"]:checked,
+html[dir="rtl"] input[type="radio"]:not(:checked),
+html[dir="rtl"] input[type="radio"]:checked {
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    height: 1px;
+    left: 0;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
 }

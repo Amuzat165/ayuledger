@@ -52,7 +52,7 @@ $all = config('role_manage.DrVoucher.All');
                     <div class="header">
                         <h2 class="m-b-20">
                             {{ $createItemName }}
-                            <small>Put {{ $moduleName }} Information</small>
+                            <small>{{ __('financial.labels.enter_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
                         <div class="body">
                             <form class="form" id="form_validation" method="post"
@@ -64,7 +64,7 @@ $all = config('role_manage.DrVoucher.All');
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control show-tick"
                                                     name="branch_id">
-                                                    <option value="0">Select Branch Name</option>
+                                                    <option value="0">{{ __('financial.labels.select_branch') }}</option>
                                                     @foreach ($branches->sortByDesc('id') as $project)
                                                     <option @if ($project->id == old('branch_id')) selected @endif
                                                         value="{{ $project->id }}">{{ $project->name }}</option>
@@ -78,7 +78,7 @@ $all = config('role_manage.DrVoucher.All');
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control show-tick"
                                                     name="bank_cash_id" id="">
-                                                    <option value="0"> Select Bank Cash Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_bank_cash') }}</option>
                                                     @foreach ($bank_cashes->sortByDesc('id') as $bank_cash)
                                                     <option @if ($bank_cash->id == old('bank_cash_id')) selected @endif
                                                         value="{{ $bank_cash->id }}">{{ $bank_cash->name }}
@@ -92,7 +92,7 @@ $all = config('role_manage.DrVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="cheque_number" type="text" class="form-control">
-                                                <label class="form-label">Cheque Number</label>
+                                                <label class="form-label">{{ __('financial.labels.cheque_number') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -104,7 +104,7 @@ $all = config('role_manage.DrVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }}</option>
                                                     @foreach ($income_expense_heads->sortByDesc('id') as $HeadOfAccount)
                                                     <option @if ($HeadOfAccount->id == old('income_expense_head_id'))
                                                         selected @endif
@@ -119,7 +119,7 @@ $all = config('role_manage.DrVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount </label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -137,7 +137,7 @@ $all = config('role_manage.DrVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }}</option>
                                                     @foreach ($income_expense_heads as $HeadOfAccount)
                                                     <option @if ($HeadOfAccount->id == old('income_expense_head_id'))
                                                         selected @endif
@@ -152,7 +152,7 @@ $all = config('role_manage.DrVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount </label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -172,7 +172,7 @@ $all = config('role_manage.DrVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }}</option>
                                                     @foreach ($income_expense_heads as $HeadOfAccount)
                                                     <option @if ($HeadOfAccount->id == old('income_expense_head_id'))
                                                         selected @endif
@@ -187,7 +187,7 @@ $all = config('role_manage.DrVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount </label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -207,7 +207,7 @@ $all = config('role_manage.DrVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }}</option>
                                                     @foreach ($income_expense_heads as $HeadOfAccount)
                                                     <option @if ($HeadOfAccount->id == old('income_expense_head_id'))
                                                         selected @endif
@@ -222,7 +222,7 @@ $all = config('role_manage.DrVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount </label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -242,7 +242,7 @@ $all = config('role_manage.DrVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }}</option>
                                                     @foreach ($income_expense_heads as $HeadOfAccount)
                                                     <option @if ($HeadOfAccount->id == old('head_of_account_id'))
                                                         selected @endif
@@ -257,7 +257,7 @@ $all = config('role_manage.DrVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount </label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -274,7 +274,7 @@ $all = config('role_manage.DrVoucher.All');
                                             <div class="form-line" id="bs_datepicker_container">
                                                 <input autocomplete="off" value="{{ old('voucher_date') }}"
                                                     name="voucher_date" type="text" class="form-control"
-                                                    placeholder="Please choose a date...">
+                                                    placeholder="{{ __('financial.screens.select_date') }}">
                                             </div>
                                         </div>
                                     </div>
@@ -282,10 +282,52 @@ $all = config('role_manage.DrVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <textarea name="particulars" rows="2" class="form-control no-resize"
-                                                    placeholder="Particulars"></textarea>
+                                                    placeholder="{{ __('financial.labels.particulars') }}"></textarea>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+
+                                {{-- TOTALS SUMMARY ROW --}}
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="card">
+                                            <div class="header">
+                                                <h4>{{ __('financial.labels.voucher_summary') }}</h4>
+                                            </div>
+                                            <div class="body">
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                        <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                                <input type="number" id="total_voucher_amount" class="form-control" readonly>
+                                                                <label class="form-label">{{ __('financial.terms.total_amount') }}</label>
+                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                        <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                                <input type="number" id="withholding_tax_amount" class="form-control" readonly>
+                                                                <label class="form-label">{{ __('financial.labels.withholding_tax') }}</label>
+                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                        <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                                <input type="number" id="balance_due_voucher" class="form-control" readonly>
+                                                                <label class="form-label">{{ __('financial.labels.balance_due') }}</label>
+                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="form-line">
                                             <button type="submit" class="btn btn-primary m-t-15 waves-effect">
@@ -328,10 +370,10 @@ $all = config('role_manage.DrVoucher.All');
 <script src="{{ asset('asset/js/pages/forms/basic-form-elements.js') }}"></script>
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)
@@ -403,12 +445,12 @@ $all = config('role_manage.DrVoucher.All');
                         Area.style.display = 'block';
                     }
                 },
-                hideHeadAmountArea: function(Field) {
+                hideHead{{ __('financial.labels.amount') }}Area: function(Field) {
                     if (Field) {
                         Field.style.display = 'none';
                     }
                 },
-                showHeadAmountArea: function(Field) {
+                showHead{{ __('financial.labels.amount') }}Area: function(Field) {
                     var DomString = this.getDOMString();
                     Field.querySelector('select').value = 0;
                     Field.querySelector(DomString.amount).value = "";
@@ -427,6 +469,7 @@ $all = config('role_manage.DrVoucher.All');
                 Array.prototype.forEach.call(Fields.get_plus, function(plus, index) {
                     plus.addEventListener('click', function() {
                         addItem(index);
+                        calculateTotalAndTax();
                     }, false);
                 });
                 Array.prototype.forEach.call(Fields.get_minus, function(minus, index) {
@@ -434,68 +477,71 @@ $all = config('role_manage.DrVoucher.All');
                         removeItem(index);
                     }, false);
                 });
+                Array.prototype.forEach.call(Fields.get_amount, function(amountField) {
+                    amountField.addEventListener('input', calculateTotalAndTax);
+                });
             };
             var validation = function(e) {
                 var Values, Fields;
                 Values = UICnt.getValues();
                 Fields = UICnt.getFields();
                 if (Values.project_id == 0) {
-                    toastr["error"]('Select  branch name');
+                    toastr["error"](@json(__('financial.labels.branch_required')));
                     e.preventDefault();
                 }
                 if (Values.bankcash_id == 0) {
-                    toastr["error"]('Select Bank Cash Name');
+                    toastr["error"]('{{ __('financial.labels.select_bank_cash') }}');
                     e.preventDefault();
                 }
                 if (Fields.get_head_of_account_id[0].querySelector('select').value == 0) {
-                    toastr["error"]('Select Head Of Account');
+                    toastr["error"](@json(__('financial.labels.select_head_of_account')) + '');
                     e.preventDefault();
                 }
                 if (Fields.get_amount[0].value == '') {
-                    toastr["error"]('Put Amount');
+                    toastr["error"]('{{ __('financial.labels.enter_amount') }}');
                     e.preventDefault();
                 }
                 if (Values.date == 0) {
-                    toastr["error"]('Set Date');
+                    toastr["error"](@json(__('financial.screens.select_date')));
                     e.preventDefault();
                 }
                 if (Fields.get_dr[1].style.display == 'block') {
                     if (Fields.get_head_of_account_id[2].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + '');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[1].value == '') {
-                        toastr["error"]('Put Amount');
+                        toastr["error"]('{{ __('financial.labels.enter_amount') }}');
                         e.preventDefault();
                     }
                 }
                 if (Fields.get_dr[2].style.display == 'block') {
                     if (Fields.get_head_of_account_id[4].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + '');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[2].value == '') {
-                        toastr["error"]('Put Amount');
+                        toastr["error"]('{{ __('financial.labels.enter_amount') }}');
                         e.preventDefault();
                     }
                 }
                 if (Fields.get_dr[3].style.display == 'block') {
                     if (Fields.get_head_of_account_id[6].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + '');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[3].value == '') {
-                        toastr["error"]('Put Amount');
+                        toastr["error"]('{{ __('financial.labels.enter_amount') }}');
                         e.preventDefault();
                     }
                 }
                 if (Fields.get_dr[4].style.display == 'block') {
                     if (Fields.get_head_of_account_id[8].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + '');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[4].value == '') {
-                        toastr["error"]('Put Amount');
+                        toastr["error"]('{{ __('financial.labels.enter_amount') }}');
                         e.preventDefault();
                     }
                 }
@@ -543,7 +589,7 @@ $all = config('role_manage.DrVoucher.All');
                     return false;
                 }
                 if (checkUniqueOrNot(head_of_account_Ids)) {
-                    toastr["error"]('Head of Account should unique');
+                    toastr["error"](@json(__('financial.labels.account_head_unique')));
                     e.preventDefault();
                 }
             };
@@ -560,12 +606,30 @@ $all = config('role_manage.DrVoucher.All');
             var addItem = function(index) {
                 var Fields;
                 Fields = UICnt.getFields();
-                UICnt.showHeadAmountArea(Fields.get_dr[index + 1]);
+                UICnt.showHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[index + 1]);
             };
             var removeItem = function(index) {
                 var Fields;
                 Fields = UICnt.getFields();
-                UICnt.hideHeadAmountArea(Fields.get_dr[index + 1]);
+                UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[index + 1]);
+                calculateTotalAndTax();
+            };
+            var calculateTotalAndTax = function() {
+                var Fields = UICnt.getFields();
+                var total = 0;
+                Array.prototype.forEach.call(Fields.get_amount, function(amountField) {
+                    var value = parseFloat(amountField.value) || 0;
+                    total += value;
+                });
+                
+                // Get {{ __('financial.labels.withholding_tax') }} percentage from VAT setting (default 0)
+                var withholdingTaxPercentage = parseFloat('{{ $vat_percentage ?? 0 }}') || 0;
+                var withholdingTax{{ __('financial.labels.amount') }} = (total * withholdingTaxPercentage) / 100;
+                var balanceDue = total - withholdingTax{{ __('financial.labels.amount') }};
+                
+                document.getElementById('total_voucher_amount').value = total.toFixed(2);
+                document.getElementById('withholding_tax_amount').value = withholdingTax{{ __('financial.labels.amount') }}.toFixed(2);
+                document.getElementById('balance_due_voucher').value = balanceDue.toFixed(2);
             };
             return {
                 init: function() {
@@ -574,10 +638,18 @@ $all = config('role_manage.DrVoucher.All');
                     // Default hide fields
                     var Fields = UICnt.getFields();
                     UICnt.hide(Fields.get_cheque_number);
-                    UICnt.hideHeadAmountArea(Fields.get_dr[1]);
-                    UICnt.hideHeadAmountArea(Fields.get_dr[2]);
-                    UICnt.hideHeadAmountArea(Fields.get_dr[3]);
-                    UICnt.hideHeadAmountArea(Fields.get_dr[4]);
+                    UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[1]);
+                    UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[2]);
+                    UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[3]);
+                    UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[4]);
+                    
+                    // Attach calculation to all amount fields
+                    Fields.get_amount.forEach(function(field) {
+                        field.addEventListener('input', calculateTotalAndTax);
+                    });
+                    
+                    // Initial calculation
+                    calculateTotalAndTax();
                 }
             }
         })(UiController);

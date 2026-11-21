@@ -4,15 +4,15 @@
       <div class="form-group width-300">
         <div class="form-line">
           <select class="form-control" name="with_selected" id="">
-            <option value="0" hidden>With selected:</option>
-            <option value="trash">Move to trash</option>
-            <option value="delete">Delete permanently</option>
+            <option value="0" hidden>{{ __('ui.actions.with_selected') }}</option>
+            <option value="trash">{{ __('root.common.move_to_trash') }}</option>
+            <option value="delete">{{ __('root.common.permanently_delete') }}</option>
           </select>
         </div>
       </div>
       <div class="form-group">
         <button type="submit" name="with_selected_action" class="btn btn-sm btn-info waves-effect">
-          Apply
+          {{ __('root.common.apply') }}
         </button>
       </div>
     </div>

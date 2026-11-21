@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-{{ __('root.reports.statement_of_financial_position') }}
+{{ __('financial.reports.balance_sheet') }}
 @stop
 @section('top-bar')
 @include('shared.header')
@@ -11,8 +11,8 @@
 @stop
 @section('content')
 <section @if($is_rtl) dir="rtl" @endif class="content">
-    <div class="header">
-        <h2 class="text-center">{{ __('root.reports.statement_of_financial_position') }}</h2>
+    <div class="header" style="background-color: transparent !important;">
+        <h2 class="text-center">{{ __('financial.reports.balance_sheet') }}</h2>
         <br>
     </div>
     <div class="container-fluid">
@@ -21,13 +21,6 @@
             <!-- Branch Wise Start -->
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 @if($is_rtl) float-r @endif">
                 <div class="card">
-                    <div class="header bg-cyan">
-                        <h2>
-
-                            <small>{{ __('root.reports.show_all') }}</small>
-                        </h2>
-                    </div>
-                    <br>
                     <div class="body">
                         <div class="row clearfix">
                             <form class="form" id="form_validation" method="post"
@@ -35,10 +28,11 @@
                                 {{ csrf_field() }}
                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                     <div class="form-group form-float">
+                                        <label>{{ __('financial.labels.branch') }}</label>
                                         <div class="form-line">
                                             <select data-live-search="true" class="form-control show-tick"
                                                 name="branch_id">
-                                                <option value="0">All Branches</option>
+                                                <option value="0">{{ __('financial.labels.all_branches') }}</option>
                                                 @foreach ($branches as $Branch)
                                                 <option value="{{ $Branch->id }}">{{ $Branch->name }}</option>
                                                 @endforeach
@@ -47,30 +41,30 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <h2 class="card-inside-title">{{ __('root.reports.period') }}</h2>
+                                    <h2 class="card-inside-title">{{ __('financial.reports.period') }} 1</h2>
                                     <div class="input-daterange input-group" id="bs_datepicker_range_container">
                                         <div class="form-line">
                                             <input autocomplete="off" name="start_from" type="text" class="form-control"
-                                                placeholder="{{ __('root.reports.date_start') }}...">
+                                                placeholder="{{ __('financial.reports.date_start') }}...">
                                         </div>
-                                        <span class="input-group-addon">{{ __('root.reports.to') }}</span>
+                                        <span class="input-group-addon">{{ __('financial.reports.to') }}</span>
                                         <div class="form-line">
                                             <input autocomplete="off" name="start_to" type="text" class="form-control"
-                                                placeholder="{{ __('root.reports.date_end') }}...">
+                                                placeholder="{{ __('financial.reports.date_end') }}...">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <h2 class="card-inside-title">{{ __('root.reports.period') }}</h2>
+                                    <h2 class="card-inside-title">{{ __('financial.reports.period') }} 2</h2>
                                     <div class="input-daterange input-group" id="bs_datepicker_range_container1">
                                         <div class="form-line">
                                             <input autocomplete="off" name="end_from" type="text" class="form-control"
-                                                placeholder="{{ __('root.reports.date_start') }}...">
+                                                placeholder="{{ __('financial.reports.date_start') }}...">
                                         </div>
-                                        <span class="input-group-addon">{{ __('root.reports.to') }}</span>
+                                        <span class="input-group-addon">{{ __('financial.reports.to') }}</span>
                                         <div class="form-line">
                                             <input autocomplete="off" name="end_to" type="text" class="form-control"
-                                                placeholder="{{ __('root.reports.date_end') }}...">
+                                                placeholder="{{ __('financial.reports.date_end') }}...">
                                         </div>
                                     </div>
                                 </div>
@@ -112,7 +106,6 @@
 <!-- Bootstrap DatePicker Css -->
 <link href="{{ asset('asset/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css') }}" rel="stylesheet" />
 @endpush
-
 @push('include-js')
 <!-- Moment Plugin Js -->
 <script src="{{ asset('asset/plugins/momentjs/moment.js') }}"></script>
@@ -126,10 +119,10 @@
 <script src="{{ asset('asset/js/pages/forms/basic-form-elements.js') }}"></script>
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)
@@ -175,11 +168,11 @@
                 input_values = UICnt.getInputsValue();
                 Fields = UICnt.getFields();
                 if (input_values.start_from == 0) {
-                    toastr["error"]('Set {{ __('root.reports.period') }} Date');
+                    toastr["error"]('Set {{ __('financial.reports.period') }} Date');
                     e.preventDefault();
                 }
                 if (input_values.end_from == 0) {
-                    toastr["error"]('Set {{ __('root.reports.period') }} Date');
+                    toastr["error"]('Set {{ __('financial.reports.period') }} Date');
                     e.preventDefault();
                 }
             };

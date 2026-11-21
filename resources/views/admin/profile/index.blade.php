@@ -26,11 +26,11 @@
 
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
         @if ($errors->any())
@@ -61,10 +61,10 @@
                         <div class="image-area">
                             @if (empty($profile['avatar']))
                             <img class="width-140 height-140" src="{{ asset('upload/avatar/avatar.png') }}"
-                                alt="Avatar" />
+                                alt="{{ __('ui.profile.profile_picture') }}" />
                             @else
                             <img class="width-140 height-140" src="{{ asset($profile['avatar']) }}"
-                                alt="Profile Picture" />
+                                alt="{{ __('ui.profile.profile_picture') }}" />
                             @endif
 
                         </div>
@@ -77,14 +77,14 @@
                 </div>
                 <div class="card card-about-me">
                     <div class="header">
-                        <h2>ABOUT ME</h2>
+                        <h2>{{ __('ui.profile.about_me') }}</h2>
                     </div>
                     <div class="body">
                         <ul>
                             <li>
                                 <div class="title">
                                     <i class="material-icons">library_books</i>
-                                    Education
+                                    {{ __('ui.profile.education') }}
                                 </div>
                                 <div class="content">
                                     {{ $profile['education'] }}
@@ -93,7 +93,7 @@
                             <li>
                                 <div class="title">
                                     <i class="material-icons">location_on</i>
-                                    Location
+                                    {{ __('ui.profile.location') }}
                                 </div>
                                 <div class="content">
                                     {{ $profile['present_address'] }}
@@ -102,7 +102,7 @@
                             <li>
                                 <div class="title">
                                     <i class="material-icons">notes</i>
-                                    Description
+                                    {{ __('ui.profile.description') }}
                                 </div>
                                 <div class="content">
                                     {{ $profile['description'] }}
@@ -118,10 +118,10 @@
                         <div>
                             <ul class="nav nav-tabs" role="tablist">
                                 <li role="presentation" class="active"><a href="#profile_settings"
-                                        aria-controls="settings" role="tab" data-toggle="tab">Profile Settings</a>
+                                        aria-controls="settings" role="tab" data-toggle="tab">{{ __('ui.profile.profile_settings') }}</a>
                                 </li>
                                 <li role="presentation"><a href="#change_password_settings" aria-controls="settings"
-                                        role="tab" data-toggle="tab">Change Password</a></li>
+                                        role="tab" data-toggle="tab">{{ __('ui.profile.change_password') }}</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div role="tabpanel" class="tab-pane fade in active" id="profile_settings">
@@ -129,130 +129,123 @@
                                         action="{{ route('profile.update', ['id' => $profile['id']]) }}">
                                         {{ csrf_field() }}
                                         <div class="form-group">
-                                            <label for="first_name" class="col-sm-2 control-label">First
-                                                Name</label>
+                                            <label for="first_name" class="col-sm-2 control-label">{{ __('ui.profile.first_name') }}</label>
                                             <div class="col-sm-10">
                                                 <div class="form-line">
                                                     <input type="text" id="first_name" class="form-control"
-                                                        name="first_name" placeholder="First Name"
+                                                        name="first_name" placeholder="{{ __('ui.profile.first_name') }}"
                                                         value="{{ $profile['first_name'] }}">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="last_name" class="col-sm-2 control-label">Last Name</label>
+                                            <label for="last_name" class="col-sm-2 control-label">{{ __('ui.profile.last_name') }}</label>
                                             <div class="col-sm-10">
                                                 <div class="form-line">
                                                     <input type="text" class="form-control" id="last_name"
-                                                        name="last_name" placeholder="Last Name"
+                                                        name="last_name" placeholder="{{ __('ui.profile.last_name') }}"
                                                         value="{{ $profile['last_name'] }}">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="phone_number" class="col-sm-2 control-label">Phone
-                                                Number</label>
+                                            <label for="phone_number" class="col-sm-2 control-label">{{ __('ui.profile.phone_number') }}</label>
                                             <div class="col-sm-10">
                                                 <div class="form-line">
                                                     <input type="text" class="form-control" id="phone_number"
-                                                        name="phone_number" placeholder="Phone Number"
+                                                        name="phone_number" placeholder="{{ __('ui.profile.phone_number') }}"
                                                         value="{{ $profile['phone_number'] }}">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="designation" class="col-sm-2 control-label">Designation</label>
+                                            <label for="designation" class="col-sm-2 control-label">{{ __('ui.profile.designation') }}</label>
                                             <div class="col-sm-10">
                                                 <div class="form-line">
                                                     <input type="text" class="form-control" id="designation"
-                                                        name="designation" placeholder="Designation"
+                                                        name="designation" placeholder="{{ __('ui.profile.designation') }}"
                                                         value="{{ $profile['designation'] }}">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="gender" class="col-sm-2 control-label">Gender</label>
+                                            <label for="gender" class="col-sm-2 control-label">{{ __('ui.profile.gender') }}</label>
                                             <div class="col-sm-10">
                                                 <div class="form-line">
                                                     <select class="form-control show-tick" name="gender" id="gender">
-                                                        <option value="0">Gender</option>
-                                                        <option @if ($profile['gender']==1) selected @endif value="1">
-                                                            Male
-                                                        </option>
-                                                        <option @if ($profile['gender']==2) selected @endif value="2">
-                                                            Female
-                                                        </option>
-                                                        <option @if ($profile['gender']==3) selected @endif value="3">
-                                                            Common
-                                                        </option>
-                                                        <option @if ($profile['gender']==4) selected @endif value="4">
-                                                            Not Willing To Say
-                                                        </option>
+                                                        <option value="0">{{ __('ui.profile.gender') }}</option>
+                                                        <option @if ($profile['gender']==1) selected @endif value="1">{{ __('ui.profile.male') }}</option>
+                                                        <option @if ($profile['gender']==2) selected @endif value="2">{{ __('ui.profile.female') }}</option>
+                                                        <option @if ($profile['gender']==3) selected @endif value="3">{{ __('ui.profile.gender_common') }}</option>
+                                                        <option @if ($profile['gender']==4) selected @endif value="4">{{ __('ui.profile.not_willing_to_say') }}</option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="education" class="col-sm-2 control-label">Education</label>
+                                            <label for="education" class="col-sm-2 control-label">{{ __('ui.profile.education') }}</label>
                                             <div class="col-sm-10">
                                                 <div class="form-line">
                                                     <input type="text" class="form-control" id="education"
-                                                        name="education" placeholder="Education"
+                                                        name="education" placeholder="{{ __('ui.profile.education') }}"
                                                         value="{{ $profile['education'] }}">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="permanent_address" class="col-sm-2 control-label">Permanent
-                                                Address</label>
+                                            <label for="permanent_address" class="col-sm-2 control-label">{{ __('ui.profile.permanent_address') }}</label>
                                             <div class="col-sm-10">
                                                 <div class="form-line">
                                                     <input type="text" class="form-control" id="permanent_address"
-                                                        name="permanent_address" placeholder="Permanent Address"
+                                                        name="permanent_address" placeholder="{{ __('ui.profile.permanent_address') }}"
                                                         value="{{ $profile['permanent_address'] }}">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="present_address" class="col-sm-2 control-label">Present
-                                                Address</label>
+                                            <label for="present_address" class="col-sm-2 control-label">{{ __('ui.profile.present_address') }}</label>
                                             <div class="col-sm-10">
                                                 <div class="form-line">
                                                     <input type="text" class="form-control" id="present_address"
-                                                        name="present_address" placeholder="Present Address"
+                                                        name="present_address" placeholder="{{ __('ui.profile.present_address') }}"
                                                         value="{{ $profile['present_address'] }}">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="description" class="col-sm-2 control-label">Description</label>
+                                            <label for="description" class="col-sm-2 control-label">{{ __('ui.profile.profile_picture') }}</label>
                                             <div class="col-sm-10">
                                                 <div class="form-line">
 
                                                     <textarea class="form-control" id="description" name="description"
                                                         rows="1"
-                                                        placeholder="description">{{ $profile['description'] }}</textarea>
+                                                        placeholder="{{ __('ui.profile.description') }}">{{ $profile['description'] }}</textarea>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="description" class="col-sm-2 control-label">Profile
-                                                Picture</label>
+                                            <label for="description" class="col-sm-2 control-label">{{ __('ui.profile.description') }}</label>
                                             <div class="col-sm-10">
                                                 <input name="avatar" type="file" class="form-control">
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="language_id" class="col-sm-2 control-label">Add Language</label>
+                                            <label for="language_id" class="col-sm-2 control-label">{{ __('ui.profile.add_language') }}</label>
                                             <div class="col-sm-10">
                                                 <div class="form-line">
                                                     <select class="form-control show-tick" name="language_id"
                                                         id="language_id">
-                                                        <option value="">Select Language</option>
+                                                        <option value="">{{ __('ui.profile.select_language') }}</option>
                                                         @foreach ($languages as $language)
+                                                        @php
+                                                            $languageLocale = \App\Support\LocaleManager::normalize($language->code);
+                                                            $languageLabel = $languageLocale
+                                                                ? (\App\Support\LocaleManager::supportedLocales()[$languageLocale] ?? ucfirst($language->name))
+                                                                : ucfirst($language->name);
+                                                        @endphp
                                                         <option @if ($language_id==$language->id)
                                                             selected
-                                                            @endif value="{{ $language->id }}">{{ $language->name }}
+                                                            @endif value="{{ $language->id }}">{{ $languageLabel }}
                                                         </option>
                                                         @endforeach
                                                     </select>
@@ -261,7 +254,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
-                                                <button type="submit" class="btn btn-info">UPDATE</button>
+                                                <button type="submit" class="btn btn-info">{{ __('root.common.update') }}</button>
                                             </div>
                                         </div>
                                     </form>
@@ -270,32 +263,29 @@
                                     <form class="form-horizontal" action="{{ route('users.password') }}" method="post">
                                         {{ csrf_field() }}
                                         <div class="form-group">
-                                            <label for="OldPassword" class="col-sm-3 control-label">Old
-                                                Password</label>
+                                            <label for="OldPassword" class="col-sm-3 control-label">{{ __('Old Password') }}</label>
                                             <div class="col-sm-9">
                                                 <div class="form-line">
                                                     <input type="password" class="form-control" id="OldPassword"
-                                                        name="OldPassword" placeholder="Old Password" required>
+                                                        name="OldPassword" placeholder="{{ __('ui.profile.old_password') }}" required>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="NewPassword" class="col-sm-3 control-label">New
-                                                Password</label>
+                                            <label for="NewPassword" class="col-sm-3 control-label">{{ __('New Password') }}</label>
                                             <div class="col-sm-9">
                                                 <div class="form-line">
                                                     <input type="password" class="form-control" id="NewPassword"
-                                                        name="NewPassword" placeholder="New Password" required>
+                                                        name="NewPassword" placeholder="{{ __('ui.profile.new_password') }}" required>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="NewPasswordConfirm" class="col-sm-3 control-label">New
-                                                Password (Confirm)</label>
+                                            <label for="NewPasswordConfirm" class="col-sm-3 control-label">{{ __('New Password (Confirm)') }}</label>
                                             <div class="col-sm-9">
                                                 <div class="form-line">
                                                     <input type="password" class="form-control" id="NewPasswordConfirm"
-                                                        name="NewPasswordConfirm" placeholder="New Password (Confirm)"
+                                                        name="NewPasswordConfirm" placeholder="{{ __('ui.profile.confirm_new_password') }}"
                                                         required>
                                                 </div>
                                             </div>
@@ -303,7 +293,7 @@
 
                                         <div class="form-group">
                                             <div class="col-sm-offset-3 col-sm-9">
-                                                <button type="submit" class="btn btn-danger">SUBMIT</button>
+                                                <button type="submit" class="btn btn-danger">{{ __('ui.actions.submit') }}</button>
                                             </div>
                                         </div>
                                     </form>

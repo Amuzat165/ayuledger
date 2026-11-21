@@ -8,6 +8,7 @@ use App\IncomeExpenseGroup;
 use App\Transaction;
 use App\IncomeExpenseHead;
 use App\IncomeExpenseType;
+use App\Services\TenantContext;
 use Illuminate\Support\Facades\Cache;
 
 class Helper
@@ -236,9 +237,20 @@ class Helper
     {
         # code... 
         $data = [];
-        // Branches are used by every report; always read the active list so
-        // newly created or seeded branches are immediately available.
-        $data['branches'] = Branch::all();
+        $tenant = app(TenantContext::class)->currentTenant(request());
+        if ($tenant) {
+            $tenantId = (int) $tenant->getKey();
+            $data['branches'] = Cache::remember(
+                'tenant:' . $tenantId . ':branches',
+                now()->addMinutes(5),
+                function () use ($tenantId) {
+                    return Branch::where('tenant_id', $tenantId)->get();
+                }
+            );
+        } else {
+            // Fail closed: callers without an authenticated tenant never get a global branch list.
+            $data['branches'] = collect();
+        }
         if (Cache::get('bank_cashes') && Cache::get('bank_cashes') != null) {
             $data['bank_cashes'] = Cache::get('bank_cashes');
         } else {

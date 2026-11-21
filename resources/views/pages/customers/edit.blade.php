@@ -16,54 +16,54 @@
                         <div class="row clearfix">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="branch">Branch</label>
+                                    <label for="branch">{{ __('financial.labels.branch') }}</label>
                                     <select class="form-control" id="branch_id" name="branch_id" required>
                                         @foreach ($params->branch_name as $id => $name)
-                                            <option value="{{ $id }}" {{ $params->defaults->branch_id == $id ? 'selected' : '' }}>{{ $name }}</option>
+                                            <option value="{{ $id }}" {{ old('branch_id', $params->defaults->branch_id) == $id ? 'selected' : '' }}>{{ $name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="name">Customer Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" value="{{ $params->defaults->name }}" required>
+                                    <label for="name">{{ __('financial.labels.customer_name') }}</label>
+                                    <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $params->defaults->name) }}" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="email">Email Address</label>
-                                    <input type="email" class="form-control" id="email" name="email" value="{{ $params->defaults->email }}" required>
+                                    <label for="email">{{ __('financial.screens.email_address') }}</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $params->defaults->email) }}" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="phone">Phone Number</label>
-                                    <input type="tel" class="form-control" id="phone" name="phone" value="{{ $params->defaults->phone }}" required>
+                                    <label for="phone">{{ __('financial.screens.phone_number') }}</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" value="{{ old('phone', $params->defaults->phone) }}" required>
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="address">Home Address</label>
-                                    <input type="text" class="form-control" id="address" name="address" value="{{ $params->defaults->address }}" required>
+                                    <input type="text" class="form-control" id="address" name="address" value="{{ old('address', $params->defaults->address) }}" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="income_expense_type_id">Sales Ledger</label>
+                                    <label for="income_expense_type_id">{{ __('financial.screens.sales_ledger') }}</label>
                                     <select class="form-control" id="income_expense_type_id" name="income_expense_type_id" required>
                                         @foreach ($params->sales_ledger_options as $id => $name)
-                                            <option value="{{ $id }}" {{ $params->defaults->income_expense_type_id == $id ? 'selected' : '' }}>{{ $name }}</option>
+                                            <option value="{{ $id }}" {{ old('income_expense_type_id', $params->defaults->income_expense_type_id) == $id ? 'selected' : '' }}>{{ $name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="terms_of_payment">Terms of Payment</label>
+                                    <label for="terms_of_payment">{{ __('financial.screens.terms_of_payment') }}</label>
                                     <select class="form-control" id="terms_of_payment" name="terms_of_payment" required>
                                         @foreach ($params->terms_of_payment_options as $option)
-                                            <option value="{{ $option }}" {{ $params->defaults->terms_of_payment == $option ? 'selected' : '' }}>{{ $option }}</option>
+                                            <option value="{{ $option }}" {{ old('terms_of_payment', $params->defaults->terms_of_payment) == $option ? 'selected' : '' }}>{{ $option }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary">{{ __('financial.labels.save') }}</button>
                     </form>
                 </x-form.form-title-wrapper>
             </div>

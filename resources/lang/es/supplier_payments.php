@@ -1,0 +1,21 @@
+<?php
+return [
+    'history_title' => 'Historial de pagos a proveedores',
+    'history_intro' => 'Consulte los pagos registrados en las facturas de proveedores.',
+    'date_from' => 'Fecha desde',
+    'date_to' => 'Fecha hasta',
+    'apply_filters' => 'Aplicar filtros',
+    'reset_filters' => 'Restablecer filtros',
+    'no_history' => 'Aún no se han registrado pagos a proveedores.',
+    'no_matching_payments' => 'Ningún pago coincide con estos filtros.',
+    'view_supplier_invoice' => 'Ver factura del proveedor',
+    'make_payment' => 'Realizar pago', 'payment_amount' => 'Importe del pago', 'payment_date' => 'Fecha del pago',
+    'payment_reference' => 'Referencia del pago', 'payment_method' => 'Método de pago', 'amount_paid' => 'Importe pagado',
+    'amount_remaining' => 'Importe restante', 'payment_history' => 'Historial de pagos', 'payment_receipt' => 'Recibo de pago',
+    'supplier' => 'Proveedor', 'internal_invoice_number' => 'Número interno de factura del proveedor',
+    'previous_amount_remaining' => 'Importe restante anterior', 'new_amount_remaining' => 'Nuevo importe restante',
+    'recorded_by' => 'Registrado por', 'select_method' => 'Seleccione un método o cuenta de pago', 'not_available' => 'No disponible',
+    'no_payments' => 'No se han registrado pagos para esta factura del proveedor.', 'validation_help' => 'Revise los datos del pago.',
+    'receipt_footer' => 'Este recibo confirma el pago indicado.', 'messages' => ['saved' => 'Pago registrado.'],
+    'errors' => ['positive_amount' => 'El importe del pago debe ser mayor que cero.', 'invalid_amount' => 'Introduzca un importe válido con un máximo de dos decimales.', 'invalid_date' => 'Introduzca una fecha de pago válida.', 'invoice_not_payable' => 'Solo se puede pagar una factura del proveedor aprobada.', 'no_balance' => 'Esta factura del proveedor no tiene importe restante.', 'exceeds_balance' => 'El pago no puede superar el importe restante.', 'invalid_method' => 'Seleccione un método o cuenta de pago activo.', 'submission_conflict' => 'Esta solicitud ya se utilizó con datos diferentes.'],
+];

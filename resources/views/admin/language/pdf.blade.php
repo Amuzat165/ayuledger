@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="module_name">
-                <p>Module Name : {{ $extra['module_name'] }}</p>
+                <p>{{ __('Module Name') }} : {{ $extra['module_name'] }}</p>
             </div>
             <div class="card">
                 <div class="header">
@@ -36,9 +36,9 @@
                                 <table class="table  table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th scope="col" class="text-center">Name</th>
-                                            <th scope="col" class="text-center">Code</th>
-                                            <th scope="col" class="text-center">Country name</th>
+                                            <th scope="col" class="text-center">{{ __('Name') }}</th>
+                                            <th scope="col" class="text-center">{{ __('Code') }}</th>
+                                            <th scope="col" class="text-center">{{ __('Country name') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>

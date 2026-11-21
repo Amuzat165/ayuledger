@@ -5,7 +5,7 @@
 
 <?php
 
-$moduleName = " Ledger Type";
+$moduleName = __("financial.labels.ledger_type_management");
 $createItemName = __('root.common.create') . ' ' . $moduleName;
 
 $breadcrumbMainName = $moduleName;
@@ -63,11 +63,11 @@ $trash_show = config('role_manage.LedgerType.TrashShow');
                 <div class="card">
                     <div class="header">
                         <a @if ($all==0) class="dis-none" @endif class="btn btn-xs btn-success waves-effect text-black"
-                            href="{{ route($ParentRouteName)  }}">All({{ $ModelName::all()->count() }})</a>
+                            href="{{ route($ParentRouteName)  }}">{{ __('All') }}({{ $ModelName::all()->count() }})</a>
 
 
                         <a class="btn btn-xs btn-danger waves-effect"
-                            href="{{ route($ParentRouteName.'.trashed') }}">Trash({{ $ModelName::onlyTrashed()->count()
+                            href="{{ route($ParentRouteName.'.trashed') }}">{{ __('Trash') }}({{ $ModelName::onlyTrashed()->count()
                             }}
                             )</a>
 
@@ -87,13 +87,13 @@ $trash_show = config('role_manage.LedgerType.TrashShow');
                                     <div class="form-group">
                                         <div class="form-line">
                                             <select class="form-control" name="apply_comand_top" id="">
-                                                <option value="0">Select Action</option>
+                                                <option value="0">{{ __('Select Action') }}</option>
                                                 @if ($restore==1)
-                                                <option value="1">Restore</option>
+                                                <option value="1">{{ __('Restore') }}</option>
                                                 @endif
 
                                                 @if ($permanently_delete==1)
-                                                <option value="2">Delete</option>
+                                                <option value="2">{{ __('Delete') }}</option>
                                                 @endif
 
 
@@ -103,7 +103,7 @@ $trash_show = config('role_manage.LedgerType.TrashShow');
                                 </div>
                                 <div class=" margin-bottom-0 col-md-2 col-lg-2 col-sm-2">
                                     <div class="form-group">
-                                        <input class="btn btn-sm btn-info" type="submit" value="Apply" name="ApplyTop">
+                                        <input class="btn btn-sm btn-info" type="submit" value="{{ __('Apply') }}" name="ApplyTop">
                                     </div>
                                 </div>
                                 <div class=" margin-bottom-0 col-md-8 col-sm-8 col-xs-8">
@@ -124,9 +124,9 @@ $trash_show = config('role_manage.LedgerType.TrashShow');
                                                 class="chk-col-cyan" />
                                             <label for="md_checkbox_p"></label>
                                         </th>
-                                        <th>Name</th>
-                                        <th>Code</th>
-                                        <th>Options</th>
+                                        <th>{{ __('financial.labels.name') }}</th>
+                                        <th>{{ __('Code') }}</th>
+                                        <th>{{ __('financial.labels.actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -149,18 +149,18 @@ $trash_show = config('role_manage.LedgerType.TrashShow');
                                             <a @if ($restore==0) class="dis-none" @endif
                                                 class="btn btn-xs btn-info waves-effect"
                                                 href="{{ route($ParentRouteName.'.restore',['id'=>$item->id]) }}"
-                                                data-toggle="tooltip" data-placement="top" title="Restore"><i
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('Restore') }}"><i
                                                     class="material-icons">restore</i></a>
 
                                             <a data-target="#largeModal"
                                                 class="btn btn-xs btn-success waves-effect ajaxCall dis-none" href="#"
-                                                data-toggle="tooltip" data-placement="top" title="Preview"><i
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('Preview') }}"><i
                                                     class="material-icons">pageview</i></a>
 
                                             <a @if ($permanently_delete==0) class="dis-none" @endif
                                                 class="btn btn-xs btn-danger waves-effect"
                                                 href="{{ route($ParentRouteName.'.kill',['id'=>$item->id]) }}"
-                                                data-toggle="tooltip" data-placement="top" title="Parmanently Delete?">
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('Parmanently Delete?') }}">
                                                 <i class="material-icons">delete</i></a>
 
                                         </td>
@@ -174,9 +174,9 @@ $trash_show = config('role_manage.LedgerType.TrashShow');
                                                     class="chk-col-cyan" />
                                                 <label for="md_checkbox_footer"></label>
                                             </th>
-                                            <th>Name</th>
-                                            <th>Code</th>
-                                            <th>Options</th>
+                                            <th>{{ __('financial.labels.name') }}</th>
+                                            <th>{{ __('Code') }}</th>
+                                            <th>{{ __('financial.labels.actions') }}</th>
                                         </tr>
                                     </thead>
 
@@ -205,14 +205,14 @@ $trash_show = config('role_manage.LedgerType.TrashShow');
                                 <div class="form-group">
                                     <div class="form-line">
                                         <select class="form-control" name="apply_comand_bottom" id="">
-                                            <option value="0">Select Action</option>
+                                            <option value="0">{{ __('Select Action') }}</option>
 
                                             @if ($restore==1)
-                                            <option value="1">Restore</option>
+                                            <option value="1">{{ __('Restore') }}</option>
                                             @endif
 
                                             @if ($permanently_delete==1)
-                                            <option value="2">Delete</option>
+                                            <option value="2">{{ __('Delete') }}</option>
                                             @endif
                                         </select>
                                     </div>
@@ -220,7 +220,7 @@ $trash_show = config('role_manage.LedgerType.TrashShow');
                             </div>
                             <div class="margin-bottom-0 col-md-2 col-lg-2 col-sm-2">
                                 <div class="form-group">
-                                    <input class="btn btn-sm btn-info" type="submit" value="Apply" name="ApplyTop">
+                                    <input class="btn btn-sm btn-info" type="submit" value="{{ __('Apply') }}" name="ApplyTop">
                                 </div>
                             </div>
                             <div class="margin-bottom-0 col-md-8 col-sm-8 col-xs-8">
@@ -286,11 +286,11 @@ $trash_show = config('role_manage.LedgerType.TrashShow');
 
 <script>
     @if(Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
                 @if(Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
                 @if ($errors->any())

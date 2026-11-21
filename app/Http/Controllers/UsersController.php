@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Profile;
+use App\TenantMembership;
+use App\SubscriptionPlan;
+use App\BusinessSetting;
+use App\RoleManage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -22,11 +26,14 @@ class UsersController extends Controller
      */
     public function index()
     {
+        $tenantId = $this->currentTenantId();
+        if (!$tenantId) abort(403);
+        $itemsQuery = $this->parentModel::where('business_id', $tenantId)->with('role')->orderBy('created_at', 'desc');
         if (env('DEMO_MODE') == true) {
-            $items = $this->parentModel::orderBy('created_at', 'desc')->where('id', '!=', 1)->with('role')->paginate(60);
+            $itemsQuery->where('id', '!=', 1);
         } else {
-            $items = $this->parentModel::orderBy('created_at', 'desc')->with('role')->paginate(60);
         }
+        $items = $itemsQuery->paginate(60);
         return view($this->parentView . '.index')->with('items', $items);
     }
 
@@ -37,7 +44,19 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return view($this->parentView . '.create');
+        $this->ensureTenantAdmin();
+        $tenantId = $this->currentTenantId();
+        abort_unless($tenantId, 403);
+
+        $currentCount = $this->tenantUserCount($tenantId);
+        $limit = $this->tenantUserLimit($tenantId);
+
+        return view($this->parentView . '.create')->with([
+            'tenantRoles' => RoleManage::withoutGlobalScopes()->orderBy('created_at', 'desc')
+                ->where('name', '!=', 'Super Admin')->get(),
+            'tenantUserCount' => $currentCount,
+            'tenantUserLimit' => $limit,
+        ]);
     }
 
     /**
@@ -48,27 +67,80 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-
+        $this->ensureTenantAdmin();
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:1|confirmed',
             'role_manage_id' => 'required|min:1'
         ]);
+        $tenantId = $this->currentTenantId();
+        if (!$tenantId) abort(403);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'role_manage_id' => $request->role_manage_id,
-        ]);
+        $role = RoleManage::withoutGlobalScopes()->whereKey($request->role_manage_id)
+            ->where('name', '!=', 'Super Admin')->first();
+        if (!$role) {
+            return back()->withInput()->withErrors(['role_manage_id' => 'The selected role is not available to tenants.']);
+        }
 
-        Profile::create([
-            'user_id' => $user->id,
-        ]);
+        if ($this->tenantUserCount($tenantId) >= $this->tenantUserLimit($tenantId)) {
+            return back()->withInput()->withErrors(['users' => 'Your subscription user limit has been reached.']);
+        }
 
-        Session::flash('success', "Successfully  Create");
+        \DB::transaction(function () use ($request, $tenantId) {
+            if ($this->tenantUserCount($tenantId) >= $this->tenantUserLimit($tenantId)) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'users' => 'Your subscription user limit has been reached.',
+                ]);
+            }
+
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+                'role_manage_id' => $request->role_manage_id,
+                'business_id' => $tenantId,
+            ]);
+
+            Profile::create(['user_id' => $user->id]);
+            TenantMembership::create([
+                'tenant_id' => $tenantId,
+                'business_id' => $tenantId,
+                'user_id' => $user->id,
+                'role_manage_id' => $user->role_manage_id,
+                'status' => 'active',
+            ]);
+        });
+
+        Session::flash('success', __('ui.messages.created'));
         return redirect()->back();
+    }
+
+    private function currentTenantId()
+    {
+        return Auth::user()->business_id ?: optional(Auth::user()->tenantMemberships()->where('status', 'active')->first())->tenant_id;
+    }
+
+    private function ensureTenantAdmin()
+    {
+        $role = Auth::user()->role;
+        abort_unless($role && strcasecmp($role->name, 'Admin') === 0, 403, 'Only the tenant administrator can create users.');
+    }
+
+    private function tenantUserCount($tenantId)
+    {
+        return TenantMembership::where('tenant_id', $tenantId)
+            ->where('status', 'active')
+            ->whereHas('user')
+            ->count();
+    }
+
+    private function tenantUserLimit($tenantId)
+    {
+        $business = BusinessSetting::where('tenant_id', $tenantId)->first();
+        if (!$business) return 0;
+        $plan = SubscriptionPlan::where('slug', $business->subscription_plan)->where('is_active', true)->first();
+        return $plan ? (int) $plan->max_users : 0;
     }
 
     /**
@@ -79,10 +151,12 @@ class UsersController extends Controller
      */
     public function show(Request $request)
     {
-
-        $item = $this->parentModel::withTrashed()->find($request->id);
+        $tenantId = $this->currentTenantId();
+        $item = $this->parentModel::withTrashed()
+            ->where('business_id', $tenantId)
+            ->find($request->id);
         if (empty($item)) {
-            Session::flash('error', "Item not found");
+            Session::flash('error', __('ui.messages.not_found'));
             return redirect()->route('role-manage');
         }
         $content = json_decode($item['content']);
@@ -98,8 +172,14 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        $items = $this->parentModel::find($id);
-        return view($this->parentView . '.edit')->with('item', $items);
+        $this->ensureTenantAdmin();
+        $tenantId = $this->currentTenantId();
+        $items = $this->parentModel::where('business_id', $tenantId)->findOrFail($id);
+        return view($this->parentView . '.edit')->with([
+            'item' => $items,
+            'tenantRoles' => RoleManage::orderBy('created_at', 'desc')
+                ->where('name', '!=', 'Super Admin')->get(),
+        ]);
     }
 
     /**
@@ -118,13 +198,17 @@ class UsersController extends Controller
             'role_manage_id' => 'numeric|min:1'
         ]);
 
-        $user = User::find($id);
+        $this->ensureTenantAdmin();
+        $tenantId = $this->currentTenantId();
+        $user = User::where('business_id', $tenantId)->findOrFail($id);
+        abort_unless(RoleManage::whereKey($request->role_manage_id)
+            ->where('name', '!=', 'Super Admin')->exists(), 403);
         if ($request->password === $request->confirm_password and  !empty($request->password)) {
 
             $user->password = bcrypt($request->password);
         } elseif ($request->password !== $request->confirm_password) {
 
-            Session::flash('error', "Password and Confirm Password should same");
+            Session::flash('error', __('ui.messages.password_confirmation_mismatch'));
             return redirect()->back();
         }
 
@@ -134,7 +218,10 @@ class UsersController extends Controller
 
 
         $user->save();
-        Session::flash('success', "Update Successfully");
+        TenantMembership::where('user_id', $user->id)
+            ->where('tenant_id', $tenantId)
+            ->update(['role_manage_id' => $user->role_manage_id]);
+        Session::flash('success', __('ui.messages.updated'));
         return redirect()->route($this->parentRoute);
     }
 
@@ -147,50 +234,68 @@ class UsersController extends Controller
     public function destroy($id)
     {
         if (Auth::id() == $id) {
-            Session::flash('error', "You Can Not Delete Yourself!");
+            Session::flash('error', __('ui.messages.cannot_delete_self'));
             return redirect()->back();
         }
-        $user = User::find($id);
+        $tenantId = $this->currentTenantId();
+        $user = User::where('business_id', $tenantId)->findOrFail($id);
+        TenantMembership::where('user_id', $user->id)->where('tenant_id', $tenantId)->delete();
         $user->delete();
-        Session::flash('success', "Successfully Trashed");
+        Session::flash('success', __('ui.messages.trashed'));
         return redirect()->back();
     }
 
 
     public function trashed()
     {
-
-        $items = $this->parentModel::onlyTrashed()->with('role')->paginate(60);
+        $tenantId = $this->currentTenantId();
+        $items = $this->parentModel::onlyTrashed()->where('business_id', $tenantId)->with('role')->paginate(60);
         return view($this->parentView . '.trashed')->with("items", $items);
     }
 
     public function trashedShow()
     {
-
         $id = $_POST["id"];
-        $trashedItem = $this->parentModel::onlyTrashed()->where('id', $id)->first();
+        $tenantId = $this->currentTenantId();
+        $trashedItem = $this->parentModel::onlyTrashed()
+            ->where('business_id', $tenantId)->where('id', $id)->first();
         return response()->json($trashedItem);
     }
 
     public function restore($id)
     {
-        $project = $this->parentModel::onlyTrashed()->where('id', $id)->first();
+        $tenantId = $this->currentTenantId();
+        $project = $this->parentModel::onlyTrashed()
+            ->where('business_id', $tenantId)->where('id', $id)->firstOrFail();
 
         $project->restore();
-        Session::flash('success', 'Successfully Restore');
+        $membership = TenantMembership::where('tenant_id', $tenantId)
+            ->where('user_id', $project->id)->first();
+        if (!$membership) {
+            TenantMembership::create([
+                'tenant_id' => $tenantId,
+                'business_id' => $tenantId,
+                'user_id' => $project->id,
+                'role_manage_id' => $project->role_manage_id,
+                'status' => 'active',
+            ]);
+        }
+        Session::flash('success', __('ui.messages.restored'));
         return redirect()->back();
     }
 
     public function kill($id)
     {
-        $project = $this->parentModel::onlyTrashed()->where('id', $id)->first();
+        $tenantId = $this->currentTenantId();
+        $project = $this->parentModel::onlyTrashed()
+            ->where('business_id', $tenantId)->where('id', $id)->firstOrFail();
         $project->forceDelete();
 
         //        For Profile
-        $profile = Profile::all()->where('user_id', $id)->first();
-        $profile->delete();
+        $profile = Profile::where('user_id', $id)->first();
+        if ($profile) $profile->delete();
 
-        Session::flash('success', 'Permanently Delete');
+        Session::flash('success', __('ui.messages.permanently_deleted'));
         return redirect()->back();
     }
 
@@ -203,6 +308,7 @@ class UsersController extends Controller
 
         $search = $request["search"];
         $items = $this->parentModel::where('name', 'like', '%' . $search . '%')
+            ->where('business_id', $this->currentTenantId())
             ->with('role')->paginate(60);
 
         return view($this->parentView . '.index')
@@ -220,6 +326,7 @@ class UsersController extends Controller
         $search = $request["search"];
         $items = $this->parentModel::where('name', 'like', '%' . $search . '%')
             ->onlyTrashed()
+            ->where('business_id', $this->currentTenantId())
             ->with('role')->paginate(60);
 
         return view($this->parentView . '.trashed')
@@ -242,7 +349,7 @@ class UsersController extends Controller
 
             return redirect()->back();
         } else {
-            Session::flash('error', "Something is wrong.Try again");
+            Session::flash('error', __('ui.messages.operation_failed'));
             return redirect()->back();
         }
     }
@@ -267,7 +374,7 @@ class UsersController extends Controller
             }
             return redirect()->back();
         } else {
-            Session::flash('error', "Something is wrong.Try again");
+            Session::flash('error', __('ui.messages.operation_failed'));
             return redirect()->back();
         }
         return redirect()->back();

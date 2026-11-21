@@ -74,7 +74,8 @@ $trash_show = config('role_manage.ContraVoucher.TrashShow');
                             </form>
                         </ul>
                     </div>
-                    <form class="actionForm" action="{{ route($ParentRouteName . '.active.action') }}" method="get">
+                    <form class="actionForm" action="{{ route($ParentRouteName . '.active.action') }}" method="post">
+                        {{ csrf_field() }}
                         <div class="pagination-and-action-area body">
                             <div>
                                 <div class="select-and-apply-area">
@@ -163,12 +164,10 @@ $trash_show = config('role_manage.ContraVoucher.TrashShow');
                                                 data-toggle="tooltip" data-placement="top"
                                                 title="{{ __('root.common.preview') }}"><i
                                                     class="material-icons">pageview</i></a>
-                                            <a @if ($delete==0) class="dis-none" @endif
-                                                class="m-b-3 btn btn-xs btn-danger waves-effect"
-                                                href="{{ route($ParentRouteName . '.destroy', ['id' => $item->voucher_no]) }}"
-                                                data-toggle="tooltip" data-placement="top"
-                                                title="{{ __('root.common.trash') }}"> <i
-                                                    class="material-icons">delete</i></a>
+                                            <form method="POST" action="{{ route($ParentRouteName . '.destroy', ['id' => $item->voucher_no]) }}" style="display:inline">
+                                                @csrf
+                                                <button type="submit" class="m-b-3 btn btn-xs btn-danger waves-effect" @if ($delete==0) disabled @endif title="{{ __('root.common.trash') }}"><i class="material-icons">delete</i></button>
+                                            </form>
                                             <a @if ($pdf==0) class="dis-none" @endif
                                                 class="m-b-3 btn btn-xs btn-warning waves-effect"
                                                 href="{{ route($ParentRouteName . '.pdf', ['id' => $item->voucher_no]) }}"
@@ -263,10 +262,10 @@ $trash_show = config('role_manage.ContraVoucher.TrashShow');
 @push('include-js')
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)

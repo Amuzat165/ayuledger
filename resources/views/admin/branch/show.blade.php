@@ -4,11 +4,11 @@
 
 <?php
 
-$moduleName = ' Branch Manage';
-$createItemName = 'Show' . $moduleName;
+$moduleName = ' ' . __('Branch Manage');
+$createItemName = __('Show') . $moduleName;
 
 $breadcrumbMainName = $moduleName;
-$breadcrumbCurrentName = ' All';
+$breadcrumbCurrentName = ' ' . __('All');
 
 $breadcrumbMainIcon = 'fas fa-project-diagram';
 $breadcrumbCurrentIcon = 'archive';
@@ -53,7 +53,7 @@ $ParentRouteName = 'branch';
                     <div class="header">
                         <h2>
                             {{ $items->name }}
-                            <small>Details {{ $items->name }} Information</small>
+                            <small>{{ __('Details :value Information', ['value' => $items->name]) }}</small>
                         </h2>
 
                         <div class="body">
@@ -69,16 +69,16 @@ $ParentRouteName = 'branch';
                                             <thead>
                                                 <tr>
                                                     <th scope="col" class="text-center">S.L</th>
-                                                    <th scope="col" class="text-center">Module Name</th>
-                                                    <th scope="col" class="text-center">Module Show</th>
-                                                    <th scope="col" class="text-center">Show</th>
-                                                    <th scope="col" class="text-center">Create</th>
-                                                    <th scope="col" class="text-center">Edit</th>
-                                                    <th scope="col" class="text-center">Delete</th>
+                                                    <th scope="col" class="text-center">{{ __('Module Name') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('Module Show') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('Show') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('Create') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('Edit') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('Delete') }}</th>
                                                     <th scope="col" class="text-center">PDF</th>
-                                                    <th scope="col" class="text-center">Trash Show</th>
-                                                    <th scope="col" class="text-center">Restore</th>
-                                                    <th scope="col" class="text-center">Permanently Delete</th>
+                                                    <th scope="col" class="text-center">{{ __('Trash Show') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('Restore') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('Permanently Delete') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -102,7 +102,7 @@ $ParentRouteName = 'branch';
                                                 @endforeach
                                                 @else
                                                 <tr>
-                                                    <th class="text-danger">No Item Available</th>
+                                                    <th class="text-danger">{{ __('No Item Available') }}</th>
                                                 </tr>
                                                 @endif
                                             </tbody>

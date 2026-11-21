@@ -5,7 +5,7 @@
 @section('container')
     @if(session('success'))
         <div class="alert alert-success">
-            {{ session('success') }}
+            {{ __(session('success')) }}
         </div>
     @endif
 
@@ -17,40 +17,55 @@
                     @csrf
                     <x-table.table-pagination-with-selected/>
                     <x-table.table-wrapper
-                        :thead="['#', 'Invoice Number', 'Customer', 'Invoice Date', 'Amount Paid', 'Balance Due', 'Status']">
+                        :thead="['#', __('financial.labels.invoice_number'), __('financial.terms.customer'), __('financial.labels.invoice_date'), __('financial.terms.amount_paid'), __('financial.labels.balance_due'), __('financial.labels.status'), __('financial.labels.actions')]">
                         @forelse ($payments as $payment)
                             @php
                                 $sn = $loop->iteration;
                                 $amount_paid = number_format($payment->amount_paid, 2);
                                 $balance_due = number_format($payment->balance_due, 2);
-                                $status = ($payment->balance_due == 0) ? 'Paid' : 'Pending';
+                                $status = ($payment->balance_due == 0) ? __('financial.labels.paid') : __('financial.labels.pending');
                             @endphp
                             <tr>
                                 <x-table.table-checkbox :sn="$sn" :item="$payment"/>
                                 <td style="font-size: 12px;">{{ $sn }}</td>
-                                <td style="font-size: 12px;">{{ $payment->invoice->invoice_number }}</td>
+                                <td style="font-size: 12px;"><strong>{{ $payment->invoice->invoice_number }}</strong></td>
                                 <td style="font-size: 12px;">{{ $payment->customer->name }}</td>
                                 <td style="font-size: 12px;">{{ $payment->invoice->invoice_date }}</td>
                                 <td style="font-size: 12px;">₦{{ $amount_paid }}</td>
                                 <td style="font-size: 12px;">₦{{ $balance_due }}</td>
                                 <td style="font-size: 15px;">
-                                    @if ($status == 'Paid')
+                                    @if ($status == __('financial.labels.paid'))
                                         <span class="label label-success">
-                                            Paid
+                                            {{ __('financial.labels.paid') }}
                                         </span>
                                     @else
-                                        <button type="button" class="btn btn-primary"
-                                                data-payment-id="{{ $payment->id }}"
-                                                data-balance-due="{{ $payment->balance_due }}"
-                                                onclick="openPaymentModal(this)">
-                                            Pay
-                                        </button>
+                                        <span class="label label-warning">
+                                            {{ __('financial.labels.pending') }}
+                                        </span>
                                     @endif
+                                </td>
+                                <td style="font-size: 12px;">
+                                    <div class="btn-group-actions">
+                                        <a href="{{ route('customers.invoices.pdf', $payment->invoice->id) }}"
+                                           class="btn btn-sm btn-primary"
+                                           title="{{ __('financial.labels.download_pdf') }}"
+                                           target="_blank">
+                                            <i class="fa fa-file-pdf-o"></i> PDF
+                                        </a>
+                                        @if ($status != __('financial.labels.paid'))
+                                            <button type="button" class="btn btn-sm btn-success"
+                                                    data-payment-id="{{ $payment->id }}"
+                                                    data-balance-due="{{ $payment->balance_due }}"
+                                                    onclick="openPaymentModal(this)">
+                                                <i class="fa fa-money"></i> {{ __('financial.labels.pay') }}
+                                            </button>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7">
+                                <td colspan="8">
                                     <x-table.table-no-records/>
                                 </td>
                             </tr>
@@ -61,6 +76,13 @@
             </div>
         </div>
     </div>
+
+    <style>
+        .btn-group-actions {
+            display: flex;
+            gap: 4px;
+        }
+    </style>
 
     <script>
         function openPaymentModal(button) {
@@ -75,29 +97,29 @@
             const paymentFormHtml = `
         <div id="paymentModal" class="modal">
             <div class="modal-header">
-                <h4>Pay Invoice #${paymentId}</h4>
+                <h4>${@json(__('financial.labels.pay_invoice'))} #${paymentId}</h4>
                 <span class="close" onclick="document.getElementById('paymentModal').remove()">&times;</span>
             </div>
             <div class="modal-content">
                 <div class="form-row">
-                    <label for="balance_due">Balance Due</label>
+                    <label for="balance_due">${@json(__('financial.labels.balance_due'))}</label>
                     <input type="text" id="balance_due" value="₦${balanceDue.toFixed(2)}" disabled>
                 </div>
                 <div class="form-row">
-                    <label for="payment_amount">Amount to Pay</label>
+                    <label for="payment_amount">${@json(__('financial.labels.amount_to_pay'))}</label>
                     <input type="number" id="payment_amount" name="payment_amount" max="${balanceDue}" value="${balanceDue}" required>
                 </div>
                 <div class="form-row">
-                    <label for="payment_mode">Payment Mode</label>
+                    <label for="payment_mode">${@json(__('financial.labels.payment_mode'))}</label>
                     <select id="payment_mode" name="payment_mode" required>
-                        <option value="">Select Payment Mode</option>
+                        <option value="">${@json(__('financial.labels.select_payment_mode'))}</option>
                         @foreach($payment_modes as $payment_mode)
             <option value="{{ $payment_mode->id }}">{{ $payment_mode->name }}</option>
                         @endforeach
             </select>
             <div id="paymentError" style="color: red;"></div>
         </div>
-        <button type="button" class="btn btn-primary" onclick="submitPayment(${paymentId}, ${balanceDue})">Submit Payment</button>
+        <button type="button" class="btn btn-primary" onclick="submitPayment(${paymentId}, ${balanceDue})">{{ __('financial.labels.submit_payment') }}</button>
             </div>
         </div>
     `;
@@ -115,12 +137,12 @@
             paymentError.innerText = '';
 
             if (!paymentModeId) {
-                paymentError.innerText = 'Please select a valid payment mode.';
+                paymentError.innerText = @json(__('financial.labels.invalid_payment_mode'));
                 return;
             }
 
             if (paymentAmount > balanceDue) {
-                paymentError.innerText = 'The payment amount cannot exceed the balance due.';
+                paymentError.innerText = @json(__('financial.labels.payment_amount_exceeds_balance'));
                 return;
             }
 
@@ -148,12 +170,12 @@
                             window.location.reload(); // Refresh the page to show updated status
                         }, 2000);
                     } else {
-                        paymentError.innerText = 'Payment failed: ' + data.error; // Show error message in the div
+                        paymentError.innerText = @json(__('financial.labels.payment_failed_prefix')) + data.error; // Show error message in the div
                     }
                 })
                 .catch(error => {
                     console.error('Error processing payment:', error);
-                    paymentError.innerText = 'An error occurred while processing the payment.'; // Show error in the div
+                    paymentError.innerText = @json(__('financial.labels.payment_processing_error')); // Show error in the div
                 });
         }
 

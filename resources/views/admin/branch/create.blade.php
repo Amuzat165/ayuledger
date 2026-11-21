@@ -51,7 +51,7 @@ $ParentRouteName = 'branch';
                     <div class="header">
                         <h2>
                             {{ $createItemName }}
-                            <small>Put {{ $moduleName }} Information</small>
+                            <small>{{ __('Put :value Information', ['value' => $moduleName]) }}</small>
                         </h2>
                         <div class="body">
                             <form class="form" id="form_validation" method="post"
@@ -63,7 +63,7 @@ $ParentRouteName = 'branch';
                                             <div class="form-line">
                                                 <input autofocus value="{{ old('name') }}" name="name" type="text"
                                                     class="form-control">
-                                                <label class="form-label">Name</label>
+                                                <label class="form-label">{{ __('financial.labels.name') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -72,7 +72,7 @@ $ParentRouteName = 'branch';
                                             <div class="form-line">
                                                 <input value="{{ old('location') }}" name="location" type="text"
                                                     class="form-control">
-                                                <label class="form-label">Location</label>
+                                                <label class="form-label">{{ __('financial.labels.location') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -81,7 +81,7 @@ $ParentRouteName = 'branch';
                                             <div class="form-line">
                                                 <textarea class="form-control" name="description"
                                                     id="">{{ old('description') }}</textarea>
-                                                <label class="form-label">Description</label>
+                                                <label class="form-label">{{ __('financial.terms.description') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -164,11 +164,11 @@ $ParentRouteName = 'branch';
 
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
 

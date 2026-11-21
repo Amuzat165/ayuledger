@@ -17,7 +17,7 @@ class SettingsTableSeeder extends Seeder
         Setting::updateOrCreate([
             'settings_name' => 'General Settings',
         ], [
-            'content' => '{"company_name":"AYUGLOBAL","contract_person":"+2348031327202","email":"mohammedabdulhakeem5@gmail.com","phone":"+2348031327202","address_1":"Gwarinpa Abuja","address_2":null,"city":"Abuja","state":"FCT","zip_code":"900108","company_logo":"upload\/company-logo\/e.png"}'
+            'content' => '{"company_name":"AYUGLOBAL","contract_person":"+2348031327202","email":"mohammedabdulhakeem5@gmail.com","phone":"+2348031327202","address_1":"Gwarinpa Abuja","address_2":null,"city":"Abuja","state":"FCT","zip_code":"900108","company_logo":"upload\/company-logo\/e.png","header_image":null,"vat_percentage":0,"company_color":"#00897B"}'
         ]);
 
         Setting::updateOrCreate([

@@ -37,8 +37,8 @@ class FixedAssetScheduleController extends Controller
         $search_by = array(
             'branch_name' => ($request->branch_id) ? $branches->where('id', $request->branch_id)->first()->name : 'All Branch',
             'branch_id' => $request->branch_id,
-            'from' => date(config('settings.date_format'), strtotime($request->from)),
-            'to' => date(config('settings.date_format'), strtotime($request->to)),
+            'from' => date('d/m/Y', strtotime($request->from)),
+            'to' => date('d/m/Y', strtotime($request->to)),
         );
         $FixedAssetSchedule = $this->getFixedAssetSchedule($request->branch_id, $request->from, $request->to);
         // Show Action

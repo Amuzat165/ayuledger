@@ -3,10 +3,10 @@
 <?php
 
 $moduleName = __('root.settings.system');
-$createItemName = 'Update ' . $moduleName;
+$createItemName = __('root.common.update') . ' ' . $moduleName;
 
 $breadcrumbMainName = $moduleName;
-$breadcrumbCurrentName = ' Update';
+$breadcrumbCurrentName = ' ' . __('root.common.update');
 
 $breadcrumbMainIcon = 'fas fa-project-diagram';
 $breadcrumbCurrentIcon = 'archive';
@@ -54,7 +54,7 @@ $ParentRouteName = 'settings.system';
                                 {{ csrf_field() }}
                                 <div class="row clearfix">
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-4">
-                                        <p>Date Format</p>
+                                        <p>{{ __('ui.settings.date_format') }}</p>
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control show-tick"
@@ -82,7 +82,7 @@ $ParentRouteName = 'settings.system';
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-4">
-                                        <p>Timezone</p>
+                                        <p>{{ __('ui.settings.timezone') }}</p>
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control show-tick"
@@ -456,7 +456,7 @@ $ParentRouteName = 'settings.system';
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-4">
-                                        <p>Currency Code</p>
+                                        <p>{{ __('Currency Code') }}</p>
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <select name="currency_code" id="currency_code" data-live-search="true"
@@ -469,7 +469,7 @@ $ParentRouteName = 'settings.system';
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-4">
-                                        <p>Currency Symbol </p>
+                                        <p>{{ __('Currency Symbol') }} </p>
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input type="text" id="currency_symbol"
@@ -479,45 +479,45 @@ $ParentRouteName = 'settings.system';
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-4">
-                                        <p>Currency (Symbol/Code)</p>
+                                        <p>{{ __('Currency (Symbol/Code)') }}</p>
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <select class="form-control show-tick" name="is_code" id="">
                                                     <option @if ($settings['is_code']=='code' ) selected="" @endif
-                                                        value="code">Currency Code
+                                                        value="code">{{ __('Currency Code') }}
                                                     </option>
                                                     <option @if ($settings['is_code']=='symbol' ) selected="" @endif
-                                                        value="symbol">Currency Symbol
+                                                        value="symbol">{{ __('Currency Symbol') }}
                                                     </option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-4">
-                                        <p>Currency Position</p>
+                                        <p>{{ __('Currency Position') }}</p>
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <select class="form-control show-tick" name="currency_position" id="">
                                                     <option @if ($settings['currency_position']=='Prefix' ) selected=""
-                                                        @endif value="Prefix">Prefix
+                                                        @endif value="Prefix">{{ __('Prefix') }}
                                                     </option>
                                                     <option @if ($settings['currency_position']=='Suffix' ) selected=""
-                                                        @endif value="Suffix">Suffix
+                                                        @endif value="Suffix">{{ __('Suffix') }}
                                                     </option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-4">
-                                        <p>Is RTL ?</p>
+                                        <p>{{ __('ui.settings.is_rtl') }}</p>
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <select class="form-control show-tick" name="is_rtl" id="">
                                                     <option @if ($settings['is_rtl']=='No' ) selected="" @endif
-                                                        value="No">No
+                                                        value="No">{{ __('ui.common.no') }}
                                                     </option>
                                                     <option @if ($settings['is_rtl']=='Yes' ) selected="" @endif
-                                                        value="Yes">Yes
+                                                        value="Yes">{{ __('ui.common.yes') }}
                                                     </option>
                                                 </select>
                                             </div>
@@ -525,13 +525,13 @@ $ParentRouteName = 'settings.system';
                                     </div>
 
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 field_area">
-                                        <p>First Transaction Date</p>
+                                        <p>{{ __('First Transaction Date') }}</p>
                                         <div class="form-group form-float">
                                             <div class="form-line" id="bs_datepicker_container">
                                                 <input autocomplete="off"
                                                     value="{{ date('d/m/Y', strtotime($settings['fixed_asset_schedule_starting_date'])) }}"
                                                     name="fixed_asset_schedule_starting_date" type="text"
-                                                    class="form-control" placeholder="Please choose a date...">
+                                                    class="form-control" placeholder="{{ __('Please choose a date...') }}">
                                             </div>
                                         </div>
                                     </div>
@@ -623,11 +623,11 @@ $ParentRouteName = 'settings.system';
     })();
 
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
 

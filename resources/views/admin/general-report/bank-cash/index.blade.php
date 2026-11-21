@@ -15,8 +15,8 @@
 @stop
 @section('content')
 <section @if ($is_rtl) dir="rtl" @endif class="content">
-    <div class="header">
-        <h2 class="text-center">Bank Cash Report</h2>
+    <div class="header" style="background-color: transparent !important;">
+        <h2 class="text-center">{{ __('financial.labels.bank_cash_report') }}</h2>
     </div>
     <div class="container-fluid">
         <!-- Inline Layout | With Floating Label -->
@@ -27,7 +27,7 @@
                     <div class="header bg-cyan">
                         <h2>
                             DATE
-                            <small>Anything is select show all</small>
+                            <small></small>
                         </h2>
                     </div>
                     <br>
@@ -42,12 +42,12 @@
                                     <div class="input-daterange input-group" id="bs_datepicker_range_container">
                                         <div class="form-line">
                                             <input autocomplete="off" name="from" type="text" class="form-control"
-                                                placeholder="Date start...">
+                                                placeholder="{{ __('Date start...') }}">
                                         </div>
-                                        <span class="input-group-addon">to</span>
+                                        <span class="input-group-addon">{{ __('financial.reports.to') }}</span>
                                         <div class="form-line">
                                             <input autocomplete="off" name="to" type="text" class="form-control"
-                                                placeholder="Date end...">
+                                                placeholder="{{ __('Date end...') }}">
                                         </div>
                                     </div>
                                 </div>
@@ -134,11 +134,11 @@
 
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
 

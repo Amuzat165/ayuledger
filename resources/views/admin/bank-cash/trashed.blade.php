@@ -2,7 +2,7 @@
 
 <?php
 
-$moduleName = __('root.bank_cash.bank_cash_manage');
+$moduleName = __('financial.labels.bank_cash_management');
 $createItemName = __('root.common.create') . ' ' . $moduleName;
 
 $breadcrumbMainName = $moduleName;
@@ -110,10 +110,10 @@ $trash_show = config('role_manage.BankCash.TrashShow');
                                                 class="chk-col-cyan" />
                                             <label for="md_checkbox_p"></label>
                                         </th>
-                                        <th>{{ __('root.bank_cash.name') }}</th>
-                                        <th>{{ __('root.bank_cash.account_number') }}</th>
-                                        <th>{{ __('root.bank_cash.description') }}</th>
-                                        <th>{{ __('root.bank_cash.options') }}</th>
+                                        <th>{{ __('financial.labels.name') }}</th>
+                                        <th>{{ __('financial.labels.account_number') }}</th>
+                                        <th>{{ __('financial.terms.description') }}</th>
+                                        <th>{{ __('financial.labels.actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -132,16 +132,16 @@ $trash_show = config('role_manage.BankCash.TrashShow');
                                             <a @if ($restore==0) class="dis-none" @endif
                                                 class="btn btn-xs btn-info waves-effect"
                                                 href="{{ route($ParentRouteName . '.restore', ['id' => $item->id]) }}"
-                                                data-toggle="tooltip" data-placement="top" title="Restore"><i
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('Restore') }}"><i
                                                     class="material-icons">restore</i></a>
                                             <a data-target="#largeModal"
                                                 class="btn btn-xs btn-success waves-effect ajaxCall dis-none" href="#"
-                                                data-toggle="tooltip" data-placement="top" title="Preview"><i
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('Preview') }}"><i
                                                     class="material-icons">pageview</i></a>
                                             <a @if ($permanently_delete==0) class="dis-none" @endif
                                                 class="btn btn-xs btn-danger waves-effect"
                                                 href="{{ route($ParentRouteName . '.kill', ['id' => $item->id]) }}"
-                                                data-toggle="tooltip" data-placement="top" title="Parmanently Delete?">
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('Parmanently Delete?') }}">
                                                 <i class="material-icons">delete</i></a>
                                         </td>
                                     </tr>
@@ -154,10 +154,10 @@ $trash_show = config('role_manage.BankCash.TrashShow');
                                                     class="chk-col-cyan" />
                                                 <label for="md_checkbox_footer"></label>
                                             </th>
-                                            <th>{{ __('root.bank_cash.name') }}</th>
-                                            <th>{{ __('root.bank_cash.account_number') }}</th>
-                                            <th>{{ __('root.bank_cash.description') }}</th>
-                                            <th>{{ __('root.bank_cash.options') }}</th>
+                                            <th>{{ __('financial.labels.name') }}</th>
+                                            <th>{{ __('financial.labels.account_number') }}</th>
+                                            <th>{{ __('financial.terms.description') }}</th>
+                                            <th>{{ __('financial.labels.actions') }}</th>
                                         </tr>
                                     </thead>
                                 </tbody>
@@ -221,10 +221,10 @@ $trash_show = config('role_manage.BankCash.TrashShow');
 @push('include-js')
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)

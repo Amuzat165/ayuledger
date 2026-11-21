@@ -37,7 +37,7 @@ $trash_show = config('role_manage.Language.TrashShow');
 <section @if ($is_rtl) dir="rtl" @endif class="content">
     <div class="container-fluid">
         <div class="block-header @if ($is_rtl) pull-right @else pull-left @endif">
-            <a @if ($create==0) class="dis-none" @endif class="btn btn-sm btn-info waves-effect"
+            <a @if ($create==0) class="dis-none" @else class="btn btn-sm btn-info waves-effect" @endif
                 href="{{ route($ParentRouteName . '.create') }}">{{ __('root.common.create') }}</a>
         </div>
         <ol class="breadcrumb breadcrumb-col-cyan @if ($is_rtl) pull-left  @else pull-right @endif">
@@ -56,9 +56,8 @@ $trash_show = config('role_manage.Language.TrashShow');
                     <div class="header">
                         <a class="btn btn-xs btn-info waves-effect" href="{{ route($ParentRouteName) }}">{{
                             __('root.common.all') }}({{ $total_language }})</a>
-                        <a @if ($trash_show==0) class="dis-none" @endif
-                            class="btn btn-xs btn-danger waves-effect text-black"
-                            href="{{ route($ParentRouteName) }}">{{ __('root.common.trash') }}({{
+                        <a @if ($trash_show==0) class="dis-none" @else class="btn btn-xs btn-danger waves-effect text-black" @endif
+                            href="{{ route($ParentRouteName . '.trashed') }}">{{ __('root.common.trash') }}({{
                             $total_trashed_language }}
                             )</a>
                         <ul class="header-dropdown m-r--5">
@@ -141,30 +140,29 @@ $trash_show = config('role_manage.Language.TrashShow');
                                             </div>
                                         </td>
                                         <td class="tdTrashAction">
-                                            <a @if ($edit==0) class="dis-none" @endif
-                                                class="btn btn-xs btn-info waves-effect"
+                                            <a @if ($edit==0) class="dis-none" @else class="btn btn-xs btn-info waves-effect" @endif
                                                 href="{{ route($ParentRouteName . '.edit', ['id' => $item->id]) }}"
                                                 data-toggle="tooltip" data-placement="top"
                                                 title="{{ __('root.common.edit') }}"><i
                                                     class="material-icons">mode_edit</i></a>
-                                            <a @if ($show==0) class="dis-none" @endif target="_blank"
+                                            <a @if ($show==0) class="dis-none" @else class="btn btn-xs btn-success waves-effect ajaxCall" @endif
+                                                target="_blank"
                                                 data-target="#largeModal"
-                                                class="btn btn-xs btn-success waves-effect ajaxCall dis-none"
                                                 href="{{ route($ParentRouteName . '.show', ['id' => $item->id]) }}"
                                                 data-toggle="tooltip" data-placement="top"
                                                 title="{{ __('root.common.preview') }}"><i
                                                     class="material-icons">pageview</i></a>
-                                            <a @if ($delete==0) class="dis-none" @endif
-                                                class="btn btn-xs btn-danger waves-effect"
+                                            <a @if ($delete==0) class="dis-none" @else class="btn btn-xs btn-danger waves-effect" @endif
                                                 href="{{ route($ParentRouteName . '.destroy', ['id' => $item->id]) }}"
                                                 data-toggle="tooltip" data-placement="top"
                                                 title="{{ __('root.common.trash') }}"> <i
                                                     class="material-icons">delete</i></a>
 
-                                            <a class="btn btn-xs btn-warning waves-effect"
+                                            {{-- Configure Language button commented out due to route binding issue --}}
+                                            {{-- <a class="btn btn-xs btn-warning waves-effect"
                                                 href="{{ route('language.configureLang', $item->id) }}"
                                                 data-toggle="tooltip" data-placement="top" title="Configure Language">
-                                                <i class="material-icons">language</i></a>
+                                                <i class="material-icons">language</i></a> --}}
                                         </td>
                                     </tr>
                                     <?php $i++; ?>
@@ -276,10 +274,10 @@ $trash_show = config('role_manage.Language.TrashShow');
 <!-- Autosize Plugin Js -->
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)
@@ -299,3 +297,4 @@ $trash_show = config('role_manage.Language.TrashShow');
         BaseController.init();
 </script>
 @endpush
+

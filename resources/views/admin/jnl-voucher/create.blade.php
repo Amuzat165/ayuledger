@@ -53,7 +53,7 @@ $all = config('role_manage.JnlVoucher.All');
                     <div class="header">
                         <h2 class="m-b-20">
                             {{ $createItemName }}
-                            <small>Put {{ $moduleName }} Information</small>
+                            <small>{{ __('financial.labels.enter_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
                         <div class="body">
                             <form class="form" id="form_validation" method="post"
@@ -65,7 +65,7 @@ $all = config('role_manage.JnlVoucher.All');
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control show-tick"
                                                     name="branch_id">
-                                                    <option value="0">Select Branch Name ( Dr )</option>
+                                                    <option value="0">{{ __('financial.labels.select_branch') }} ( {{ __('Dr') }} )</option>
                                                     @foreach ($branches->sortByDesc('id') as $branch)
                                                     <option @if ($branch->id == old('branch_id')) selected @endif
                                                         value="{{ $branch->id }}">{{ $branch->name }}</option>
@@ -82,7 +82,7 @@ $all = config('role_manage.JnlVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Dr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Dr') }} )</option>
                                                     @foreach ($income_expense_heads->sortByDesc('id') as $HeadOfAccount)
                                                     <option value="{{ $HeadOfAccount->id }}">
                                                         {{ $HeadOfAccount->name }}</option>
@@ -95,7 +95,7 @@ $all = config('role_manage.JnlVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount ( Dr ) </label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} ( {{ __('Dr') }} ) </label>
                                             </div>
                                         </div>
                                     </div>
@@ -113,7 +113,7 @@ $all = config('role_manage.JnlVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Dr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Dr') }} )</option>
                                                     @foreach ($income_expense_heads->sortByDesc('id') as $HeadOfAccount)
                                                     <option value="{{ $HeadOfAccount->id }}">
                                                         {{ $HeadOfAccount->name }}</option>
@@ -126,40 +126,7 @@ $all = config('role_manage.JnlVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount ( Dr ) </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 field_area">
-                                        <div class="form-group form-float">
-                                            <i
-                                                class="pointer-cursor material-icons text-success plus">add_circle_outline</i>
-                                            <i
-                                                class="pointer-cursor material-icons text-danger minus">remove_circle_outline</i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row dr">
-                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 field_area">
-                                        <div class="form-group form-float">
-                                            <div class="form-line">
-                                                <select data-live-search="true"
-                                                    class="form-control show-tick income_expense_head_id"
-                                                    name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Dr )</option>
-                                                    @foreach ($income_expense_heads->sortByDesc('id') as $HeadOfAccount)
-                                                    <option value="{{ $HeadOfAccount->id }}">
-                                                        {{ $HeadOfAccount->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 field_area">
-                                        <div class="form-group form-float">
-                                            <div class="form-line">
-                                                <input name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount ( Dr )</label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} ( {{ __('Dr') }} ) </label>
                                             </div>
                                         </div>
                                     </div>
@@ -179,7 +146,7 @@ $all = config('role_manage.JnlVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Dr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Dr') }} )</option>
                                                     @foreach ($income_expense_heads->sortByDesc('id') as $HeadOfAccount)
                                                     <option value="{{ $HeadOfAccount->id }}">
                                                         {{ $HeadOfAccount->name }}</option>
@@ -192,7 +159,7 @@ $all = config('role_manage.JnlVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount ( Dr )</label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} ( {{ __('Dr') }} )</label>
                                             </div>
                                         </div>
                                     </div>
@@ -212,7 +179,7 @@ $all = config('role_manage.JnlVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Dr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Dr') }} )</option>
                                                     @foreach ($income_expense_heads->sortByDesc('id') as $HeadOfAccount)
                                                     <option value="{{ $HeadOfAccount->id }}">
                                                         {{ $HeadOfAccount->name }}</option>
@@ -225,7 +192,40 @@ $all = config('role_manage.JnlVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount ( Dr )</label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} ( {{ __('Dr') }} )</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 field_area">
+                                        <div class="form-group form-float">
+                                            <i
+                                                class="pointer-cursor material-icons text-success plus">add_circle_outline</i>
+                                            <i
+                                                class="pointer-cursor material-icons text-danger minus">remove_circle_outline</i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row dr">
+                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 field_area">
+                                        <div class="form-group form-float">
+                                            <div class="form-line">
+                                                <select data-live-search="true"
+                                                    class="form-control show-tick income_expense_head_id"
+                                                    name="income_expense_head_id[]" id="">
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Dr') }} )</option>
+                                                    @foreach ($income_expense_heads->sortByDesc('id') as $HeadOfAccount)
+                                                    <option value="{{ $HeadOfAccount->id }}">
+                                                        {{ $HeadOfAccount->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 field_area">
+                                        <div class="form-group form-float">
+                                            <div class="form-line">
+                                                <input name="amount[]" type="number" class="form-control amount">
+                                                <label class="form-label">{{ __('financial.labels.amount') }} ( {{ __('Dr') }} )</label>
                                             </div>
                                         </div>
                                     </div>
@@ -242,7 +242,7 @@ $all = config('role_manage.JnlVoucher.All');
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control show-tick"
                                                     name="branch_id_cr">
-                                                    <option value="0">Select Branch Name ( Cr )</option>
+                                                    <option value="0">{{ __('financial.labels.select_branch') }} ( {{ __('Cr') }} )</option>
                                                     @foreach ($branches->sortByDesc('id') as $branch)
                                                     <option @if ($branch->id == old('branch_id_cr')) selected @endif
                                                         value="{{ $branch->id }}">{{ $branch->name }}
@@ -260,7 +260,7 @@ $all = config('role_manage.JnlVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id_cr"
                                                     name="income_expense_head_id_cr[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Cr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Cr') }} )</option>
                                                     @foreach ($income_expense_heads->sortByDesc('id') as $HeadOfAccount)
                                                     <option value="{{ $HeadOfAccount->id }}">
                                                         {{ $HeadOfAccount->name }}</option>
@@ -273,7 +273,7 @@ $all = config('role_manage.JnlVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount_cr[]" type="number" class="form-control amount_cr">
-                                                <label class="form-label">Amount ( Cr ) </label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} ( {{ __('Cr') }} ) </label>
                                             </div>
                                         </div>
                                     </div>
@@ -291,7 +291,7 @@ $all = config('role_manage.JnlVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id_cr"
                                                     name="income_expense_head_id_cr[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Cr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Cr') }} )</option>
                                                     @foreach ($income_expense_heads->sortByDesc('id') as $HeadOfAccount)
                                                     <option value="{{ $HeadOfAccount->id }}">
                                                         {{ $HeadOfAccount->name }}</option>
@@ -304,40 +304,7 @@ $all = config('role_manage.JnlVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount_cr[]" type="number" class="form-control amount_cr">
-                                                <label class="form-label">Amount ( Cr ) </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 field_area">
-                                        <div class="form-group form-float">
-                                            <i
-                                                class="pointer-cursor material-icons text-success plus">add_circle_outline</i>
-                                            <i
-                                                class="pointer-cursor material-icons text-danger minus">remove_circle_outline</i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row cr">
-                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 field_area">
-                                        <div class="form-group form-float">
-                                            <div class="form-line">
-                                                <select data-live-search="true"
-                                                    class="form-control show-tick income_expense_head_id_cr"
-                                                    name="income_expense_head_id_cr[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Cr )</option>
-                                                    @foreach ($income_expense_heads->sortByDesc('id') as $HeadOfAccount)
-                                                    <option value="{{ $HeadOfAccount->id }}">
-                                                        {{ $HeadOfAccount->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 field_area">
-                                        <div class="form-group form-float">
-                                            <div class="form-line">
-                                                <input name="amount_cr[]" type="number" class="form-control amount_cr">
-                                                <label class="form-label">Amount ( Cr )</label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} ( {{ __('Cr') }} ) </label>
                                             </div>
                                         </div>
                                     </div>
@@ -357,7 +324,7 @@ $all = config('role_manage.JnlVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id_cr"
                                                     name="income_expense_head_id_cr[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Cr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Cr') }} )</option>
                                                     @foreach ($income_expense_heads->sortByDesc('id') as $HeadOfAccount)
                                                     <option value="{{ $HeadOfAccount->id }}">
                                                         {{ $HeadOfAccount->name }}</option>
@@ -370,7 +337,7 @@ $all = config('role_manage.JnlVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount_cr[]" type="number" class="form-control amount_cr">
-                                                <label class="form-label">Amount ( Cr )</label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} ( {{ __('Cr') }} )</label>
                                             </div>
                                         </div>
                                     </div>
@@ -390,7 +357,7 @@ $all = config('role_manage.JnlVoucher.All');
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id_cr"
                                                     name="income_expense_head_id_cr[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Cr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Cr') }} )</option>
                                                     @foreach ($income_expense_heads->sortByDesc('id') as $HeadOfAccount)
                                                     <option value="{{ $HeadOfAccount->id }}">
                                                         {{ $HeadOfAccount->name }}</option>
@@ -403,7 +370,40 @@ $all = config('role_manage.JnlVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="amount_cr[]" type="number" class="form-control amount_cr">
-                                                <label class="form-label">Amount ( Cr )</label>
+                                                <label class="form-label">{{ __('financial.labels.amount') }} ( {{ __('Cr') }} )</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 field_area">
+                                        <div class="form-group form-float">
+                                            <i
+                                                class="pointer-cursor material-icons text-success plus">add_circle_outline</i>
+                                            <i
+                                                class="pointer-cursor material-icons text-danger minus">remove_circle_outline</i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row cr">
+                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 field_area">
+                                        <div class="form-group form-float">
+                                            <div class="form-line">
+                                                <select data-live-search="true"
+                                                    class="form-control show-tick income_expense_head_id_cr"
+                                                    name="income_expense_head_id_cr[]" id="">
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Cr') }} )</option>
+                                                    @foreach ($income_expense_heads->sortByDesc('id') as $HeadOfAccount)
+                                                    <option value="{{ $HeadOfAccount->id }}">
+                                                        {{ $HeadOfAccount->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 field_area">
+                                        <div class="form-group form-float">
+                                            <div class="form-line">
+                                                <input name="amount_cr[]" type="number" class="form-control amount_cr">
+                                                <label class="form-label">{{ __('financial.labels.amount') }} ( {{ __('Cr') }} )</label>
                                             </div>
                                         </div>
                                     </div>
@@ -420,7 +420,7 @@ $all = config('role_manage.JnlVoucher.All');
                                             <div class="form-line" id="bs_datepicker_container">
                                                 <input autocomplete="off" value="{{ old('voucher_date') }}"
                                                     name="voucher_date" type="text" class="form-control"
-                                                    placeholder="Please choose a date...">
+                                                    placeholder="{{ __('financial.screens.select_date') }}">
                                             </div>
                                         </div>
                                     </div>
@@ -428,7 +428,7 @@ $all = config('role_manage.JnlVoucher.All');
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <textarea name="particulars" rows="2" class="form-control no-resize"
-                                                    placeholder="Particulars">{{ old('particulars') }}</textarea>
+                                                    placeholder="{{ __('financial.labels.particulars') }}">{{ old('particulars') }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -477,10 +477,10 @@ $all = config('role_manage.JnlVoucher.All');
 <script src="{{ asset('asset/js/pages/forms/basic-form-elements.js') }}"></script>
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)
@@ -555,12 +555,12 @@ $all = config('role_manage.JnlVoucher.All');
                         Area.style.display = 'block';
                     }
                 },
-                hideHeadAmountArea: function(Field) {
+                hideHead{{ __('financial.labels.amount') }}Area: function(Field) {
                     if (Field) {
                         Field.style.display = 'none';
                     }
                 },
-                showHeadAmountArea: function(Field) {
+                showHead{{ __('financial.labels.amount') }}Area: function(Field) {
                     var DomString = this.getDOMString();
                     Field.querySelector('select').value = 0;
                     Field.querySelector(DomString.amount).value = "";
@@ -590,134 +590,134 @@ $all = config('role_manage.JnlVoucher.All');
                 var Values, Fields;
                 Values = UICnt.getValues();
                 Fields = UICnt.getFields();
-                var TotalDrAmount = 0,
-                    TotalCrAmount = 0;
+                var TotalDr{{ __('financial.labels.amount') }} = 0,
+                    TotalCr{{ __('financial.labels.amount') }} = 0;
                 if (Values.project_id == 0) {
-                    toastr["error"]('Select  Branch ( Dr )');
+                    toastr["error"](@json(__('financial.labels.select_branch')) + ' (Dr)');
                     e.preventDefault();
                 }
                 if (Values.project_id_cr == 0) {
-                    toastr["error"]('Select  Branch ( Cr )');
+                    toastr["error"](@json(__('financial.labels.select_branch')) + ' (Cr)');
                     e.preventDefault();
                 }
                 if (Fields.get_head_of_account_id[0].querySelector('select').value == 0) {
-                    toastr["error"]('Select Head Of Account ( Dr )');
+                    toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Dr');
                     e.preventDefault();
                 }
                 if (Fields.get_amount[0].value == '') {
-                    toastr["error"]('Put Amount ( Dr )');
+                    toastr["error"]('{{ __('financial.labels.enter_amount') }} ( Dr )');
                     e.preventDefault();
                 } else {
-                    TotalDrAmount += parseFloat(Fields.get_amount[0].value);
+                    TotalDr{{ __('financial.labels.amount') }} += parseFloat(Fields.get_amount[0].value);
                 }
                 if (Fields.get_head_of_account_id_cr[0].querySelector('select').value == 0) {
-                    toastr["error"]('Select Head Of Account ( Cr )');
+                    toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Cr');
                     e.preventDefault();
                 }
                 if (Fields.get_amount_cr[0].value == '') {
-                    toastr["error"]('Put Amount ( Cr )');
+                    toastr["error"]('{{ __('financial.labels.enter_amount') }} ( Cr )');
                     e.preventDefault();
                 } else {
-                    TotalCrAmount += parseFloat(Fields.get_amount_cr[0].value);
+                    TotalCr{{ __('financial.labels.amount') }} += parseFloat(Fields.get_amount_cr[0].value);
                 }
                 if (Values.date == 0) {
-                    toastr["error"]('Set Date');
+                    toastr["error"](@json(__('financial.screens.select_date')));
                     e.preventDefault();
                 }
                 if (Fields.get_dr[1].style.display == 'block') {
                     if (Fields.get_head_of_account_id[2].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account ( Dr )');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Dr');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[1].value == '') {
-                        toastr["error"]('Put Amount ( Dr )');
+                        toastr["error"]('{{ __('financial.labels.enter_amount') }} ( Dr )');
                         e.preventDefault();
                     } else {
-                        TotalDrAmount += parseFloat(Fields.get_amount[1].value);
+                        TotalDr{{ __('financial.labels.amount') }} += parseFloat(Fields.get_amount[1].value);
                     }
                 }
                 if (Fields.get_dr[2].style.display == 'block') {
                     if (Fields.get_head_of_account_id[4].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account ( Dr )');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Dr');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[2].value == '') {
-                        toastr["error"]('Put Amount ( Dr )');
+                        toastr["error"]('{{ __('financial.labels.enter_amount') }} ( Dr )');
                         e.preventDefault();
                     } else {
-                        TotalDrAmount += parseFloat(Fields.get_amount[2].value);
+                        TotalDr{{ __('financial.labels.amount') }} += parseFloat(Fields.get_amount[2].value);
                     }
                 }
                 if (Fields.get_dr[3].style.display == 'block') {
                     if (Fields.get_head_of_account_id[6].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account ( Dr )');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Dr');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[3].value == '') {
-                        toastr["error"]('Put Amount ( Dr )');
+                        toastr["error"]('{{ __('financial.labels.enter_amount') }} ( Dr )');
                         e.preventDefault();
                     } else {
-                        TotalDrAmount += parseFloat(Fields.get_amount[3].value);
+                        TotalDr{{ __('financial.labels.amount') }} += parseFloat(Fields.get_amount[3].value);
                     }
                 }
                 if (Fields.get_dr[4].style.display == 'block') {
                     if (Fields.get_head_of_account_id[8].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account ( Dr )');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Dr');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[4].value == '') {
-                        toastr["error"]('Put Amount ( Dr )');
+                        toastr["error"]('{{ __('financial.labels.enter_amount') }} ( Dr )');
                         e.preventDefault();
                     } else {
-                        TotalDrAmount += parseFloat(Fields.get_amount[4].value);
+                        TotalDr{{ __('financial.labels.amount') }} += parseFloat(Fields.get_amount[4].value);
                     }
                 }
                 if (Fields.get_cr[1].style.display == 'block') {
                     if (Fields.get_head_of_account_id_cr[2].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account ( Cr )');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Cr');
                         e.preventDefault();
                     }
                     if (Fields.get_amount_cr[1].value == '') {
-                        toastr["error"]('Put Amount ( Cr)');
+                        toastr["error"]('{{ __('financial.labels.enter_amount') }} ( Cr)');
                         e.preventDefault();
                     } else {
-                        TotalCrAmount += parseFloat(Fields.get_amount_cr[1].value);
+                        TotalCr{{ __('financial.labels.amount') }} += parseFloat(Fields.get_amount_cr[1].value);
                     }
                 }
                 if (Fields.get_cr[2].style.display == 'block') {
                     if (Fields.get_head_of_account_id_cr[4].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account ( Cr ) ');
+                        toastr["error"]('{{ __('financial.labels.select_head_of_account') }} ');
                         e.preventDefault();
                     }
                     if (Fields.get_amount_cr[2].value == '') {
-                        toastr["error"]('Put Amount ( Cr )');
+                        toastr["error"]('{{ __('financial.labels.enter_amount') }} ( Cr )');
                         e.preventDefault();
                     } else {
-                        TotalCrAmount += parseFloat(Fields.get_amount_cr[2].value);
+                        TotalCr{{ __('financial.labels.amount') }} += parseFloat(Fields.get_amount_cr[2].value);
                     }
                 }
                 if (Fields.get_cr[3].style.display == 'block') {
                     if (Fields.get_head_of_account_id_cr[6].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account ( Cr )');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Cr');
                         e.preventDefault();
                     }
                     if (Fields.get_amount_cr[3].value == '') {
-                        toastr["error"]('Put Amount ( Cr )');
+                        toastr["error"]('{{ __('financial.labels.enter_amount') }} ( Cr )');
                         e.preventDefault();
                     } else {
-                        TotalCrAmount += parseFloat(Fields.get_amount_cr[3].value);
+                        TotalCr{{ __('financial.labels.amount') }} += parseFloat(Fields.get_amount_cr[3].value);
                     }
                 }
                 if (Fields.get_cr[4].style.display == 'block') {
                     if (Fields.get_head_of_account_id_cr[8].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account ( Cr )');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Cr');
                         e.preventDefault();
                     }
                     if (Fields.get_amount_cr[4].value == '') {
-                        toastr["error"]('Put Amount ( Cr )');
+                        toastr["error"]('{{ __('financial.labels.enter_amount') }} ( Cr )');
                         e.preventDefault();
                     } else {
-                        TotalCrAmount += parseFloat(Fields.get_amount_cr[4].value);
+                        TotalCr{{ __('financial.labels.amount') }} += parseFloat(Fields.get_amount_cr[4].value);
                     }
                 }
                 var head_of_account_Ids = [];
@@ -794,11 +794,11 @@ $all = config('role_manage.JnlVoucher.All');
                     return false;
                 }
                 if (checkUniqueOrNot(head_of_account_Ids)) {
-                    toastr["error"]('Head of Account should unique');
+                    toastr["error"](@json(__('financial.labels.account_head_unique')));
                     e.preventDefault();
                 }
-                if (TotalDrAmount === TotalCrAmount) {} else {
-                    toastr["error"]('Total Amount of Dr and Cr Should same');
+                if (TotalDr{{ __('financial.labels.amount') }} === TotalCr{{ __('financial.labels.amount') }}) {} else {
+                    toastr["error"]('{{ __('financial.labels.voucher_totals_must_match') }}');
                     e.preventDefault();
                 }
 
@@ -813,7 +813,7 @@ $all = config('role_manage.JnlVoucher.All');
                     Cr.nextElementSibling.querySelector('select').value = 0;
                     Cr.nextElementSibling.querySelector(DomString.amount_cr).value = "";
                 } else {
-                    UICnt.showHeadAmountArea(Fields.get_dr[index + 1]);
+                    UICnt.showHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[index + 1]);
                 }
             };
             var removeItem = function(event, index) {
@@ -824,7 +824,7 @@ $all = config('role_manage.JnlVoucher.All');
                 if (Cr) {
                     Cr.style.display = 'none';
                 } else {
-                    UICnt.hideHeadAmountArea(Fields.get_dr[index + 1]);
+                    UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[index + 1]);
                 }
             };
             return {
@@ -833,14 +833,14 @@ $all = config('role_manage.JnlVoucher.All');
                     setUpEventListner();
                     // Default hide fields
                     var Fields = UICnt.getFields();
-                    UICnt.hideHeadAmountArea(Fields.get_dr[1]);
-                    UICnt.hideHeadAmountArea(Fields.get_dr[2]);
-                    UICnt.hideHeadAmountArea(Fields.get_dr[3]);
-                    UICnt.hideHeadAmountArea(Fields.get_dr[4]);
-                    UICnt.hideHeadAmountArea(Fields.get_cr[1]);
-                    UICnt.hideHeadAmountArea(Fields.get_cr[2]);
-                    UICnt.hideHeadAmountArea(Fields.get_cr[3]);
-                    UICnt.hideHeadAmountArea(Fields.get_cr[4]);
+                    UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[1]);
+                    UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[2]);
+                    UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[3]);
+                    UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_dr[4]);
+                    UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_cr[1]);
+                    UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_cr[2]);
+                    UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_cr[3]);
+                    UICnt.hideHead{{ __('financial.labels.amount') }}Area(Fields.get_cr[4]);
                 }
             }
 

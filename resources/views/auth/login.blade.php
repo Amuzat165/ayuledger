@@ -209,6 +209,17 @@
             font-size: 13px;
         }
 
+        .login-success {
+            margin-top: 20px;
+            padding: 13px 15px;
+            border: 1px solid #bce7ce;
+            border-radius: 12px;
+            background: #effaf4;
+            color: #17603b;
+            font-size: 14px;
+            line-height: 1.55;
+        }
+
         @media (max-width: 991px) {
             .login-panel {
                 grid-template-columns: 1fr;
@@ -233,7 +244,7 @@
                     </div>
                     <div class="brand-copy" style="margin-top: 28px;">
                         <p>
-                            Access your accounting workspace, review balances, and keep daily operations moving from one secure place.
+                            {{ __('Access your accounting workspace, review balances, and keep daily operations moving from one secure place.') }}
                         </p>
                     </div>
                 </div>
@@ -241,24 +252,28 @@
                 <div class="hero-points">
                     <div class="hero-point">
                         <i class="fa fa-lock" aria-hidden="true"></i>
-                        <span>Secure sign-in for your finance and reporting workspace.</span>
+                        <span>{{ __('ui.login.workspace_summary') }}</span>
                     </div>
                     <div class="hero-point">
                         <i class="fa fa-line-chart" aria-hidden="true"></i>
-                        <span>Quick access to ledgers, vouchers, payroll, and reports.</span>
+                        <span>{{ __('ui.login.quick_access_summary') }}</span>
                     </div>
                     <div class="hero-point">
                         <i class="fa fa-users" aria-hidden="true"></i>
-                        <span>Built for teams that need a clean, reliable daily login.</span>
+                        <span>{{ __('ui.login.team_summary') }}</span>
                     </div>
                 </div>
             </section>
 
             <section class="login-form-area">
                 <div class="login-form-head">
-                    <h2>Log in</h2>
-                    <p>Enter your account details to continue.</p>
+                    <h2>{{ __('ui.auth.log_in') }}</h2>
+                    <p>{{ __('ui.auth.enter_account_details') }}</p>
                 </div>
+
+                @if (session('status'))
+                    <div class="login-success" role="status">{{ session('status') }}</div>
+                @endif
 
                 <form id="sign_in" method="POST" action="{{ route('login') }}">
                     @csrf
@@ -270,8 +285,8 @@
                                    type="email"
                                    class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}"
                                    name="email"
-                                   value="{{ old('email') }}"
-                                   placeholder="Email address"
+                                   value="{{ old('email', session('payment_login_email')) }}"
+                                   placeholder="{{ __('ui.auth.email_address') }}"
                                    autocomplete="email"
                                    autofocus>
                         </div>
@@ -289,7 +304,7 @@
                                    type="password"
                                    class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}"
                                    name="password"
-                                   placeholder="Password"
+                                   placeholder="{{ __('ui.forms.password') }}"
                                    autocomplete="current-password">
                         </div>
                         @if ($errors->has('password'))
@@ -303,18 +318,18 @@
                         <div class="checkbox">
                             <label for="remember">
                                 <input id="remember" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                                Remember me
+                                {{ __('ui.auth.remember_me') }}
                             </label>
                         </div>
 
                         @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}">Forgot password?</a>
+                            <a href="{{ route('password.request') }}">{{ __('ui.auth.forgot_password') }}</a>
                         @endif
                     </div>
 
                     <div class="login-submit">
                         <button type="submit" class="btn btn-primary">
-                            Login
+                            {{ __('ui.auth.login') }}
                         </button>
                     </div>
 

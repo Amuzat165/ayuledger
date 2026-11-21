@@ -1,30 +1,30 @@
 @extends('layouts.form-table-layout')
 
-@section('subtitle', 'Add Payment Voucher')
+@section('subtitle', __('financial.screens.create_payment_voucher'))
 
 @section('container')
-    <x-breadcrumb :level="'Payment Vouchers'" :location="'Add Payment Voucher'" :as="'form'" />
+    <x-breadcrumb :level="__('financial.terms.payment')" :location="__('financial.screens.create_payment_voucher')" :as="'form'" />
 
     <div class="row clearfix">
         <div class="col-xs-12">
             <div class="card">
-                <x-form.form-title-wrapper h1="Create Payment Voucher">
+                <x-form.form-title-wrapper :h1="__('financial.screens.create_payment_voucher')">
                     <form class="form" id="form_validation" method="post" action="{{ $action }}">
                         @csrf
                         <div class="row clearfix">
                             <div class="col-md-6">
-                                <label for="vendor_id">Select Vendor</label>
+                                <label for="vendor_id">{{ __('financial.labels.select_vendor') }}</label>
                                 <select name="vendor_id" id="vendor_id" class="form-control" required>
-                                    <option value="">Select Vendor</option>
+                                    <option value="">{{ __('financial.labels.select_vendor') }}</option>
                                     @foreach($vendor_id_options as $vendor)
                                         <option value="{{ $vendor->id }}">{{ $vendor->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-md-6 text-right">
-                                <p><strong>Branch:</strong> <span id="branch_name"></span></p>
-                                <p><strong>Date:</strong> <span id="current_date"></span></p>
-                                <p><strong>Voucher No:</strong> <span id="voucher_number"></span></p>
+                                <p><strong>{{ __('financial.labels.branch') }}:</strong> <span id="branch_name"></span></p>
+                                <p><strong>{{ __('financial.labels.date') }}:</strong> <span id="current_date"></span></p>
+                                <p><strong>{{ __('financial.screens.voucher') }}:</strong> <span id="voucher_number"></span></p>
                             </div>
                         </div>
                         <div class="row clearfix mt-3">
@@ -34,32 +34,38 @@
                                     <table class="table table-bordered">
                                         <thead>
                                         <tr>
-                                            <th>Invoice Number</th>
-                                            <th>Date</th>
-                                            <th>Exchange Rate</th>
-                                            <th>Amount</th>
-                                            <th>Balance Due</th>
-                                            <th>Actions</th>
+                                            <th>{{ __('financial.labels.invoice_number') }}</th><th>{{ __('financial.labels.date') }}</th><th>{{ __('financial.labels.exchange_rate') }}</th>
+                                            <th>{{ __('financial.labels.invoice_total') }}</th><th>{{ __('financial.terms.wht') }}</th><th>{{ __('financial.labels.net_amount_payable') }}</th>
+                                            <th>{{ __('financial.terms.amount_paid') }}</th><th>{{ __('financial.labels.balance_due') }}</th><th>{{ __('financial.labels.actions') }}</th>
                                         </tr>
                                         </thead>
                                         <tbody id="invoice-details-body">
                                         @foreach($invoices as $invoice)
+                                            @php($summary = $invoice->settlement_summary)
                                             <tr>
                                                 <td>{{ $invoice->invoice_number }}</td>
-                                                <td>{{ $invoice->invoice_date->format('Y-m-d') }}</td>
+                                                <td>{{ $invoice->invoice_date }}</td>
                                                 <td>{{ $invoice->exchange_rate }}</td>
-                                                <td>{{ $invoice->total_amount }}</td>
-                                                <td>{{ $invoice->balance_due }}</td>
+                                                <td>{{ $currency_symbol }}{{ number_format((float) $summary['invoice_total'], 2) }}</td>
+                                                <td>{{ $summary['settlement_available'] ? $currency_symbol . number_format((float) $summary['wht_amount'], 2) : __('financial.labels.review_required') }}</td>
+                                                <td>{{ $summary['settlement_available'] ? $currency_symbol . number_format((float) $summary['net_payable'], 2) : __('financial.labels.review_required') }}</td>
+                                                <td>{{ $summary['amount_paid'] === null ? '—' : $currency_symbol . number_format((float) $summary['amount_paid'], 2) }}</td>
+                                                <td>{{ $summary['settlement_available'] ? $currency_symbol . number_format((float) $summary['balance_due'], 2) : __('financial.labels.review_required') }}</td>
                                                 <td>
-                                                    @if($invoice->is_paid)
-                                                        <span>Paid</span>
+                                                    @if(!$summary['settlement_available'])
+                                                        <span title="{{ $summary['review_message'] }}">{{ __('financial.labels.review_required') }}</span>
+                                                    @elseif($summary['balance_due'] === '0.00')
+                                                        <span>{{ __('financial.labels.paid') }}</span>
                                                     @else
                                                         <button type="button" class="btn btn-primary"
                                                                 data-invoice-id="{{ $invoice->id }}"
-                                                                data-amount-due="{{ $invoice->total_amount }}"
-                                                                data-balance-due="{{ $invoice->balance_due }}"
+                                                                data-invoice-total="{{ $summary['invoice_total'] }}"
+                                                                data-wht="{{ $summary['wht_amount'] }}"
+                                                                data-net-payable="{{ $summary['net_payable'] }}"
+                                                                data-amount-paid="{{ $summary['amount_paid'] }}"
+                                                                data-balance-due="{{ $summary['balance_due'] }}"
                                                                 onclick="handlePayButtonClick(this)">
-                                                            Pay {{ $invoice->total_amount }}
+                                                            {{ __('Pay') }} {{ $currency_symbol }}{{ number_format((float) $summary['balance_due'], 2) }}
                                                         </button>
                                                     @endif
                                                 </td>
@@ -70,7 +76,7 @@
                                 </div>
                             </div>
                             <div class="col-md-12 mt-3">
-                                <button type="button" class="btn btn-primary" onclick="printVoucher()">Print</button>
+                                <button type="button" class="btn btn-primary" onclick="printVoucher()">{{ __('financial.labels.print') }}</button>
                             </div>
                         </div>
                     </form>
@@ -119,7 +125,7 @@
         // Print voucher function
         function printVoucher() {
             const vendorName = document.getElementById('vendor_id').options[document.getElementById('vendor_id').selectedIndex].text;
-            document.getElementById('vendor_name_print').innerText = `Vendor Name: ${vendorName}`;
+            document.getElementById('vendor_name_print').innerText = `${@json(__('financial.labels.vendor_name'))}: ${vendorName}`;
 
             const currentDate = document.getElementById('current_date').innerText;
             const voucherNumber = document.getElementById('voucher_number').innerText;
@@ -127,18 +133,18 @@
 
             const printContents = `
         <div>
-            <p><strong>Branch:</strong> ${branch}</p>
-            <p><strong>Date:</strong> ${currentDate}</p>
-            <p><strong>Voucher No:</strong> ${voucherNumber}</p>
-            <h4 id="vendor_name_print">Vendor Name: ${vendorName}</h4>
+            <p><strong>${@json(__('financial.labels.branch'))}:</strong> ${branch}</p>
+            <p><strong>${@json(__('financial.labels.date'))}:</strong> ${currentDate}</p>
+            <p><strong>${@json(__('financial.screens.voucher'))}:</strong> ${voucherNumber}</p>
+            <h4 id="vendor_name_print">${@json(__('financial.labels.vendor_name'))}: ${vendorName}</h4>
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Invoice Number</th>
-                        <th>Date</th>
-                        <th>Exchange Rate</th>
-                        <th>Amount</th>
-                        <th>Balance Due</th>
+                        <th>${@json(__('financial.labels.invoice_number'))}</th>
+                        <th>${@json(__('financial.labels.date'))}</th>
+                        <th>${@json(__('financial.labels.exchange_rate'))}</th>
+                        <th>${@json(__('financial.terms.total_amount'))}</th>
+                        <th>${@json(__('financial.labels.balance_due'))}</th>
                     </tr>
                 </thead>
                 <tbody id="invoice-details-body">
@@ -176,23 +182,32 @@
                         } else {
                             let invoiceDetailsBody = '';
                             data.invoices.forEach(invoice => {
+                                const summary = invoice.settlement_summary;
+                                const reviewRequired = !summary.settlement_available;
                                 invoiceDetailsBody += `
                             <tr>
                                 <td>${invoice.invoice_number}</td>
                                 <td>${new Date(invoice.invoice_date).toLocaleDateString()}</td>
                                 <td>${invoice.exchange_rate}</td>
-                                <td>₦${Number(invoice.total_amount).toLocaleString()}</td>
-                                <td>₦${Number(invoice.balance_due).toLocaleString()}</td>
+                                <td>${formatMoney(summary.invoice_total)}</td>
+                                <td>${reviewRequired ? @json(__('financial.labels.review_required')) : formatMoney(summary.wht_amount)}</td>
+                                <td>${reviewRequired ? @json(__('financial.labels.review_required')) : formatMoney(summary.net_payable)}</td>
+                                <td>${summary.amount_paid === null ? '—' : formatMoney(summary.amount_paid)}</td>
+                                <td>${reviewRequired ? @json(__('financial.labels.review_required')) : formatMoney(summary.balance_due)}</td>
                                 <td>
-                                    ${invoice.is_paid ?
-                                    '<span class="label label-success">Paid</span>' :
+                                    ${reviewRequired ?
+                                    '<span title="' + summary.review_message + '">' + @json(__('financial.labels.review_required')) + '</span>' : (summary.balance_due === '0.00' ?
+                                    '<span class="label label-success">' + @json(__('financial.labels.paid')) + '</span>' :
                                     `<button type="button" class="btn btn-primary pay-button"
                                             data-invoice-id="${invoice.id}"
-                                            data-amount-due="${invoice.total_amount}"
-                                            data-balance-due="${invoice.balance_due}"
+                                            data-invoice-total="${summary.invoice_total}"
+                                            data-wht="${summary.wht_amount}"
+                                            data-net-payable="${summary.net_payable}"
+                                            data-amount-paid="${summary.amount_paid}"
+                                            data-balance-due="${summary.balance_due}"
                                             onclick="handlePayButtonClick(this)">
-                                            Pay
-                                        </button>`}
+                                            ${@json(__('financial.labels.pay'))} ${formatMoney(summary.balance_due)}
+                                        </button>`)}
                                 </td>
                             </tr>
                         `;
@@ -201,7 +216,7 @@
 
                             // Set vendor name for printing
                             const vendorName = document.getElementById('vendor_id').options[document.getElementById('vendor_id').selectedIndex].text;
-                            document.getElementById('vendor_name_print').innerText = `Vendor Name: ${vendorName}`;
+                            document.getElementById('vendor_name_print').innerText = `${@json(__('financial.labels.vendor_name'))}: ${vendorName}`;
 
                             // Fetch and display branch name
                             const branchName = data.branch ? data.branch.name : 'N/A';
@@ -219,6 +234,9 @@
             }
         });
 
+        const currencySymbol = @json($currency_symbol);
+        const formatMoney = value => `${currencySymbol}${Number(value).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
         function handlePayButtonClick(button) {
             // Remove any existing modal to avoid duplicates
             const existingModal = document.getElementById('paymentModal');
@@ -227,37 +245,43 @@
             }
 
             const invoiceId = button.getAttribute('data-invoice-id');
-            const totalAmountDue = parseFloat(button.getAttribute('data-amount-due'));
-            const totalBalanceDue = parseFloat(button.getAttribute('data-balance-due'));
+            const invoiceTotal = button.getAttribute('data-invoice-total');
+            const wht = button.getAttribute('data-wht');
+            const netPayable = button.getAttribute('data-net-payable');
+            const amountPaid = button.getAttribute('data-amount-paid');
+            const totalBalanceDue = button.getAttribute('data-balance-due');
             // Modal HTML to be appended
             const paymentFormHtml = `
     <div id="paymentModal" class="modal">
         <div class="modal-header">
-            <h4>Pay Invoice #${invoiceId}</h4>
+            <h4>${@json(__('financial.labels.pay_invoice'))} #${invoiceId}</h4>
             <span class="close" onclick="document.getElementById('paymentModal').remove()">&times;</span>
         </div>
         <div class="modal-content">
             <div class="form-row">
-                <label for="total_amount_due">Total Amount</label>
-                <input type="text" id="total_amount_due" value="${totalAmountDue.toFixed(2)}" disabled>
+                <label>${@json(__('financial.labels.invoice_total'))}</label><input type="text" value="${formatMoney(invoiceTotal)}" disabled>
+                <label>${@json(__('financial.terms.wht'))}</label><input type="text" value="${formatMoney(wht)}" disabled>
+                <label>${@json(__('financial.labels.net_amount_payable'))}</label><input type="text" value="${formatMoney(netPayable)}" disabled>
+                <label>${@json(__('financial.labels.amount_paid_cumulative'))}</label><input type="text" value="${formatMoney(amountPaid)}" disabled>
+                <label>${@json(__('financial.labels.balance_due'))}</label><input type="text" value="${formatMoney(totalBalanceDue)}" disabled>
             </div>
 
             <div class="form-row">
-                <label for="payment_amount">Amount to Pay</label>
-                <input type="number" id="payment_amount" name="payment_amount" max="${totalAmountDue}" value="${totalBalanceDue}" required>
+                <label for="payment_amount">${@json(__('financial.labels.amount_to_pay'))}</label>
+                <input type="number" id="payment_amount" name="payment_amount" min="0.01" step="0.01" max="${totalBalanceDue}" value="${totalBalanceDue}" required>
             </div>
 
             <div class="form-row">
-                <label for="payment_mode">Payment Mode</label>
+                <label for="payment_mode">${@json(__('financial.labels.payment_mode'))}</label>
                 <select id="payment_mode" name="payment_mode" required>
-                    <option value="">Select Payment Mode</option>
+                    <option value="">${@json(__('financial.labels.select_payment_mode'))}</option>
                     @foreach($payment_modes as $payment_mode)
             <option value="{{ $payment_mode->id }}">{{ $payment_mode->name }}</option>
                     @endforeach
             </select>
             <span id="payment_mode_error" class="error-message" style="color: red; display: none;"></span>
         </div>
-        <button type="button" class="btn btn-primary" onclick="submitPayment(${invoiceId}, ${totalAmountDue})" style="flex: 1 1 100%;">Submit Payment</button>
+        <button type="button" class="btn btn-primary" onclick="submitPayment(${invoiceId})" style="flex: 1 1 100%;">${@json(__('financial.labels.submit_payment'))}</button>
         </div>
     </div>
     `;
@@ -265,16 +289,10 @@
             // Append modal to the body
             document.body.insertAdjacentHTML('beforeend', paymentFormHtml);
 
-            // Add event listener to automatically update the remaining balance when amount to pay is changed
-            // document.getElementById('payment_amount').addEventListener('input', function () {
-            //     const paymentAmount = parseFloat(this.value) || 0;
-            //     const remainingBalance = totalAmountDue - paymentAmount;
-            //     document.getElementById('remaining_balance').value = remainingBalance.toFixed(2);
-            // });
         }
 
-        function submitPayment(invoiceId, totalAmountDue) {
-            const paymentAmount = parseFloat(document.getElementById('payment_amount').value);
+        function submitPayment(invoiceId) {
+            const paymentAmount = document.getElementById('payment_amount').value;
             const paymentModeId = document.getElementById('payment_mode').value;
             const paymentModeError = document.getElementById('payment_mode_error'); // Error message element
 
@@ -284,7 +302,7 @@
 
             // Validate payment mode selection
             if (!paymentModeId) {
-                paymentModeError.innerText = 'Please select a payment mode.';
+                paymentModeError.innerText = @json(__('financial.labels.select_payment_mode'));
                 paymentModeError.style.display = 'block';
                 return;
             }
@@ -293,12 +311,12 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 },
                 body: JSON.stringify({
                     amount: paymentAmount,
-                    payment_mode_id: paymentModeId,
-                    total_amount_due: totalAmountDue
+                    payment_mode_id: paymentModeId
                 })
             })
                 .then(response => response.json())
@@ -310,7 +328,8 @@
                         // Redirect to the view receipts page
                         window.location.href = data.redirect;
                     } else {
-                        alert('Payment failed: ' + data.error);
+                        const message = data.message || data.error || Object.values(data.errors || {}).flat().join(' ') || @json(__('ui.messages.operation_failed'));
+                        alert(@json(__('ui.messages.operation_failed')) + ': ' + message);
                     }
                 })
                 .catch(error => {

@@ -10,16 +10,16 @@
                     <thead>
                         <tr>
                             <th>
-                                Sl.No
+                                {{ __('Sl.No') }}
                             </th>
                             <th>
-                                Name
+                                {{ __('financial.labels.name') }}
                             </th>
                             <th>
-                                Location
+                                {{ __('financial.labels.location') }}
                             </th>
                             <th>
-                                Description
+                                {{ __('financial.terms.description') }}
                             </th>
                         </tr>
                     </thead>

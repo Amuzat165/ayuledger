@@ -53,7 +53,7 @@ $ParentRouteName = 'user';
                     <div class="header">
                         <h2>
                             {{ $createItemName }}
-                            <small>Edit {{ $moduleName }} Information</small>
+                            <small>{{ __('ui.forms.edit_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
 
                         <div class="body">
@@ -68,7 +68,7 @@ $ParentRouteName = 'user';
                                             <div class="form-line">
                                                 <input value="{{ $item->name  }}" name="name" type="text"
                                                     class="form-control">
-                                                <label class="form-label">Name</label>
+                                                <label class="form-label">{{ __('root.user.name') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -78,7 +78,7 @@ $ParentRouteName = 'user';
                                             <div class="form-line">
                                                 <input readonly value="{{ $item->email }}" name="email" type="email"
                                                     class="form-control" required>
-                                                <label class="form-label">Email Address</label>
+                                                <label class="form-label">{{ __('ui.forms.email_address') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -87,7 +87,7 @@ $ParentRouteName = 'user';
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="password" type="password" class="form-control ">
-                                                <label class="form-label">Password</label>
+                                                <label class="form-label">{{ __('ui.forms.password') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -96,7 +96,7 @@ $ParentRouteName = 'user';
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="confirm_password" type="password" class="form-control">
-                                                <label class="form-label">Confirm Password</label>
+                                                <label class="form-label">{{ __('ui.forms.confirm_password') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -105,8 +105,8 @@ $ParentRouteName = 'user';
                                         <div class="form-line">
                                             <select data-live-search="true" class="form-control show-tick search-choice"
                                                 name="role_manage_id" id="role_manage_id">
-                                                <option value="0">Select User Role</option>
-                                                @foreach(App\RoleManage::all() as $role)
+                                                <option value="0">{{ __('ui.forms.select_user_role') }}</option>
+                                                @foreach($tenantRoles as $role)
                                                 <option @if ($item->role_manage_id==$role->id)
                                                     selected
                                                     @endif value="{{$role->id}}"> {{ $role->name }}
@@ -201,11 +201,11 @@ $ParentRouteName = 'user';
 
 <script>
     @if(Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
                 @if(Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
 
@@ -278,18 +278,18 @@ $ParentRouteName = 'user';
 
 
                 if (input_values.name == 0) {
-                    toastr["error"]('Set Any' + FieldName1);
+                    toastr["error"](@json(__('ui.messages.field_required', ['field' => __('root.user.name')])));
                     e.preventDefault();
                 }
 
                 if (input_values.password != input_values.confirm_password) {
-                    toastr["error"]('Password Does Not Match');
+                    toastr["error"](@json(__('ui.messages.password_mismatch')));
                     e.preventDefault();
                 }
 
 
                 if (input_values.role_manage_id == 0) {
-                    toastr["error"]('Select Any Role');
+                    toastr["error"](@json(__('ui.messages.select_any_role')));
                     e.preventDefault();
                 }
 

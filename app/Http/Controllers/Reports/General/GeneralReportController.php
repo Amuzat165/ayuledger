@@ -72,8 +72,8 @@ class GeneralReportController extends Controller
                 ->orderBy('created_at', 'asc')
                 ->get();
 
-            $from = date(config('settings.date_format'), strtotime($request->start_from));
-            $to = date(config('settings.date_format'), strtotime($request->to));
+            $from = $dateFrom->format('d/m/Y');
+            $to = $dateTo->format('d/m/Y');
         } else {
 
             $items = Branch::all();
@@ -161,8 +161,8 @@ class GeneralReportController extends Controller
                 ->orderBy('created_at', 'asc')
                 ->get();
 
-            $from = date(config('settings.date_format'), strtotime($request->start_from));
-            $to = date(config('settings.date_format'), strtotime($request->to));
+            $from = $dateFrom->format('d/m/Y');
+            $to = $dateTo->format('d/m/Y');
         } else {
 
             $items = IncomeExpenseType::all();
@@ -244,8 +244,8 @@ class GeneralReportController extends Controller
                 ->orderBy('created_at', 'asc')
                 ->get();
 
-            $from = date(config('settings.date_format'), strtotime($request->start_from));
-            $to = date(config('settings.date_format'), strtotime($request->to));
+            $from = $dateFrom->format('d/m/Y');
+            $to = $dateTo->format('d/m/Y');
         } else {
 
             $items = IncomeExpenseGroup::all();
@@ -326,8 +326,8 @@ class GeneralReportController extends Controller
             'voucher_type' => 'LEDGER NAME REPORT',
         ];
         $searchBy = [
-            'from' => $fromDate,
-            'to' => $toDate,
+            'from' => \DateTime::createFromFormat('Y-m-d', $fromDate)->format('d/m/Y'),
+            'to' => \DateTime::createFromFormat('Y-m-d', $toDate)->format('d/m/Y'),
             'branch_name' => $request->branch_id ? optional(Branch::find($request->branch_id))->name : 'All Branches',
         ];
 
@@ -387,8 +387,8 @@ class GeneralReportController extends Controller
                 ->orderBy('created_at', 'asc')
                 ->get();
 
-            $from = date(config('settings.date_format'), strtotime($request->start_from));
-            $to = date(config('settings.date_format'), strtotime($request->to));
+            $from = $dateFrom->format('d/m/Y');
+            $to = $dateTo->format('d/m/Y');
         } else {
 
             $items = BankCash::all();
@@ -472,12 +472,12 @@ class GeneralReportController extends Controller
             $dateTo = new DateTime($request->to);
             $To = $dateTo->format('Y-m-d'); // 31-07-2012 '2008-11-11'
             $items = Transaction::with('Branch', 'IncomeExpenseHead', 'BankCash')->where('voucher_type', $request->voucher_type)
-                ->whereBetween('created_at', [$From . " 00:00:00", $To . " 23:59:59"])
+                ->whereBetween('voucher_date', [$From . " 00:00:00", $To . " 23:59:59"])
                 ->orderBy('created_at', 'asc')
                 ->get();
 
-            $from = date(config('settings.date_format'), strtotime($request->start_from));
-            $to = date(config('settings.date_format'), strtotime($request->to));
+            $from = $dateFrom->format('d/m/Y');
+            $to = $dateTo->format('d/m/Y');
             $all = $request->voucher_type;
         } elseif (empty($request->from) and !empty($request->voucher_type)) {
 
@@ -493,11 +493,11 @@ class GeneralReportController extends Controller
             $From = $dateFrom->format('Y-m-d'); // 31-07-2012 '2008-11-11'
             $dateTo = new DateTime($request->to);
             $To = $dateTo->format('Y-m-d'); // 31-07-2012 '2008-11-11'
-            $items = Transaction::with('Branch', 'IncomeExpenseHead', 'BankCash')->whereBetween('created_at', [$From . " 00:00:00", $To . " 23:59:59"])
+            $items = Transaction::with('Branch', 'IncomeExpenseHead', 'BankCash')->whereBetween('voucher_date', [$From . " 00:00:00", $To . " 23:59:59"])
                 ->orderBy('created_at', 'asc')
                 ->get();
-            $from = date(config('settings.date_format'), strtotime($request->start_from));
-            $to = date(config('settings.date_format'), strtotime($request->to));
+            $from = $dateFrom->format('d/m/Y');
+            $to = $dateTo->format('d/m/Y');
         }
         if ($request->branch_id) {
             $items = $items->where('branch_id', $request->branch_id);

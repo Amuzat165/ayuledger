@@ -24,29 +24,29 @@ class PayrollController extends Controller
 
     public function index()
     {
-        $title = 'Payrolls'; // Set your desired title here
+        $title = __('financial.screens.payrolls'); // Set your desired title here
         $payrolls = Payroll::with('branch')->get();
 
         return view('pages.payrolls.index', [
             'title' => $title,
-            'resource' => 'Payrolls', // Optional: Adjust based on your breadcrumb requirements
+            'resource' => __('financial.screens.payrolls'), // Optional: Adjust based on your breadcrumb requirements
             'type' => 'table', // Optional: Adjust based on your breadcrumb requirements
             'thead' => [ // Your table headers array
                 '#',
-                'Branch',
-                'Employee',
-                'Basic Salary',
-                'Housing',
-                'Transport',
-                'Medical',
-                'Other Benefits',
-                'Gross Salary',
-                'Deduction Payee',
-                'Pension',
-                'Net Pay',
+                __('financial.labels.branch'),
+                __('financial.screens.employee'),
+                __('financial.screens.basic_salary'),
+                __('financial.screens.housing'),
+                __('financial.screens.transport'),
+                __('financial.screens.medical'),
+                __('financial.screens.other_benefits'),
+                __('financial.screens.gross_salary'),
+                __('financial.screens.deduction_payee'),
+                __('financial.screens.pension'),
+                __('financial.screens.net_pay'),
 //                'Date Created',
-                'Edit',
-                'Del'
+                __('root.common.edit'),
+                __('ui.actions.delete')
             ],
             'tbody' => $payrolls, // Your table body data
         ]);
@@ -63,8 +63,8 @@ class PayrollController extends Controller
         $branches = Branch::pluck('name', 'id');
 
         $params = [
-            'title' => 'Add Payroll',
-            'resource' => 'Payrolls',
+            'title' => __('financial.screens.add_payroll'),
+            'resource' => __('financial.screens.payrolls'),
             'type' => 'form',
             'action' => route($this->route . '.store'),
             'defaults' => [],
@@ -98,7 +98,7 @@ class PayrollController extends Controller
 
         Payroll::create($this->payrollData($validated));
 
-        return redirect()->route('payrolls.index')->with('success', 'Payroll entry added successfully!');
+        return redirect()->route('payrolls.index')->with('success', __('financial.screens.payroll_added'));
     }
 
 
@@ -113,7 +113,7 @@ class PayrollController extends Controller
         $payroll = Payroll::findOrFail($id);
 
         return ControllerHelper::view([
-            'title' => 'View Payroll',
+            'title' => __('financial.screens.view_payroll'),
             'resource' => 'Payrolls',
             'type' => 'detail',
             'data' => $payroll
@@ -159,7 +159,7 @@ class PayrollController extends Controller
 
         $payroll->update($this->payrollData($validated));
 
-        return redirect()->route('payrolls.index')->with('success', 'Payroll entry updated successfully!');
+        return redirect()->route('payrolls.index')->with('success', __('financial.screens.payroll_updated'));
     }
     /**
      * Remove the specified resource from storage.
@@ -171,7 +171,7 @@ class PayrollController extends Controller
     {
         $payroll = Payroll::findOrFail($id);
         $payroll->delete();
-        return redirect()->route('payrolls.index')->with('success', 'Payroll deleted successfully.');
+        return redirect()->route('payrolls.index')->with('success', __('financial.screens.payroll_deleted'));
     }
 
     /** Calculate derived values on the server so form submission is reliable. */

@@ -4,7 +4,7 @@
   Request::url()===route('user.active.search') or Request::url()===route('user.trashed.search')) class="active " @endif>
   <a class="menu-toggle " href="javascript:void(0);">
     <i class="fas fa-user"></i>
-    <span>User</span>
+    <span>{{ __('root.menu.user') }}</span>
   </a>
   <ul class="ml-menu">
     <li @if (Request::url()===route('user') or Request::url()===route('user.active.search')) class="active" @endif>

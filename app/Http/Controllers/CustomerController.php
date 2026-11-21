@@ -26,22 +26,22 @@ class CustomerController extends Controller
         $customers = true ? Customer::with('branch')->get() : CustomerConstant::CUSTOMERS;
 
         return ControllerHelper::view([
-            'title' => 'View Customer',
-            'resource' => 'Customers',
+            'title' => __('financial.screens.view_customer'),
+            'resource' => __('financial.screens.customers'),
             'type' => 'table',
             //
             'thead' => [
                 '#',
-                'Branch',
-                'Customer Name',
-                'Email Address',
-                'Phone Number',
-                'Address',
-                'Sales Ledger',
-                'Terms of Payment',
+                __('financial.labels.branch'),
+                __('financial.labels.customer_name'),
+                __('financial.screens.email_address'),
+                __('financial.screens.phone_number'),
+                __('financial.screens.address'),
+                __('financial.screens.sales_ledger'),
+                __('financial.screens.terms_of_payment'),
 //                'Date Created',
-                'Edit',
-                'Del'
+                __('root.common.edit'),
+                __('ui.actions.delete')
             ],
             'tbody' => $customers,
         ]);
@@ -55,7 +55,7 @@ class CustomerController extends Controller
         $branch_name = ArrayHelper::toAssoc($branches);
 
         return ControllerHelper::view([
-            'title' => 'Add Customer',
+            'title' => __('financial.screens.add_customer'),
             'resource' => 'Customers',
             'type' => 'form',
             'action' => $this->route . '.store',
@@ -80,11 +80,11 @@ class CustomerController extends Controller
     {
         $validated = $request->validated();
         $validated['terms_of_payment_in_days'] = $validated['terms_of_payment'] === 'Pay in number of days'
-            ? $validated['terms_of_payment_in_days']
+            ? ($validated['terms_of_payment_in_days'] ?? null)
             : null;
         Customer::create($validated);
 
-        return redirect('/customers')->with('success', 'customer created successfully.');
+        return redirect('/customers')->with('success', __('financial.screens.customer_added'));
     }
 
     /**
@@ -105,7 +105,7 @@ class CustomerController extends Controller
 
         // Ensure $params is an object consistently
         $params = (object) [
-            'title' => 'Edit Customer',
+            'title' => __('financial.screens.edit_customer'),
             'resource' => 'Customers',
             'type' => 'form',
             'action' => route('customers.update', $customer->id), // Form action for update
@@ -130,7 +130,7 @@ class CustomerController extends Controller
             'address' => 'required',
             'income_expense_type_id' => 'required|exists:income_expense_types,id',
             'terms_of_payment' => 'required',
-            'terms_of_payment_in_days' => 'nullable|integer|min:1',
+            'terms_of_payment_in_days' => 'required_if:terms_of_payment,Pay in number of days|nullable|integer|min:1',
         ]);
 
         $validated['terms_of_payment_in_days'] = $validated['terms_of_payment'] === 'Pay in number of days'
@@ -139,7 +139,7 @@ class CustomerController extends Controller
 
         $customer->fill($validated)->save();
 
-        return redirect()->route('customers.index')->with('success', 'customer updated successfully.');
+        return redirect()->route('customers.index')->with('success', __('financial.screens.customer_updated'));
     }
 
 

@@ -54,7 +54,7 @@
                             </tr>
                         @endforelse
                             <tr>
-                                <td colspan="4" style="text-align: right;">Total</td>
+                                <td colspan="4" style="text-align: right;">{{ __('Total') }}</td>
                                 <td>₦{{ number_format($tbody->sum('debit'), 2) }}</td>
                                 <td colspan="1"></td>
                                 <td>₦{{ number_format($tbody->sum('credit'), 2) }}</td>

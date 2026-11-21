@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 
-class Transaction extends Model
+class Transaction extends TenantScopedModel
 {
     use Notifiable;
     use SoftDeletes;
@@ -52,91 +52,87 @@ class Transaction extends Model
 
     public function GetBankCashBalanceByBranchBankCashIdDate($branch_id, $bankCashID = null, $from_date = null, $to_date = null)
     {
-        if ($branch_id > 0 and $bankCashID > 0 and $from_date != null) {
-            $condition = "bank_cash_id=" . $bankCashID . " 
-            AND branch_id=" . $branch_id . "
-            AND voucher_date BETWEEN '" . date("Y-m-d", strtotime($from_date)) . "' AND '" . date("Y-m-d", strtotime($to_date)) . "'
-            ";
+        $hasFromDate = $from_date !== null;
+        $hasToDate = $to_date !== null;
+        if (!is_numeric($bankCashID) || $bankCashID <= 0 || !is_numeric($branch_id) || $branch_id < 0 || $hasFromDate !== $hasToDate) {
+            return 0;
         }
-        if ($branch_id > 0 and $bankCashID > 0 and $from_date == null) {
-            $condition = "bank_cash_id=" . $bankCashID . " 
-            AND branch_id=" . $branch_id . "
-            ";
+        if ($from_date === '' || $to_date === '') {
+            return 0;
         }
-        if ($branch_id == 0 and $bankCashID > 0 and $from_date == null) {
-            $condition = "bank_cash_id=" . $bankCashID . "
-            ";
-        }
-        if ($branch_id == 0 and $bankCashID > 0 and $from_date != null) {
-            $condition = "bank_cash_id=" . $bankCashID . "
-            AND voucher_date BETWEEN '" . date("Y-m-d", strtotime($from_date)) . "' AND '" . date("Y-m-d", strtotime($to_date)) . "'
-            ";
-        }
-        $balance = DB::select(DB::raw("
-                SELECT IFNULL(SUM(transactions.cr) , 0 ) - IFNULL( SUM(transactions.dr), 0)  AS Balance
-                FROM
-                transactions
-                INNER JOIN bank_cashes
-                ON transactions.bank_cash_id=bank_cashes.id
-                WHERE " . $condition . "
-                AND transactions.deleted_at IS NULL
-            "));
 
-        return $balance[0]->Balance;
+        $query = DB::table('transactions')
+            ->join('bank_cashes', 'transactions.bank_cash_id', '=', 'bank_cashes.id')
+            ->whereNull('transactions.deleted_at');
+
+        if ($branch_id > 0) {
+            $query->where('transactions.branch_id', $branch_id);
+        }
+        if ($bankCashID > 0) {
+            $query->where('transactions.bank_cash_id', $bankCashID);
+        }
+        if ($hasFromDate) {
+            $query->whereBetween('transactions.voucher_date', [
+                date('Y-m-d', strtotime($from_date)),
+                date('Y-m-d', strtotime($to_date)),
+            ]);
+        }
+
+        return $query->selectRaw('IFNULL(SUM(transactions.cr), 0) - IFNULL(SUM(transactions.dr), 0) AS Balance')->value('Balance') ?? 0;
     }
 
     public function GetUniqueIncomeExpenseHeadByBranch($branchID, $from_date = null, $to_date = null)
     {
-        if ($branchID > 0 and $from_date != null and $to_date != null) {
-            $condition = " branch_id=" . $branchID . "  AND transactions.voucher_date BETWEEN '" . $from_date . "' AND '" . $to_date . "' ";
-        } elseif ($branchID > 0 and $from_date == null and $to_date == null) {
-            $condition = " branch_id=" . $branchID . " ";
-        } elseif ($branchID == 0 and $from_date != null and $to_date != null) {
-            $condition = " transactions.voucher_date BETWEEN '" . $from_date . "' AND '" . $to_date . "' ";
+        $hasFromDate = $from_date !== null;
+        $hasToDate = $to_date !== null;
+        if (!is_numeric($branchID) || $branchID < 0 || $hasFromDate !== $hasToDate || ($branchID == 0 && !$hasFromDate)) {
+            return [];
+        }
+        if ($from_date === '' || $to_date === '') {
+            return [];
         }
 
-        $incomeExpenseHeadDetails = DB::select(DB::raw("SELECT DISTINCT transactions.income_expense_head_id , 
-              income_expense_heads.name, income_expense_heads.`type`
-              FROM 
-              transactions
-              INNER JOIN income_expense_heads
-              ON transactions.income_expense_head_id=income_expense_heads.id
-              WHERE " . $condition . "
-              AND transactions.deleted_at IS NULL
-              AND income_expense_head_id IS NOT NULL
-              ORDER BY income_expense_head_id asc"));
-        return $incomeExpenseHeadDetails;
-    }
+        $query = DB::table('transactions')
+            ->join('income_expense_heads', 'transactions.income_expense_head_id', '=', 'income_expense_heads.id')
+            ->whereNull('transactions.deleted_at')
+            ->whereNotNull('transactions.income_expense_head_id');
 
+        if ($branchID > 0) {
+            $query->where('transactions.branch_id', $branchID);
+        }
+        if ($hasFromDate && $hasToDate) {
+            $query->whereBetween('transactions.voucher_date', [$from_date, $to_date]);
+        }
+
+        return $query->select('transactions.income_expense_head_id', 'income_expense_heads.name', 'income_expense_heads.type')
+            ->distinct()
+            ->orderBy('transactions.income_expense_head_id')
+            ->get()
+            ->all();
+    }
 
     public function GetBalanceByBranchIdIncExpIdTypeId($branch_id, $head_id, $type_id, $from_date = null, $to_date = null)
     {
+        $query = DB::table('transactions')
+            ->join('income_expense_heads', 'transactions.income_expense_head_id', '=', 'income_expense_heads.id')
+            ->where('transactions.branch_id', $branch_id)
+            ->where('transactions.income_expense_head_id', $head_id)
+            ->where('income_expense_heads.type', $type_id)
+            ->whereNull('transactions.deleted_at');
+
         if (!empty($from_date)) {
-            $condition = "branch_id=" . $branch_id . " AND income_expense_head_id =" . $head_id . " AND type=" . $type_id . " 
-            AND voucher_date BETWEEN '" . date("Y-m-d", strtotime($from_date)) . "' AND '" . date("Y-m-d", strtotime($to_date)) . "' ";
-        } else {
-            $condition = " branch_id=" . $branch_id . " AND income_expense_head_id =" . $head_id . " AND type=" . $type_id . " ";
+            $query->whereBetween('transactions.voucher_date', [
+                date('Y-m-d', strtotime($from_date)),
+                date('Y-m-d', strtotime($to_date)),
+            ]);
         }
 
-        $DrCrDetails = DB::select(DB::raw("
-             SELECT transactions.dr , transactions.cr 
-             FROM 
-             transactions 
-             INNER JOIN income_expense_heads
-             ON transactions.income_expense_head_id=income_expense_heads.id
-             WHERE " . $condition . "
-             AND transactions.deleted_at IS NULL
-            ;
-        "));
-
+        $details = $query->select('transactions.dr', 'transactions.cr')->get();
         $balance = 0;
-        foreach ($DrCrDetails as $crDetail) {
-            if ($type_id == 1) { /// Dr
-                $balance += $crDetail->dr - $crDetail->cr;
-            } else {  // Cr
-                $balance += $crDetail->cr - $crDetail->dr;
-            }
+        foreach ($details as $detail) {
+            $balance += $type_id == 1 ? $detail->dr - $detail->cr : $detail->cr - $detail->dr;
         }
+
         return $balance;
     }
 

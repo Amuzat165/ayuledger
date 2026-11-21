@@ -23,8 +23,8 @@
                 <table class="table table-bordered table-sm">
                     <thead>
                         <tr>
-                            <td class="text-right">Search By:</td>
-                            <td class="text-right">Branch Name:</td>
+                            <td class="text-right">{{ __('Search By') }}:</td>
+                            <td class="text-right">{{ __('Branch Name') }}:</td>
                             <th>{{ $search_by['branch_name'] }}</th>
                         </tr>
                     </thead>
@@ -39,37 +39,37 @@
                     <thead>
                         <tr>
                             <th class="text-center">
-                                <h5>Particulars </h5>
+                                <h5>{{ __('financial.labels.particulars') }} </h5>
                             </th>
                             <th class="text-center">
                                 <h5>
-                                    Opening Balance ( {{ $search_by['from'] }} )
+                                    {{ __('Opening Balance') }} ( {{ $search_by['from'] }} )
                                     <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?>
                                 </h5>
                             </th>
                             <th class="text-center">
-                                <h5>Addition During Year</h5>
+                                <h5>{{ __('financial.labels.addition_during_year') }}</h5>
                             </th>
                             <th class="text-center">
-                                <h5>Deduction During Year</h5>
+                                <h5>{{ __('financial.labels.deduction_during_year') }}</h5>
                             </th>
                             <th class="text-center">
-                                <h5>Total Assets</h5>
+                                <h5>{{ __('financial.labels.total_assets') }}</h5>
                             </th>
                             <th class="text-center">
-                                <h5>Dep.Rate (%)</h5>
+                                <h5>{{ __('Dep.Rate (%)') }}</h5>
                             </th>
                             <th class="text-center">
-                                <h5>Accumulated Depreciation</h5>
+                                <h5>{{ __('financial.labels.accumulated_depreciation') }}</h5>
                             </th>
                             <th class="text-center">
-                                <h5>Current Year Depreciation</h5>
+                                <h5>{{ __('financial.labels.current_year_depreciation') }}</h5>
                             </th>
                             <th class="text-center">
-                                <h5>Total Depreciation</h5>
+                                <h5>{{ __('financial.labels.total_depreciation') }}</h5>
                             </th>
                             <th class="text-center font-s-16">
-                                <h5>Closing Balance ( {{ $search_by['to'] }} )
+                                <h5>{{ __('Closing Balance') }} ( {{ $search_by['to'] }} )
                                     <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?>
                                 </h5>
                             </th>
@@ -93,7 +93,7 @@
                             </tr>
                         @endforeach
                         <tr>
-                            <td class="text-right font-w-b font-s-20" scope="row">Total=</td>
+                            <td class="text-right font-w-b font-s-20" scope="row">{{ __('Total') }}=</td>
                             <td class="text-right font-w-b font-s-20" scope="row">
                                 {{ Helper::convertMoneyFormat($particulars['TotalBalance']['start_balance']) }}</td>
                             <td class="text-left font-w-b font-s-20" colspan="7" scope="row"></td>

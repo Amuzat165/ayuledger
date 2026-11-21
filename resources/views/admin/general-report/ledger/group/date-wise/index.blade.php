@@ -22,10 +22,10 @@
                 <table class="table table-bordered table-sm">
                     <thead>
                         <tr>
-                            <td class="text-right">Search By:</td>
-                            <td class="text-right">From Date:</td>
+                            <td class="text-right">{{ __('financial.labels.search_by') }}:</td>
+                            <td class="text-right">{{ __('financial.reports.date_start') }}:</td>
                             <th>{{ $search_by['from'] }}</th>
-                            <td class="text-right">To Date:</td>
+                            <td class="text-right">{{ __('financial.reports.date_end') }}:</td>
                             <th>{{ $search_by['to'] }}</th>
                         </tr>
                     </thead>
@@ -40,13 +40,13 @@
                     <thead>
                         <tr>
                             <th class="text-center">
-                                Sl.No
+                                {{ __('Sl.No') }}
                             </th>
                             <th>
-                                Name
+                                {{ __('financial.labels.name') }}
                             </th>
                             <th>
-                                Code
+                                {{ __('Code') }}
                             </th>
                         </tr>
                     </thead>

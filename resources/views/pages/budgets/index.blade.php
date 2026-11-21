@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Budget Management')
+@section('title', __('financial.screens.budget_management'))
 
 @section('top-bar')
     @include('shared.header')
@@ -14,14 +14,14 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <a class="btn btn-sm btn-info waves-effect" href="{{ route('budgets.index') }}">Back</a>
+                <a class="btn btn-sm btn-info waves-effect" href="{{ route('budgets.index') }}">{{ __('financial.labels.back') }}</a>
             </div>
 
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>Budget Management</h2>
+                            <h2>{{ __('financial.screens.budget_management') }}</h2>
                         </div>
                         <div class="body">
                             <form id="budgetForm" method="POST" action="{{ route('budgets.store') }}">
@@ -29,15 +29,15 @@
                                 <div class="row clearfix">
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <label for="date">Select Date</label>
+                                            <label for="date">{{ __('financial.screens.select_date') }}</label>
                                             <input id="date" name="date" type="date" class="form-control" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <label for="branch">Branch</label>
+                                            <label for="branch">{{ __('financial.labels.branch') }}</label>
                                             <select data-live-search="true" class="form-control show-tick" name="branch_id">
-                                                <option value="0">Select Branch</option>
+                                                <option value="0">{{ __('financial.labels.select_branch') }}</option>
                                                 @foreach ($branches as $branch)
                                                     <option @if ($branch->id == old('branch_id')) selected @endif
                                                     value="{{ $branch->id }}">{{ $branch->name }}</option>
@@ -47,11 +47,11 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <label for="type">Select Type</label>
+                                            <label for="type">{{ __('financial.screens.select_type') }}</label>
                                             <select id="type" class="form-control" name="type" required>
-                                                <option value="">Select Type</option>
-                                                <option value="profit_loss">Profit or Loss</option>
-                                                <option value="financial_position">Financial Position</option>
+                                                <option value="">{{ __('financial.screens.select_type') }}</option>
+                                                <option value="profit_loss">{{ __('financial.screens.profit_or_loss') }}</option>
+                                                <option value="financial_position">{{ __('financial.screens.financial_position') }}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -60,20 +60,20 @@
                                     <table class="table table-bordered">
                                         <thead>
                                         <tr>
-                                            <th>Account</th>
-                                            <th>Jan</th>
-                                            <th>Feb</th>
-                                            <th>Mar</th>
-                                            <th>Apr</th>
-                                            <th>May</th>
-                                            <th>June</th>
-                                            <th>July</th>
-                                            <th>Aug</th>
-                                            <th>Sept</th>
-                                            <th>Oct</th>
-                                            <th>Nov</th>
-                                            <th>Dec</th>
-                                            <th>Annual Amount</th>
+                                            <th>{{ __('financial.terms.account') }}</th>
+                                            <th>{{ __('financial.screens.january') }}</th>
+                                            <th>{{ __('financial.screens.february') }}</th>
+                                            <th>{{ __('financial.screens.march') }}</th>
+                                            <th>{{ __('financial.screens.april') }}</th>
+                                            <th>{{ __('financial.screens.may') }}</th>
+                                            <th>{{ __('financial.screens.june') }}</th>
+                                            <th>{{ __('financial.screens.july') }}</th>
+                                            <th>{{ __('financial.screens.august') }}</th>
+                                            <th>{{ __('financial.screens.september') }}</th>
+                                            <th>{{ __('financial.screens.october') }}</th>
+                                            <th>{{ __('financial.screens.november') }}</th>
+                                            <th>{{ __('financial.screens.december') }}</th>
+                                            <th>{{ __('financial.screens.annual_amount') }}</th>
                                             <th>del</th>
                                         </tr>
                                         </thead>
@@ -81,7 +81,7 @@
 {{--                                        <tr>--}}
 {{--                                            <td>--}}
 {{--                                                <select name="account[]" class="form-control">--}}
-{{--                                                    <option value="" disabled selected>Select Account</option>--}}
+{{--                                                    <option value="" disabled selected>{{ __('financial.screens.select_account') }}</option>--}}
 {{--                                                    @foreach($accounts as $accountId => $accountName)--}}
 {{--                                                        <option value="{{ $accountName }}">{{ $accountName }}</option>--}}
 {{--                                                    @endforeach--}}
@@ -95,28 +95,28 @@
 {{--                                        </tr>--}}
                                         </tbody>
                                     </table>
-                                    <button type="button" class="btn btn-primary" onclick="addRow()">Add Row</button>
-                                    <button type="submit" class="btn btn-success">Save</button>
+                                    <button type="button" class="btn btn-primary" onclick="addRow()">{{ __('financial.screens.add_row') }}</button>
+                                    <button type="submit" class="btn btn-success">{{ __('financial.labels.save') }}</button>
                                 </div>
                                 <div id="financialPositionTable" class="table-responsive" style="display: none;">
                                     <table class="table table-bordered">
                                         <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Account</th>
-                                            <th>Jan</th>
-                                            <th>Feb</th>
-                                            <th>Mar</th>
-                                            <th>Apr</th>
-                                            <th>May</th>
-                                            <th>June</th>
-                                            <th>July</th>
-                                            <th>Aug</th>
-                                            <th>Sept</th>
-                                            <th>Oct</th>
-                                            <th>Nov</th>
-                                            <th>Dec</th>
-                                            <th>Annual Amount</th>
+                                            <th>{{ __('financial.terms.account') }}</th>
+                                            <th>{{ __('financial.screens.january') }}</th>
+                                            <th>{{ __('financial.screens.february') }}</th>
+                                            <th>{{ __('financial.screens.march') }}</th>
+                                            <th>{{ __('financial.screens.april') }}</th>
+                                            <th>{{ __('financial.screens.may') }}</th>
+                                            <th>{{ __('financial.screens.june') }}</th>
+                                            <th>{{ __('financial.screens.july') }}</th>
+                                            <th>{{ __('financial.screens.august') }}</th>
+                                            <th>{{ __('financial.screens.september') }}</th>
+                                            <th>{{ __('financial.screens.october') }}</th>
+                                            <th>{{ __('financial.screens.november') }}</th>
+                                            <th>{{ __('financial.screens.december') }}</th>
+                                            <th>{{ __('financial.screens.annual_amount') }}</th>
                                             {{--                                            <th>Actions</th>--}}
                                         </tr>
                                         </thead>
@@ -207,7 +207,7 @@
                 <tr>
                     <td>
                         <select name="account[]" class="form-control">
-                            <option value="" disabled selected>Select Account</option>
+                            <option value="" disabled selected>{{ __('financial.screens.select_account') }}</option>
                             @foreach($accounts as $accountId => $accountName)
                             <option value="{{ $accountName }}">{{ $accountName }}</option>
                             @endforeach

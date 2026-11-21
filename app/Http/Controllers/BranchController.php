@@ -3,332 +3,396 @@
 namespace App\Http\Controllers;
 
 use App\Branch;
-use Illuminate\Http\Request;
+use App\Services\TenantContext;
 use Barryvdh\DomPDF\Facade as PDF;
-
-use App\Http\Controllers\Controller;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class BranchController extends Controller
 {
-
-    //    Important properties
     public $parentModel = Branch::class;
     public $parentRoute = 'branch';
-    public $parentView = "admin.branch";
+    public $parentView = 'admin.branch';
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Branch actions require middleware, but the tenant is resolved again here
+     * so controller queries never depend on request-supplied ownership data.
      */
-    public function index()
+    private function tenantId(Request $request): int
     {
-        $data = [];
-        if (Cache::get('total_branches') && Cache::get('total_branches') != null) {
-            $data['total_branches'] = Cache::get('total_branches');
-        } else {
-            $data['total_branches'] = $this->parentModel::count();
-            Cache::put('total_branches', $data['total_branches']);
+        $tenant = app(TenantContext::class)->currentTenant($request);
+        abort_unless($tenant, 403);
+
+        return (int) $tenant->getKey();
+    }
+
+    private function queryForTenant(int $tenantId)
+    {
+        return Branch::query()->where('tenant_id', $tenantId);
+    }
+
+    private function findForTenant(Request $request, $id): Branch
+    {
+        return $this->queryForTenant($this->tenantId($request))->findOrFail($id);
+    }
+
+    private function cacheKey(int $tenantId, string $key): string
+    {
+        return 'tenant:' . $tenantId . ':' . $key;
+    }
+
+    private function forgetBranchCaches(int $tenantId): void
+    {
+        Cache::forget($this->cacheKey($tenantId, 'branches'));
+        Cache::forget($this->cacheKey($tenantId, 'total_branches'));
+        Cache::forget($this->cacheKey($tenantId, 'total_trashed_branches'));
+    }
+
+    private function countsForTenant(int $tenantId): array
+    {
+        return [
+            'total_branches' => Cache::remember(
+                $this->cacheKey($tenantId, 'total_branches'),
+                now()->addMinutes(5),
+                function () use ($tenantId) {
+                    return $this->queryForTenant($tenantId)->count();
+                }
+            ),
+            'total_trashed_branches' => Cache::remember(
+                $this->cacheKey($tenantId, 'total_trashed_branches'),
+                now()->addMinutes(5),
+                function () use ($tenantId) {
+                    return $this->queryForTenant($tenantId)->onlyTrashed()->count();
+                }
+            ),
+        ];
+    }
+
+    private function assertPermission(string $permission): void
+    {
+        abort_unless((bool) config('role_manage.Branch.' . $permission), 403);
+    }
+
+    private function selectedIds(Request $request): array
+    {
+        $validated = $request->validate([
+            'items.id' => ['required', 'array', 'min:1'],
+            'items.id.*' => ['required', 'integer', 'distinct'],
+        ]);
+
+        return array_map('intval', $validated['items']['id']);
+    }
+
+    private function selectedCommand(Request $request): int
+    {
+        $top = (int) $request->input('apply_comand_top', 0);
+        $bottom = (int) $request->input('apply_comand_bottom', 0);
+        if ($top !== 0 && $bottom !== 0 && $top !== $bottom) {
+            throw ValidationException::withMessages(['items' => 'Choose one action for the selected branches.']);
         }
 
-        if (Cache::get('total_trashed_branches') && Cache::get('total_trashed_branches') != null) {
-            $data['total_trashed_branches'] = Cache::get('total_trashed_branches');
-        } else {
-            $data['total_trashed_branches'] = $this->parentModel::onlyTrashed()->count();
-            Cache::put('total_trashed_branches', $data['total_trashed_branches']);
+        $command = $top ?: $bottom;
+        if (!in_array($command, [1, 2, 3], true)) {
+            throw ValidationException::withMessages(['items' => 'Choose a valid action.']);
         }
-        $items = $this->parentModel::orderBy('created_at', 'desc')->paginate(60)->onEachSide(1);
-        return view($this->parentView . '.index', $data)->with('items', $items);
+
+        return $command;
+    }
+
+    private function ensureAllBelongToTenant(int $tenantId, array $ids, bool $trashed): array
+    {
+        $query = $this->queryForTenant($tenantId)->whereIn('id', $ids)->lockForUpdate();
+        $query = $trashed ? $query->onlyTrashed() : $query->whereNull('deleted_at');
+        $branches = $query->get();
+        if ($branches->count() !== count($ids)) {
+            abort(404);
+        }
+
+        return $branches->all();
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Foreign keys with SET NULL would otherwise detach history on force delete.
+     * Check every currently known inbound branch_id reference before deletion.
      */
-    public function create()
+    private function hasHistoricalReferences(int $branchId): bool
     {
+        foreach ([
+            'budgets', 'customers', 'expenses', 'goods_receipts', 'inventories',
+            'payrolls', 'purchase_orders', 'supplier_invoices', 'transactions', 'vendors',
+        ] as $table) {
+            if (DB::table($table)->where('branch_id', $branchId)->exists()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function performSoftDelete(Branch $branch): void
+    {
+        $branch->delete_by = auth()->user()->email;
+        // Keep the original name: it is part of the preserved historical record.
+        $branch->save();
+        $branch->delete();
+    }
+
+    private function performPermanentDelete(Branch $branch): void
+    {
+        if ($this->hasHistoricalReferences((int) $branch->getKey())) {
+            throw new HttpException(409, 'This branch has linked business records and cannot be permanently deleted.');
+        }
+
+        $branch->forceDelete();
+    }
+
+    private function safeMutationFailure(string $message)
+    {
+        Session::flash('error', $message);
+
+        return redirect()->back();
+    }
+
+    public function index(Request $request)
+    {
+        $tenantId = $this->tenantId($request);
+        $items = $this->queryForTenant($tenantId)->orderBy('created_at', 'desc')->paginate(60)->onEachSide(1);
+
+        return view($this->parentView . '.index', $this->countsForTenant($tenantId))->with('items', $items);
+    }
+
+    public function create(Request $request)
+    {
+        $this->tenantId($request);
+
         return view($this->parentView . '.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|unique:branches',
-        ]);
-        try {
-            $this->parentModel::create([
-                'name' => $request->name,
-                'location' => $request->location,
-                'description' => $request->description,
-                'create_by' => auth()->user()->email,
-            ]);
-            Cache::forget('total_branches');
-            Cache::forget('branches');
-            Session::flash('success', "Successfully  Create");
-        } catch (\Exception $e) {
-            Session::flash('error', $e->getMessage());
-        }
+        $tenantId = $this->tenantId($request);
+        $validated = $request->validate([
+            'name' => ['required', 'string', Rule::unique('branches', 'name')],
+            'location' => ['nullable', 'string'],
+            'description' => ['nullable', 'string'],
+        ], ['name.unique' => 'A branch with this name already exists.']);
+
+        $branch = new Branch();
+        $branch->tenant_id = $tenantId;
+        $branch->name = $validated['name'];
+        $branch->location = $validated['location'] ?? null;
+        $branch->description = $validated['description'] ?? null;
+        $branch->create_by = auth()->user()->email;
+        $branch->save();
+
+        $this->forgetBranchCaches($tenantId);
+        Session::flash('success', 'Successfully Create');
+
         return redirect()->back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request)
+    public function show(Request $request, $id)
     {
-        $item = $this->parentModel::find($request->id);
-        if (empty($item)) {
-            Session::flash('error', "Item not found");
-            return redirect()->back();
-        }
+        $item = $this->findForTenant($request, $id);
+
         return view($this->parentView . '.show')->with('items', $item);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        $items = $this->parentModel::find($id);
-        if (empty($items)) {
-            Session::flash('error', "Item not found");
-            return redirect()->back();
-        }
-        return view($this->parentView . '.edit')->with('item', $items);
+        $item = $this->findForTenant($request, $id);
+
+        return view($this->parentView . '.edit')->with('item', $item);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'sometimes|string|unique:branches,name,' . $id,
-        ]);
-        $items = $this->parentModel::find($id);
-        $items->name = $request->name;
-        $items->location = $request->location;
-        $items->description = $request->description;
-        $items->update_by = auth()->user()->email;
+        $tenantId = $this->tenantId($request);
+        $item = $this->findForTenant($request, $id);
+        $validated = $request->validate([
+            'name' => ['sometimes', 'required', 'string', Rule::unique('branches', 'name')->ignore($item->getKey())],
+            'location' => ['sometimes', 'nullable', 'string'],
+            'description' => ['sometimes', 'nullable', 'string'],
+        ], ['name.unique' => 'A branch with this name already exists.']);
 
-        $items->save();
-        Cache::forget('branches');
-        Session::flash('success', "Update Successfully");
+        foreach (['name', 'location', 'description'] as $field) {
+            if (array_key_exists($field, $validated)) {
+                $item->{$field} = $validated[$field];
+            }
+        }
+        $item->update_by = auth()->user()->email;
+        $item->save();
+
+        $this->forgetBranchCaches($tenantId);
+        Session::flash('success', 'Update Successfully');
+
         return redirect()->route($this->parentRoute);
     }
 
-    public function pdf(Request $request)
+    public function pdf(Request $request, $id)
     {
-        $item = $this->parentModel::find($request->id);
-        if (empty($item)) {
-            Session::flash('error', "Item not found");
-            return redirect()->back();
-        }
+        $item = $this->findForTenant($request, $id);
         $now = new \DateTime();
         $date = $now->format(Config('settings.date_format') . ' h:i:s');
-        $extra = array(
-            'current_date_time' => $date,
-            'module_name' => 'Branch Manage'
-        );
-        $pdf = PDF::loadView($this->parentView . '.pdf', ['items' => $item,  'extra' => $extra])->setPaper('a4', 'landscape');
-        //return $pdf->stream('invoice.pdf');
+        $extra = ['current_date_time' => $date, 'module_name' => 'Branch Manage'];
+        $pdf = PDF::loadView($this->parentView . '.pdf', ['items' => $item, 'extra' => $extra])
+            ->setPaper('a4', 'landscape');
+
         return $pdf->download($extra['current_date_time'] . '_' . $extra['module_name'] . '.pdf');
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        $items = $this->parentModel::find($id);
-        if ($this->parentModel::find($id)->Transaction->count() > 0) {
-            Session::flash('error', "You can not delete it.Because it has Some Transaction");
-            return redirect()->back();
-        }
-        $items->delete_by = auth()->user()->email;
-        $items->name = $items->id . '_' . $items->name;
-        try {
-            $items->save();
-            $items->delete();
-            Cache::forget('total_trashed_branches');
-            Cache::forget('total_branches');
-            Cache::forget('branches');
-            Session::flash('success', "Successfully Trashed");
-        } catch (\Exception $e) {
-            Session::flash('error', $e->getMessage());
-        }
+        $tenantId = $this->tenantId($request);
+        $branch = $this->findForTenant($request, $id);
+        $this->performSoftDelete($branch);
+        $this->forgetBranchCaches($tenantId);
+        Session::flash('success', 'Successfully Trashed');
+
         return redirect()->back();
     }
-    public function trashed()
-    {
-        $data = [];
-        if (Cache::get('total_branches') && Cache::get('total_branches') != null) {
-            $data['total_branches'] = Cache::get('total_branches');
-        } else {
-            $data['total_branches'] = $this->parentModel::count();
-            Cache::put('total_branches', $data['total_branches']);
-        }
 
-        if (Cache::get('total_trashed_branches') && Cache::get('total_trashed_branches') != null) {
-            $data['total_trashed_branches'] = Cache::get('total_trashed_branches');
-        } else {
-            $data['total_trashed_branches'] = $this->parentModel::onlyTrashed()->count();
-            Cache::put('total_trashed_branches', $data['total_trashed_branches']);
-        }
-        $items = $this->parentModel::onlyTrashed()->paginate(60);
-        return view($this->parentView . '.trashed', $data)->with("items", $items);
-    }
-    public function restore($id)
+    public function trashed(Request $request)
     {
-        $items = $this->parentModel::onlyTrashed()->where('id', $id)->first();
-        $items->restore();
-        Cache::forget('total_trashed_branches');
-        Cache::forget('total_branches');
-        Cache::forget('branches');
+        $tenantId = $this->tenantId($request);
+        $items = $this->queryForTenant($tenantId)->onlyTrashed()->paginate(60);
+
+        return view($this->parentView . '.trashed', $this->countsForTenant($tenantId))->with('items', $items);
+    }
+
+    public function restore(Request $request, $id)
+    {
+        $tenantId = $this->tenantId($request);
+        $item = $this->queryForTenant($tenantId)->onlyTrashed()->findOrFail($id);
+        $item->restore();
+        $this->forgetBranchCaches($tenantId);
         Session::flash('success', 'Successfully Restore');
+
         return redirect()->back();
     }
 
-    public function kill($id)
+    public function kill(Request $request, $id)
     {
-        $items = $this->parentModel::withTrashed()->where('id', $id)->first();
-        if ($this->parentModel::withTrashed()->find($id)->Transaction->count() > 0) {
-            Session::flash('error', "You can not delete it.Because it has Some Transaction");
-            return redirect()->back();
-        }
+        $tenantId = $this->tenantId($request);
+
         try {
-            $items->forceDelete();
-            Session::flash('success', 'Permanently Delete');
-            Cache::forget('total_trashed_branches');
-            Cache::forget('total_branches');
-            Cache::forget('branches');
-        } catch (\Exception $e) {
-            Session::flash('error', $e->getMessage());
+            DB::transaction(function () use ($tenantId, $id) {
+                $item = $this->queryForTenant($tenantId)->withTrashed()->lockForUpdate()->findOrFail($id);
+                $this->performPermanentDelete($item);
+            });
+        } catch (HttpException $e) {
+            if ($e->getStatusCode() === 404) {
+                throw $e;
+            }
+            return $this->safeMutationFailure($e->getMessage());
+        } catch (QueryException $e) {
+            return $this->safeMutationFailure('This branch is still linked to business records and cannot be permanently deleted.');
         }
+
+        $this->forgetBranchCaches($tenantId);
+        Session::flash('success', 'Permanently Delete');
+
         return redirect()->back();
     }
 
     public function activeSearch(Request $request)
     {
-        $request->validate([
-            'search' => 'min:1'
-        ]);
-        $data = [];
-        if (Cache::get('total_branches') && Cache::get('total_branches') != null) {
-            $data['total_branches'] = Cache::get('total_branches');
-        } else {
-            $data['total_branches'] = $this->parentModel::count();
-            Cache::put('total_branches', $data['total_branches']);
-        }
-
-        if (Cache::get('total_trashed_branches') && Cache::get('total_trashed_branches') != null) {
-            $data['total_trashed_branches'] = Cache::get('total_trashed_branches');
-        } else {
-            $data['total_trashed_branches'] = $this->parentModel::onlyTrashed()->count();
-            Cache::put('total_trashed_branches', $data['total_trashed_branches']);
-        }
-        $search = $request["search"];
-        $items = $this->parentModel::where('name', 'like', '%' . $search . '%')
-            ->orWhere('location', 'like', '%' . $search . '%')
-            ->orWhere('description', 'like', '%' . $search . '%')
+        $tenantId = $this->tenantId($request);
+        $validated = $request->validate(['search' => ['nullable', 'string', 'min:1']]);
+        $search = $validated['search'] ?? '';
+        $items = $this->queryForTenant($tenantId)
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('location', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
+            })
             ->paginate(60);
-        return view($this->parentView . '.index', $data)
-            ->with('items', $items);
+
+        return view($this->parentView . '.index', $this->countsForTenant($tenantId))->with('items', $items);
     }
 
     public function trashedSearch(Request $request)
     {
-        $request->validate([
-            'search' => 'min:1'
-        ]);
-        $data = [];
-        if (Cache::get('total_branches') && Cache::get('total_branches') != null) {
-            $data['total_branches'] = Cache::get('total_branches');
-        } else {
-            $data['total_branches'] = $this->parentModel::count();
-            Cache::put('total_branches', $data['total_branches']);
-        }
-        if (Cache::get('total_trashed_branches') && Cache::get('total_trashed_branches') != null) {
-            $data['total_trashed_branches'] = Cache::get('total_trashed_branches');
-        } else {
-            $data['total_trashed_branches'] = $this->parentModel::onlyTrashed()->count();
-            Cache::put('total_trashed_branches', $data['total_trashed_branches']);
-        }
-        $search = $request["search"];
-        $items = $this->parentModel::where('name', 'like', '%' . $search . '%')
-            ->onlyTrashed()
-            ->orWhere('location', 'like', '%' . $search . '%')
-            ->onlyTrashed()
-            ->orWhere('description', 'like', '%' . $search . '%')
-            ->onlyTrashed()
+        $tenantId = $this->tenantId($request);
+        $validated = $request->validate(['search' => ['nullable', 'string', 'min:1']]);
+        $search = $validated['search'] ?? '';
+        $items = $this->queryForTenant($tenantId)->onlyTrashed()
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('location', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
+            })
             ->paginate(60);
-        return view($this->parentView . '.trashed',  $data)
-            ->with('items', $items);
+
+        return view($this->parentView . '.trashed', $this->countsForTenant($tenantId))->with('items', $items);
     }
 
-    //    Fixed Method for all
     public function activeAction(Request $request)
     {
-        $request->validate([
-            'items' => 'required'
-        ]);
-        if ($request->apply_comand_top == 3 || $request->apply_comand_bottom == 3) {
-            foreach ($request->items["id"] as $id) {
-                $this->destroy($id);
-            }
-            return redirect()->back();
-        } elseif ($request->apply_comand_top == 2 || $request->apply_comand_bottom == 2) {
-            foreach ($request->items["id"] as $id) {
-                $this->kill($id);
-            }
-            return redirect()->back();
-        } else {
-            Session::flash('error', "Something is wrong.Try again");
-            return redirect()->back();
-        }
+        return $this->bulkAction($request, false);
     }
 
     public function trashedAction(Request $request)
     {
-        $request->validate([
-            'items' => 'required'
-        ]);
-        if ($request->apply_comand_top == 1 || $request->apply_comand_bottom == 1) {
-            foreach ($request->items["id"] as $id) {
-                $this->restore($id);
-            }
-        } elseif ($request->apply_comand_top == 2 || $request->apply_comand_bottom == 2) {
-            foreach ($request->items["id"] as $id) {
-                $this->kill($id);
-            }
-            return redirect()->back();
+        return $this->bulkAction($request, true);
+    }
+
+    private function bulkAction(Request $request, bool $trashed)
+    {
+        $tenantId = $this->tenantId($request);
+        $ids = $this->selectedIds($request);
+        $command = $this->selectedCommand($request);
+
+        if ($trashed && $command === 1) {
+            $this->assertPermission('Restore');
+        } elseif ($command === 2) {
+            $this->assertPermission('PermanentlyDelete');
+        } elseif ($command === 3 && !$trashed) {
+            $this->assertPermission('Delete');
         } else {
-            Session::flash('error', "Something is wrong.Try again");
-            return redirect()->back();
+            abort(403);
         }
+
+        try {
+            DB::transaction(function () use ($tenantId, $ids, $trashed, $command) {
+                $branches = $this->ensureAllBelongToTenant($tenantId, $ids, $trashed);
+
+                if ($command === 2) {
+                    foreach ($branches as $branch) {
+                        if ($this->hasHistoricalReferences((int) $branch->getKey())) {
+                            throw new HttpException(409, 'One or more branches have linked business records and cannot be permanently deleted.');
+                        }
+                    }
+                }
+
+                foreach ($branches as $branch) {
+                    if ($command === 1) {
+                        $branch->restore();
+                    } elseif ($command === 2) {
+                        $branch->forceDelete();
+                    } else {
+                        $this->performSoftDelete($branch);
+                    }
+                }
+            });
+        } catch (HttpException $e) {
+            if ($e->getStatusCode() === 404) {
+                throw $e;
+            }
+            return $this->safeMutationFailure($e->getMessage());
+        } catch (QueryException $e) {
+            return $this->safeMutationFailure('One or more branches are still linked to business records; no changes were made.');
+        }
+
+        $this->forgetBranchCaches($tenantId);
+        Session::flash('success', 'Branch action completed successfully.');
+
         return redirect()->back();
     }
 }

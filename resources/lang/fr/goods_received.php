@@ -1,0 +1,12 @@
+<?php
+return [
+    'title' => 'Marchandises reçues', 'breadcrumb' => 'Marchandises reçues', 'record_receipt' => 'Enregistrer les marchandises reçues', 'approve_purchase_order' => 'Approuver le bon de commande', 'approved_by' => 'Approuvé par',
+    'receipt_number' => 'Numéro de réception', 'purchase_order' => 'Bon de commande', 'supplier' => 'Fournisseur', 'branch' => 'Succursale',
+    'received_date' => 'Date de réception', 'received_by' => 'Reçu par', 'notes' => 'Notes', 'item' => 'Article', 'ordered_quantity' => 'Quantité commandée',
+    'previously_received' => 'Déjà reçu', 'remaining_quantity' => 'Quantité restante', 'received_quantity' => 'Quantité reçue', 'unit' => 'Unité',
+    'agreed_price' => 'Prix unitaire convenu', 'status' => 'Statut', 'actions' => 'Actions', 'draft' => 'Brouillon', 'confirmed' => 'Confirmé',
+    'save_draft' => 'Enregistrer le brouillon', 'confirm' => 'Confirmer la réception', 'view' => 'Afficher', 'back' => 'Retour', 'empty' => 'Aucune réception enregistrée.',
+    'draft_help' => 'Un brouillon ne modifie ni le stock ni le statut du bon de commande.', 'confirm_help' => 'La confirmation met à jour le stock admissible et le statut du bon de commande ensemble.',
+    'messages' => ['draft_saved' => 'Brouillon de réception enregistré.', 'confirmed' => 'Réception confirmée.', 'purchase_order_approved' => 'Bon de commande approuvé et prêt pour réception.'],
+    'errors' => ['only_draft_can_be_approved' => 'Seul un brouillon peut être approuvé.', 'order_requires_items' => 'Ajoutez au moins un article avant d’approuver ce bon.', 'order_not_receivable' => 'La réception nécessite un bon approuvé avec des quantités restantes.', 'invalid_submission' => 'Cette référence est déjà utilisée pour un autre bon de commande.', 'at_least_one_quantity' => 'Saisissez une quantité reçue pour au moins un article.', 'line_not_in_order' => 'Un ou plusieurs articles ne font pas partie de ce bon de commande.', 'quantity_must_be_positive' => 'La quantité reçue doit être supérieure à zéro.', 'over_receiving' => 'La quantité dépasse le solde restant du bon de commande.', 'inventory_unavailable' => 'L’article de stock lié n’est plus disponible.', 'classify_inventory_first' => 'Définissez le suivi de stock des articles liés avant de confirmer.', 'whole_stock_quantity' => 'Les articles suivis en stock doivent être reçus en quantités entières.', 'inventory_branch_mismatch' => 'Un article suivi en stock doit appartenir à la succursale du bon de commande.'],
+];

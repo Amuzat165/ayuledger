@@ -13,7 +13,7 @@
     <?php
     $transaction = new \App\Transaction();
     ?>
-    <p>Printing Date & Time: {{ $extra['current_date_time']  }}</p>
+    <p>{{ __('Printing Date & Time') }}: {{ $extra['current_date_time']  }}</p>
 
     <div>
         <div class="f-l-W-600">
@@ -24,7 +24,7 @@
         <br>
         <div class="f-r width-200 margin-bottom-10">
             <p class="text-a-c border-t-1 border-l-1 border-r-1 line-h-20">
-                Voucher No <br></p>
+                {{ __('financial.labels.voucher_number') }} <br></p>
             <p class="text-a-c border-1 line-h-20">{{ str_pad($items[0]->voucher_no, 4, '0', STR_PAD_LEFT)  }}</p>
         </div>
     </div>
@@ -37,10 +37,10 @@
     <table class="table table-bordered table-sm">
         <tbody>
         <tr>
-            <td>Branch Name: {{ App\Transaction::find($items[0]->id)->Branch->name }}</td>
-            <td>Location: {{ App\Transaction::find($items[0]->id)->Branch->location }}</td>
-            <td>Made Of Payment: {{ App\Transaction::find($items[0]->id)->BankCash->name }}</td>
-            <td>Date: {{  date(config('settings.date_format'), strtotime($items[0]->voucher_date))  }}</td>
+            <td>{{ __('financial.labels.branch_name') }}: {{ App\Transaction::find($items[0]->id)->Branch->name }}</td>
+            <td>{{ __('Location') }}: {{ App\Transaction::find($items[0]->id)->Branch->location }}</td>
+            <td>{{ __('financial.labels.payment_account') }}: {{ App\Transaction::find($items[0]->id)->BankCash->name }}</td>
+            <td>{{ __('Date') }}: {{  date(config('settings.date_format'), strtotime($items[0]->voucher_date))  }}</td>
         </tr>
         </tbody>
     </table>
@@ -48,11 +48,11 @@
     <table class="table table-bordered table-sm">
         <thead>
         <tr>
-            <th scope="col" class="text-center">SL.NO</th>
+            <th scope="col" class="text-center">{{ __('SL.NO') }}</th>
 
-            <th scope="col">Head Of Accounts</th>
-            <th scope="col">CHQ. No</th>
-            <th scope="col">Amount ( <?php echo (config('settings.is_code') == 'code') ?
+            <th scope="col">{{ __('financial.labels.head_of_account') }}</th>
+            <th scope="col">{{ __('CHQ. No') }}</th>
+            <th scope="col">{{ __('Amount') }} ( <?php echo (config('settings.is_code') == 'code') ?
                     config('settings.currency_code') : config('settings.currency_symbol')  ?>
                 )
         </tr>
@@ -78,19 +78,19 @@
             </tr>
         @endforeach
         <tr>
-            <th scope="row" colspan="3" class="text-right">Total =</th>
+            <th scope="row" colspan="3" class="text-right">{{ __('Total') }} =</th>
             <th>{{ $transaction->convert_money_format($total_amount)  }} /=</th>
         </tr>
         </tbody>
     </table>
-    <p>In word: <span
+    <p>{{ __('financial.labels.amount_in_words') }}: <span
                 class="font-w-b">{{ $transaction->convert_number_to_words($total_amount) }}  {!! config('settings.currency_code') !!} </span>
         only.
     </p>
 
     @if(!empty($items[0]->particulars))
         <br>
-        <p>Particulars: <span class="font-w-b"> {{ $items[0]->particulars }}</span></p>
+        <p>{{ __('financial.labels.particulars') }}: <span class="font-w-b"> {{ $items[0]->particulars }}</span></p>
     @endif
 
     @if(count($items)==1)
@@ -112,19 +112,19 @@
         <tr>
             <td class="text-center border-n">
                 - - - - -<br>
-                Prepared by
+                {{ __('Prepared by') }}
             </td>
             <td class="text-center border-n">
                 - - - - -<br>
-                Checked by
+                {{ __('Checked by') }}
             </td>
             <td class="text-center border-n">
                 - - - - -<br>
-                Forward by
+                {{ __('Forward by') }}
             </td>
             <td class="text-center border-n">
                 - - - - -<br>
-                Approved by
+                {{ __('Approved by') }}
             </td>
         </tr>
     </table>

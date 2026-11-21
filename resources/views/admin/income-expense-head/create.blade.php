@@ -2,7 +2,7 @@
 
 <?php
 
-$moduleName = __('root.ledger_name.ledger_name_manage');
+$moduleName = __('financial.labels.ledger_account_management');
 $createItemName = __('root.common.create') . ' ' . $moduleName;
 
 $breadcrumbMainName = $moduleName;
@@ -48,7 +48,7 @@ $ParentRouteName = 'income_expense_head';
                     <div class="header">
                         <h2>
                             {{ $createItemName }}
-                            <small>Put {{ $moduleName }} Information</small>
+                            <small>{{ __('financial.labels.enter_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
                         <div class="body">
                             <form class="form" id="form_validation" method="post"
@@ -60,7 +60,7 @@ $ParentRouteName = 'income_expense_head';
                                             <div class="form-line">
                                                 <input autofocus value="{{ old('name') }}" name="name" type="text"
                                                     class="form-control">
-                                                <label class="form-label">Name</label>
+                                                <label class="form-label">{{ __('Name') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -69,7 +69,7 @@ $ParentRouteName = 'income_expense_head';
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control  show-tick"
                                                     name="income_expense_type_id" id="">
-                                                    <option value="0">Select Ledger Type</option>
+                                                    <option value="0">{{ __('Select') }} {{ __('financial.labels.account_type') }}</option>
                                                     @foreach ($income_expense_types as $income_expense_type_id)
                                                     <option @if ($income_expense_type_id->id ==
                                                         old('income_expense_type_id')) selected @endif
@@ -85,7 +85,7 @@ $ParentRouteName = 'income_expense_head';
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control  show-tick"
                                                     name="income_expense_group_id" id="">
-                                                    <option value="0">Select Ledger Group</option>
+                                                    <option value="0">{{ __('Select') }} {{ __('financial.labels.account_group') }}</option>
                                                     @foreach ($income_expense_groups as $income_expense_group)
                                                     <option @if ($income_expense_group->id ==
                                                         old('income_expense_group_id')) selected @endif
@@ -101,19 +101,19 @@ $ParentRouteName = 'income_expense_head';
                                             <div class="form-line">
                                                 <input value="{{ old('unit') }}" name="unit" type="text"
                                                     class="form-control">
-                                                <label class="form-label">Unit</label>
+                                                <label class="form-label">{{ __('Unit') }}</label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="form-group form-float">
-                                            <span>Type</span> &nbsp;&nbsp;
+                                            <span>{{ __('Type') }}</span> &nbsp;&nbsp;
                                             <input value="1" name="type" type="radio" id="radio_1"
                                                 class="with-gap radio-col-cyan" checked />
-                                            <label for="radio_1">Dr</label>
+                                            <label for="radio_1">{{ __('Dr') }}</label>
                                             <input value="0" name="type" type="radio" id="radio_2"
                                                 class="with-gap radio-col-cyan" />
-                                            <label for="radio_2">Cr</label>
+                                            <label for="radio_2">{{ __('Cr') }}</label>
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -143,10 +143,10 @@ $ParentRouteName = 'income_expense_head';
 @push('include-js')
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)
@@ -197,11 +197,11 @@ $ParentRouteName = 'income_expense_head';
                 Fields = UICnt.getFields();
                 var FieldName1 = " Name";
                 if (input_values.income_expense_group_id == 0) {
-                    toastr["error"]('Select Ledger Group');
+                    toastr["error"]('Select {{ __('financial.labels.account_group') }}');
                     e.preventDefault();
                 }
                 if (input_values.income_expense_type_id == 0) {
-                    toastr["error"]('Select Ledger Type');
+                    toastr["error"]('Select {{ __('financial.labels.account_type') }}');
                     e.preventDefault();
                 }
                 if (input_values.name == 0) {

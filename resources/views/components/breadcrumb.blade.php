@@ -1,9 +1,19 @@
 @php
 $is_form = $as == 'form';
+$breadcrumbDisplay = function ($value) {
+    $slug = \Illuminate\Support\Str::snake(trim((string) $value));
+    foreach (['screens', 'reports', 'terms', 'labels'] as $group) {
+        $key = 'financial.' . $group . '.' . $slug;
+        if (\Illuminate\Support\Facades\Lang::has($key, 'main')) {
+            return __($key);
+        }
+    }
+    return $value;
+};
 $props = (object)[
 'left' => [
 'href' => $is_form ? url()->previous() : url()->current() . '/create',
-'text' => $is_form ? 'Back' : 'Add New',
+'text' => $is_form ? __('financial.labels.back') : __('financial.labels.add_new'),
 'icon' => $is_form ? 'fas fa-chevron-left' : 'fas fa-plus',
 ],
 'right' => [
@@ -25,17 +35,17 @@ $props = (object)[
   <li>
     <a href="{{ route('dashboard') }}">
       <i class="fas fa-home"></i> &nbsp;
-      Home
+      {{ __('financial.labels.home') }}
     </a>
   </li>
   <li>
-    <a href="" title="Reload">
+    <a href="" title="{{ __('Reload') }}">
       <i class="fas fa-folder-open"></i> &nbsp;
-      {{ $level }}
+      {{ $breadcrumbDisplay($level) }}
     </a>
   </li>
   <li class="active" style="cursor:default">
     <i class="{{ $props->right['icon']}}"></i> &nbsp;
-    {{ $location }}
+    {{ $breadcrumbDisplay($location) }}
   </li>
 </ol>

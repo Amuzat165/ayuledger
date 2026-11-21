@@ -89,10 +89,10 @@ class CostOfRevenueController extends Controller
         $branches = Helper::__getBranchBankCashIncomeExpenseHead()['branches'];
         $search_by = array(
             'branch_name' => ($request->branch_id) ? $branches->where('id', $request->branch_id)->first()->name : 'All Branch',
-            'start_from' => ($request->start_from) ?  date(config('settings.date_format'), strtotime($request->start_from)) : null,
-            'start_to' => ($request->start_to) ?  date(config('settings.date_format'), strtotime($request->start_to)) : null,
-            'end_from' => ($request->end_from) ?  date(config('settings.date_format'), strtotime($request->end_from)) : null,
-            'end_to' => ($request->end_to) ?  date(config('settings.date_format'), strtotime($request->end_to)) : null,
+            'start_from' => $request->start_from ?: null,
+            'start_to' => $request->start_to ?: null,
+            'end_from' => $request->end_from ?: null,
+            'end_to' => $request->end_to ?: null,
         );
         // Show Action
         if ($request->action == 'Show') {

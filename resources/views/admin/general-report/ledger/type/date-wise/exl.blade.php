@@ -15,13 +15,13 @@
                         </tr>
                         <tr>
                             <th>
-                                Sl.No
+                                {{ __('Sl.No') }}
                             </th>
                             <th>
-                                Name
+                                {{ __('financial.labels.name') }}
                             </th>
                             <th>
-                                Code
+                                {{ __('Code') }}
                             </th>
                         </tr>
                     </thead>

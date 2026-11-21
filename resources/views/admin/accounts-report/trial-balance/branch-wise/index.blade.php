@@ -33,26 +33,26 @@
                             </tr>
                             <tr>
                                 <th class="text-center">
-                                    Sl. No
+                                    {{ __('Sl. No') }}
                                 </th>
                                 <th class="text-center font-s-18">
-                                    Head Of Account
+                                    {{ __('financial.labels.head_of_account') }}
                                 </th>
                                 <th class="text-center font-s-18" colspan="2">
                                     @if (!empty($search_by['from']))
-                                        From {{ date(config('settings.date_format'), strtotime($search_by['from'])) }} to
-                                        {{ date(config('settings.date_format'), strtotime($search_by['to'])) }}
+                                        {{ __('From') }} {{ date('d/m/Y', strtotime($search_by['from'])) }} to
+                                        {{ date('d/m/Y', strtotime($search_by['to'])) }}
                                     @else
-                                        UpTo to {{ $extra['current_date_time'] }}
+                                        {{ __('UpTo to') }} {{ $extra['current_date_time'] }}
                                     @endif
                                 </th>
                             </tr>
                             <tr>
                                 <th class="text-center" scope="col"></th>
                                 <th scope="col"></th>
-                                <th class="text-right" scope="col">Dr ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
+                                <th class="text-right" scope="col">{{ __('Dr') }} ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
                                 </th>
-                                <th class="text-right" scope="col">Cr ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
+                                <th class="text-right" scope="col">{{ __('Cr') }} ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
                                 </th>
                             </tr>
                         </thead>
@@ -108,13 +108,13 @@
                             <?php $total_dr += $sub_dr; ?>
                             <?php $total_cr += $sub_cr; ?>
                             <tr>
-                                <th class="text-right" colspan="2">Sub Total =</th>
+                                <th class="text-right" colspan="2">{{ __('financial.labels.subtotal_equals') }}</th>
                                 <th class="text-right">{{ Helper::convertMoneyFormat($sub_dr) }}</th>
                                 <th class="text-right">{{ Helper::convertMoneyFormat($sub_cr) }}</th>
                             </tr>
                             @if (count($items['branches']) == $branch_number)
                                 <tr>
-                                    <th class="text-right font-s-20" colspan="2">Total Amount=</th>
+                                    <th class="text-right font-s-20" colspan="2">{{ __('Total Amount') }}=</th>
                                     <th class="text-right font-s-20">{{ Helper::convertMoneyFormat($total_dr) }}
                                     </th>
                                     <th class="text-right font-s-20">{{ Helper::convertMoneyFormat($total_cr) }}
@@ -134,26 +134,26 @@
                     <thead>
                         <tr>
                             <th class="text-center">
-                                Sl. No
+                                {{ __('Sl. No') }}
                             </th>
                             <th class="text-center font-s-18">
-                                Closing Bank & Cash Balance
+                                {{ __('financial.labels.closing_bank_cash_balance') }}
                             </th>
                             <th class="text-center font-s-18" colspan="2">
                                 @if (!empty($search_by['from']))
-                                    From {{ date(config('settings.date_format'), strtotime($search_by['from'])) }} to
-                                    {{ date(config('settings.date_format'), strtotime($search_by['to'])) }}
+                                    {{ __('From') }} {{ date('d/m/Y', strtotime($search_by['from'])) }} to
+                                    {{ date('d/m/Y', strtotime($search_by['to'])) }}
                                 @else
-                                    UpTo to {{ $extra['current_date_time'] }}
+                                    {{ __('UpTo to') }} {{ $extra['current_date_time'] }}
                                 @endif
                             </th>
                         </tr>
                         <tr>
                             <th class="text-center" scope="col"></th>
                             <th scope="col"></th>
-                            <th class="text-right" scope="col">Dr ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
+                            <th class="text-right" scope="col">{{ __('Dr') }} ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
                             </th>
-                            <th class="text-right" scope="col">Cr ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
+                            <th class="text-right" scope="col">{{ __('Cr') }} ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
                             </th>
                         </tr>
                     </thead>
@@ -191,12 +191,12 @@
                             @endphp
                         @endforeach
                         <tr>
-                            <th class="text-right" colspan="2">Sub Total =</th>
+                            <th class="text-right" colspan="2">{{ __('financial.labels.subtotal_equals') }}</th>
                             <th class="text-right">{{ Helper::convertMoneyFormat($total_bank_cash_balance) }}</th>
                             <th class="text-right">{{ Helper::convertMoneyFormat(0) }}</th>
                         </tr>
                         <tr>
-                            <th class="text-right font-s-20" colspan="2">Grand Total Amount =</th>
+                            <th class="text-right font-s-20" colspan="2">{{ __('financial.labels.grand_total_amount_equals') }}</th>
                             <th class="text-right font-s-20">{{ Helper::convertMoneyFormat($total_cr) }}</th>
                             <th class="text-right font-s-20">
                                 {{ Helper::convertMoneyFormat($total_dr + $total_bank_cash_balance) }}</th>

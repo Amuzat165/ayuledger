@@ -54,7 +54,7 @@ $ParentRouteName = 'role-manage';
                     <div class="header">
                         <h2>
                             {{ $items->name }}
-                            <small>Details {{ $items->name }} Information</small>
+                            <small>{{ __('ui.forms.show_module_information', ['module' => $items->name]) }}</small>
                         </h2>
 
                         <div class="body">
@@ -69,15 +69,15 @@ $ParentRouteName = 'role-manage';
                                         <table class="table  table-bordered table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th scope="col" class="text-center">S.L</th>
-                                                    <th scope="col" class="text-center">Module Name</th>
-                                                    <th scope="col" class="text-center">Show</th>
-                                                    <th scope="col" class="text-center">Create</th>
-                                                    <th scope="col" class="text-center">Edit</th>
-                                                    <th scope="col" class="text-center">Delete</th>
-                                                    <th scope="col" class="text-center">Trash Show</th>
-                                                    <th scope="col" class="text-center">Restore</th>
-                                                    <th scope="col" class="text-center">Permanently Delete</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.permissions.serial_number') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.permissions.module_name') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.actions.show') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.create') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.edit') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.actions.delete') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.permissions.trash_show') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.restore') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.permanently_delete') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -105,7 +105,7 @@ $ParentRouteName = 'role-manage';
 
                                                 @else
                                                 <tr>
-                                                    <th class="text-danger">No Item Available</th>
+                                                    <th class="text-danger">{{ __('ui.messages.no_item_available') }}</th>
                                                 </tr>
                                                 @endif
 

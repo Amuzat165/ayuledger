@@ -2,7 +2,7 @@
 
 <?php
 
-$moduleName = __('root.ledger_group.ledger_group_manage');
+$moduleName = __('financial.labels.ledger_group_management');
 $createItemName = __('root.common.create') .' '. $moduleName;
 
 $breadcrumbMainName = $moduleName;
@@ -49,7 +49,7 @@ $ParentRouteName = 'income_expense_group';
                     <div class="header">
                         <h2>
                             {{ $createItemName }}
-                            <small>Put {{ $moduleName }} Information</small>
+                            <small>{{ __('financial.labels.enter_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
                         <div class="body">
                             <form class="form" id="form_validation" method="post"
@@ -61,14 +61,14 @@ $ParentRouteName = 'income_expense_group';
                                             <div class="form-line">
                                                 <input autofocus value="{{ old('name') }}" name="name" type="text"
                                                     class="form-control">
-                                                <label class="form-label">Name</label>
+                                                <label class="form-label">{{ __('Name') }}</label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="form-group form-float">
                                             <div class="form-line">
-                                                <label class="form-label">Description</label>
+                                                <label class="form-label">{{ __('financial.terms.description') }}</label>
                                                 <textarea class="form-control no-resize" name="description"
                                                     rows="1"></textarea>
                                             </div>
@@ -96,10 +96,10 @@ $ParentRouteName = 'income_expense_group';
 @push('include-js')
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)
@@ -145,7 +145,7 @@ $ParentRouteName = 'income_expense_group';
                 input_values = UICnt.getInputsValue();
                 Fields = UICnt.getFields();
                 if (input_values.name == 0) {
-                    toastr["error"]('Ledger Group Name Is Required');
+                    toastr["error"]('{{ __('financial.labels.account_group') }} Is Required');
                     e.preventDefault();
                 }
             };

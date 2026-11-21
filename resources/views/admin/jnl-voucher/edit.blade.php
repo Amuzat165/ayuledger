@@ -49,7 +49,7 @@ $ParentRouteName = 'jnl_voucher';
                     <div class="header">
                         <h2 class="m-b-20">
                             {{ $createItemName }}
-                            <small>Edit {{ $moduleName }} Information</small>
+                            <small>{{ __('financial.labels.edit_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
                         <div class="body">
                             <form class="form" id="form_validation" method="post"
@@ -61,7 +61,7 @@ $ParentRouteName = 'jnl_voucher';
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control show-tick"
                                                     name="branch_id">
-                                                    <option value="0">Select Branch Name ( Dr )</option>
+                                                    <option value="0">{{ __('financial.labels.select_branch') }} ( {{ __('Dr') }} )</option>
                                                     @foreach ($branches->sortByDesc('id') as $branch)
                                                     <option @if ($branch->id == $items['dr'][0]->branch_id) selected
                                                         @endif
@@ -79,7 +79,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Dr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Dr') }} )</option>
                                                     @foreach ($income_expense_heads->sortByDesc('id') as $HeadOfAccount)
                                                     @if (!empty($items['dr'][0]->income_expense_head_id))
                                                     @php($id = $items['dr'][0]->income_expense_head_id)
@@ -100,7 +100,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <input
                                                     value="{{ !empty($items['dr'][0]->dr) ? $items['dr'][0]->dr : 0 }}"
                                                     name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount ( Dr ) </label>
+                                                <label class="form-label">{{ __('Amount ( Dr )') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -118,7 +118,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Dr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Dr') }} )</option>
                                                     @if (!empty($items['dr'][1]->income_expense_head_id))
                                                     @php($id = $items['dr'][1]->income_expense_head_id)
                                                     @else
@@ -139,7 +139,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <input
                                                     value="{{ !empty($items['dr'][1]->dr) ? $items['dr'][1]->dr : 0 }}"
                                                     name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount ( Dr ) </label>
+                                                <label class="form-label">{{ __('Amount ( Dr )') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -159,7 +159,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Dr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Dr') }} )</option>
                                                     @if (!empty($items['dr'][2]->income_expense_head_id))
                                                     @php($id = $items['dr'][2]->income_expense_head_id)
                                                     @else
@@ -180,7 +180,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <input
                                                     value="{{ !empty($items['dr'][2]->dr) ? $items['dr'][2]->dr : 0 }}"
                                                     name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount ( Dr )</label>
+                                                <label class="form-label">{{ __('Amount ( Dr )') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -200,7 +200,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Dr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Dr') }} )</option>
                                                     @if (!empty($items['dr'][3]->income_expense_head_id))
                                                     @php($id = $items['dr'][3]->income_expense_head_id)
                                                     @else
@@ -221,7 +221,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <input
                                                     value="{{ !empty($items['dr'][3]->dr) ? $items['dr'][3]->dr : 0 }}"
                                                     name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount ( Dr )</label>
+                                                <label class="form-label">{{ __('Amount ( Dr )') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -241,7 +241,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id"
                                                     name="income_expense_head_id[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Dr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Dr') }} )</option>
                                                     @if (!empty($items['dr'][4]->income_expense_head_id))
                                                     @php($id = $items['dr'][4]->income_expense_head_id)
                                                     @else
@@ -262,7 +262,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <input
                                                     value="{{ !empty($items['dr'][4]->dr) ? $items['dr'][4]->dr : 0 }}"
                                                     name="amount[]" type="number" class="form-control amount">
-                                                <label class="form-label">Amount ( Dr )</label>
+                                                <label class="form-label">{{ __('Amount ( Dr )') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -279,7 +279,7 @@ $ParentRouteName = 'jnl_voucher';
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control show-tick"
                                                     name="branch_id_cr">
-                                                    <option value="0">Select Branch Name ( Cr )</option>
+                                                    <option value="0">{{ __('financial.labels.select_branch') }} ( {{ __('Cr') }} )</option>
                                                     @foreach ($branches->sortByDesc('id') as $branch)
                                                     <option @if ($branch->id == $items['cr'][0]->branch_id) selected
                                                         @endif
@@ -297,7 +297,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id_cr"
                                                     name="income_expense_head_id_cr[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Cr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Cr') }} )</option>
                                                     @if (!empty($items['cr'][0]->income_expense_head_id))
                                                     @php($id = $items['cr'][0]->income_expense_head_id)
                                                     @else
@@ -317,7 +317,7 @@ $ParentRouteName = 'jnl_voucher';
                                             <div class="form-line">
                                                 <input value="{{ $items['cr'][0]->cr }}" name="amount_cr[]"
                                                     type="number" class="form-control amount_cr">
-                                                <label class="form-label">Amount ( Cr ) </label>
+                                                <label class="form-label">{{ __('Amount ( Cr )') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -335,7 +335,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id_cr"
                                                     name="income_expense_head_id_cr[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Cr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Cr') }} )</option>
                                                     @if (!empty($items['cr'][1]->income_expense_head_id))
                                                     @php($id = $items['cr'][1]->income_expense_head_id)
                                                     @else
@@ -357,7 +357,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <input
                                                     value="{{ !empty($items['cr'][1]->cr) ? $items['cr'][1]->cr : 0 }}"
                                                     name="amount_cr[]" type="number" class="form-control amount_cr">
-                                                <label class="form-label">Amount ( Cr ) </label>
+                                                <label class="form-label">{{ __('Amount ( Cr )') }} </label>
                                             </div>
                                         </div>
                                     </div>
@@ -377,7 +377,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id_cr"
                                                     name="income_expense_head_id_cr[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Cr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Cr') }} )</option>
                                                     @if (!empty($items['cr'][2]->income_expense_head_id))
                                                     @php($id = $items['cr'][2]->income_expense_head_id)
                                                     @else
@@ -398,7 +398,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <input
                                                     value="{{ !empty($items['cr'][2]->cr) ? $items['cr'][2]->cr : 0 }}"
                                                     name="amount_cr[]" type="number" class="form-control amount_cr">
-                                                <label class="form-label">Amount ( Cr )</label>
+                                                <label class="form-label">{{ __('Amount ( Cr )') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -418,7 +418,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id_cr"
                                                     name="income_expense_head_id_cr[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Cr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Cr') }} )</option>
                                                     @if (!empty($items['cr'][3]->income_expense_head_id))
                                                     @php($id = $items['cr'][3]->income_expense_head_id)
                                                     @else
@@ -439,7 +439,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <input
                                                     value="{{ !empty($items['cr'][3]->cr) ? $items['cr'][3]->cr : 0 }}"
                                                     name="amount_cr[]" type="number" class="form-control amount_cr">
-                                                <label class="form-label">Amount ( Cr )</label>
+                                                <label class="form-label">{{ __('Amount ( Cr )') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -459,7 +459,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <select data-live-search="true"
                                                     class="form-control show-tick income_expense_head_id_cr"
                                                     name="income_expense_head_id_cr[]" id="">
-                                                    <option value="0"> Select Head of Account Name ( Cr )</option>
+                                                    <option value="0"> {{ __('financial.labels.select_head_of_account') }} ( {{ __('Cr') }} )</option>
                                                     @if (!empty($items['cr'][4]->income_expense_head_id))
                                                     @php($id = $items['cr'][4]->income_expense_head_id)
                                                     @else
@@ -480,7 +480,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <input
                                                     value="{{ !empty($items['cr'][4]->cr) ? $items['cr'][4]->cr : 0 }}"
                                                     name="amount_cr[]" type="number" class="form-control amount_cr">
-                                                <label class="form-label">Amount ( Cr )</label>
+                                                <label class="form-label">{{ __('Amount ( Cr )') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -498,7 +498,7 @@ $ParentRouteName = 'jnl_voucher';
                                                 <input autocomplete="off"
                                                     value="{{ date('m/d/Y', strtotime($items['dr'][0]->voucher_date)) }}"
                                                     name="voucher_date" type="text" class="form-control"
-                                                    placeholder="Please choose a voucher date...">
+                                                    placeholder="{{ __('Please choose a voucher date...') }}">
                                             </div>
                                         </div>
                                     </div>
@@ -506,7 +506,7 @@ $ParentRouteName = 'jnl_voucher';
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <textarea name="particulars" rows="2" class="form-control no-resize"
-                                                    placeholder="Particulars">{{ $items['dr'][0]->particulars }}</textarea>
+                                                    placeholder="{{ __('financial.labels.particulars') }}">{{ $items['dr'][0]->particulars }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -554,10 +554,10 @@ $ParentRouteName = 'jnl_voucher';
 <script src="{{ asset('asset/js/pages/forms/basic-form-elements.js') }}"></script>
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)
@@ -670,44 +670,44 @@ $ParentRouteName = 'jnl_voucher';
                 var TotalDrAmount = 0,
                     TotalCrAmount = 0;
                 if (Values.project_id == 0) {
-                    toastr["error"]('Select  Branch ( Dr )');
+                    toastr["error"](@json(__('financial.labels.select_branch')) + ' (Dr)');
                     e.preventDefault();
                 }
                 if (Values.project_id_cr == 0) {
-                    toastr["error"]('Select  Branch ( Cr )');
+                    toastr["error"](@json(__('financial.labels.select_branch')) + ' (Cr)');
                     e.preventDefault();
                 }
                 if (Fields.get_head_of_account_id[0].querySelector('select').value == 0) {
-                    toastr["error"]('Select Head Of Account ( Dr )');
+                    toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Dr');
                     e.preventDefault();
                 }
                 if (Fields.get_amount[0].value == '') {
-                    toastr["error"]('Put Amount ( Dr )');
+                    toastr["error"](@json(__('financial.labels.enter_amount')) + 'Dr');
                     e.preventDefault();
                 } else {
                     TotalDrAmount += parseFloat(Fields.get_amount[0].value);
                 }
                 if (Fields.get_head_of_account_id_cr[0].querySelector('select').value == 0) {
-                    toastr["error"]('Select Head Of Account ( Cr )');
+                    toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Cr');
                     e.preventDefault();
                 }
                 if (Fields.get_amount_cr[0].value == '') {
-                    toastr["error"]('Put Amount ( Cr )');
+                    toastr["error"](@json(__('financial.labels.enter_amount')) + 'Cr');
                     e.preventDefault();
                 } else {
                     TotalCrAmount += parseFloat(Fields.get_amount_cr[0].value);
                 }
                 if (Values.date == 0) {
-                    toastr["error"]('Set Date');
+                    toastr["error"](@json(__('financial.screens.select_date')));
                     e.preventDefault();
                 }
                 if (Fields.get_dr[1].style.display == 'block') {
                     if (Fields.get_head_of_account_id[2].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account ( Dr )');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Dr');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[1].value == '') {
-                        toastr["error"]('Put Amount ( Dr )');
+                        toastr["error"](@json(__('financial.labels.enter_amount')) + 'Dr');
                         e.preventDefault();
                     } else {
                         TotalDrAmount += parseFloat(Fields.get_amount[1].value);
@@ -715,11 +715,11 @@ $ParentRouteName = 'jnl_voucher';
                 }
                 if (Fields.get_dr[2].style.display == 'block') {
                     if (Fields.get_head_of_account_id[4].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account ( Dr )');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Dr');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[2].value == '') {
-                        toastr["error"]('Put Amount ( Dr )');
+                        toastr["error"](@json(__('financial.labels.enter_amount')) + 'Dr');
                         e.preventDefault();
                     } else {
                         TotalDrAmount += parseFloat(Fields.get_amount[2].value);
@@ -727,11 +727,11 @@ $ParentRouteName = 'jnl_voucher';
                 }
                 if (Fields.get_dr[3].style.display == 'block') {
                     if (Fields.get_head_of_account_id[6].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account ( Dr )');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Dr');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[3].value == '') {
-                        toastr["error"]('Put Amount ( Dr )');
+                        toastr["error"](@json(__('financial.labels.enter_amount')) + 'Dr');
                         e.preventDefault();
                     } else {
                         TotalDrAmount += parseFloat(Fields.get_amount[3].value);
@@ -739,11 +739,11 @@ $ParentRouteName = 'jnl_voucher';
                 }
                 if (Fields.get_dr[4].style.display == 'block') {
                     if (Fields.get_head_of_account_id[8].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account ( Dr )');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Dr');
                         e.preventDefault();
                     }
                     if (Fields.get_amount[4].value == '') {
-                        toastr["error"]('Put Amount ( Dr )');
+                        toastr["error"](@json(__('financial.labels.enter_amount')) + 'Dr');
                         e.preventDefault();
                     } else {
                         TotalDrAmount += parseFloat(Fields.get_amount[4].value);
@@ -751,11 +751,11 @@ $ParentRouteName = 'jnl_voucher';
                 }
                 if (Fields.get_cr[1].style.display == 'block') {
                     if (Fields.get_head_of_account_id_cr[2].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account ( Cr )');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Cr');
                         e.preventDefault();
                     }
                     if (Fields.get_amount_cr[1].value == '') {
-                        toastr["error"]('Put Amount ( Cr)');
+                        toastr["error"](@json(__('financial.labels.enter_amount')) + 'Cr');
                         e.preventDefault();
                     } else {
                         TotalCrAmount += parseFloat(Fields.get_amount_cr[1].value);
@@ -763,11 +763,11 @@ $ParentRouteName = 'jnl_voucher';
                 }
                 if (Fields.get_cr[2].style.display == 'block') {
                     if (Fields.get_head_of_account_id_cr[4].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account ( Cr ) ');
+                        toastr["error"]('{{ __('financial.labels.select_head_of_account') }} ');
                         e.preventDefault();
                     }
                     if (Fields.get_amount_cr[2].value == '') {
-                        toastr["error"]('Put Amount ( Cr )');
+                        toastr["error"](@json(__('financial.labels.enter_amount')) + 'Cr');
                         e.preventDefault();
                     } else {
                         TotalCrAmount += parseFloat(Fields.get_amount_cr[2].value);
@@ -775,11 +775,11 @@ $ParentRouteName = 'jnl_voucher';
                 }
                 if (Fields.get_cr[3].style.display == 'block') {
                     if (Fields.get_head_of_account_id_cr[6].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account ( Cr )');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Cr');
                         e.preventDefault();
                     }
                     if (Fields.get_amount_cr[3].value == '') {
-                        toastr["error"]('Put Amount ( Cr )');
+                        toastr["error"](@json(__('financial.labels.enter_amount')) + 'Cr');
                         e.preventDefault();
                     } else {
                         TotalCrAmount += parseFloat(Fields.get_amount_cr[3].value);
@@ -787,11 +787,11 @@ $ParentRouteName = 'jnl_voucher';
                 }
                 if (Fields.get_cr[4].style.display == 'block') {
                     if (Fields.get_head_of_account_id_cr[8].querySelector('select').value == 0) {
-                        toastr["error"]('Select Head Of Account ( Cr )');
+                        toastr["error"](@json(__('financial.labels.select_head_of_account')) + 'Cr');
                         e.preventDefault();
                     }
                     if (Fields.get_amount_cr[4].value == '') {
-                        toastr["error"]('Put Amount ( Cr )');
+                        toastr["error"](@json(__('financial.labels.enter_amount')) + 'Cr');
                         e.preventDefault();
                     } else {
                         TotalCrAmount += parseFloat(Fields.get_amount_cr[4].value);
@@ -871,11 +871,11 @@ $ParentRouteName = 'jnl_voucher';
                     return false;
                 }
                 if (checkUniqueOrNot(head_of_account_Ids)) {
-                    toastr["error"]('Head of Account should unique');
+                    toastr["error"](@json(__('financial.labels.account_head_unique')));
                     e.preventDefault();
                 }
                 if (TotalDrAmount === TotalCrAmount) {} else {
-                    toastr["error"]('Total Amount of Dr and Cr Should same');
+                    toastr["error"](@json(__('financial.labels.voucher_totals_must_match')));
                     e.preventDefault();
                 }
             };

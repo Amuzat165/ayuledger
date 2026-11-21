@@ -13,37 +13,37 @@
                         </tr>
                         <tr>
                             <th>
-                                <h5>Particulars </h5>
+                                <h5>{{ __('financial.labels.particulars') }} </h5>
                             </th>
                             <th>
                                 <h5>
-                                    Opening Balance ( {{ $search_by['from'] }} )
+                                    {{ __('Opening Balance') }} ( {{ $search_by['from'] }} )
                                     <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?>
                                 </h5>
                             </th>
                             <th>
-                                <h5>Addition During Year</h5>
+                                <h5>{{ __('financial.labels.addition_during_year') }}</h5>
                             </th>
                             <th>
-                                <h5>Deduction During Year</h5>
+                                <h5>{{ __('financial.labels.deduction_during_year') }}</h5>
                             </th>
                             <th>
-                                <h5>Total Assets</h5>
+                                <h5>{{ __('financial.labels.total_assets') }}</h5>
                             </th>
                             <th>
-                                <h5>Dep.Rate (%)</h5>
+                                <h5>{{ __('Dep.Rate (%)') }}</h5>
                             </th>
                             <th>
-                                <h5>Accumulated Depreciation</h5>
+                                <h5>{{ __('financial.labels.accumulated_depreciation') }}</h5>
                             </th>
                             <th>
-                                <h5>Current Year Depreciation</h5>
+                                <h5>{{ __('financial.labels.current_year_depreciation') }}</h5>
                             </th>
                             <th>
-                                <h5>Total Depreciation</h5>
+                                <h5>{{ __('financial.labels.total_depreciation') }}</h5>
                             </th>
                             <th>
-                                <h5>Closing Balance ( {{ $search_by['to'] }} )
+                                <h5>{{ __('Closing Balance') }} ( {{ $search_by['to'] }} )
 
                                     <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?>
                                 </h5>
@@ -68,7 +68,7 @@
                             </tr>
                         @endforeach
                         <tr>
-                            <td scope="row">Total=</td>
+                            <td scope="row">{{ __('Total') }}=</td>
                             <td scope="row">
                                 {{ $particulars['TotalBalance']['start_balance'] }}
                             </td>

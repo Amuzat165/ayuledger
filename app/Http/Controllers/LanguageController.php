@@ -49,7 +49,13 @@ class LanguageController extends Controller
      */
     public function create()
     {
-        return view($this->parentView . '.create');
+        $predefined_languages = [
+            'english' => ['code' => 'eng', 'country' => 'United States'],
+            'french' => ['code' => 'fr', 'country' => 'France'],
+            'spanish' => ['code' => 'es', 'country' => 'Spain'],
+            'chinese' => ['code' => 'zh', 'country' => 'China'],
+        ];
+        return view($this->parentView . '.create', ['predefined_languages' => $predefined_languages]);
     }
 
     /**
@@ -61,41 +67,76 @@ class LanguageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|unique:languages',
-            'code' => 'required|alpha_dash|string|unique:languages',
-            'country_name' => 'required|string'
+            'language' => 'required|string|in:english,french,spanish,chinese',
         ]);
-        $name = strtolower($request->name);
-        $code = strtolower($request->code);
-        if ($code == 'main') {
-            Session::flash('error', 'Main is not an language name. Try another one');
+
+        // Map predefined languages
+        $language_map = [
+            'english' => ['name' => 'english', 'code' => 'eng', 'country_name' => 'United States'],
+            'french' => ['name' => 'french', 'code' => 'fr', 'country_name' => 'France'],
+            'spanish' => ['name' => 'spanish', 'code' => 'es', 'country_name' => 'Spain'],
+            'chinese' => ['name' => 'chinese', 'code' => 'zh', 'country_name' => 'China'],
+        ];
+
+        $selected = $language_map[$request->language];
+        $name = strtolower($selected['name']);
+        $code = strtolower($selected['code']);
+        $country_name = $selected['country_name'];
+
+        // Check if language already exists in database
+        $existing = $this->parentModel::where('code', $code)->first();
+        if ($existing) {
+            Session::flash('error', ucfirst($name) . ' language already exists');
             return redirect()->back();
         }
+
         $language_dir = resource_path() . DIRECTORY_SEPARATOR . 'lang';
         $languages_path = $language_dir . DIRECTORY_SEPARATOR . $code;
+        
         DB::beginTransaction();
         try {
-            // copy main folder and past it on language folder
+            // Copy main folder to new language folder
             $copy_dir = $language_dir . DIRECTORY_SEPARATOR . 'main';
+            
+            // If destination directory exists, delete it first
+            if (File::isDirectory($languages_path)) {
+                File::deleteDirectory($languages_path);
+            }
+            
             File::copyDirectory($copy_dir, $languages_path);
-            $this->parentModel::create([
+            
+            // Create language record
+            $language = $this->parentModel::create([
                 'name' => $name,
                 'code' => $code,
-                'country_name' => $request->country_name,
+                'country_name' => $country_name,
+                'is_default' => 0,
                 'create_by' => auth()->user()->email,
             ]);
+
+            // Set this language as default and make it active
+            DB::table('languages')->where('is_default', 1)->update(['is_default' => 0]);
+            $language->update(['is_default' => 1]);
+            
+            // Set the app locale
+            config(['app.locale' => $code]);
+
+            // Clear caches
             Cache::forget('total_language');
             Cache::forget('languages');
-            Session::flash('success', "Successfully  Create");
+            Cache::forget('default_language');
+            
+            Session::flash('success', ucfirst($name) . ' language created and set as default successfully!');
             DB::commit();
         } catch (\Exception $e) {
             if (File::isDirectory($languages_path)) {
                 File::deleteDirectory($languages_path);
             }
-            Session::flash('error', $e->getMessage());
+            Session::flash('error', 'Error: ' . $e->getMessage());
             DB::rollback();
         }
-        return redirect()->back();
+        
+        return redirect()->route('language');
     }
 
     /**
@@ -412,6 +453,8 @@ class LanguageController extends Controller
                         config(['app.locale' => $language->code]);
                     }
                     if ($is_default) {
+                        // Clear default language cache so middleware picks up new language
+                        Cache::forget('default_language');
                         Session::flash('success', 'Application default language set successfully');
                     } else {
                         Session::flash('success', 'Application default language remove successfully');

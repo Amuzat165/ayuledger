@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Profile extends Model
+class Profile extends TenantScopedModel
 {
     use SoftDeletes;
     protected $fillable = [

@@ -7,22 +7,63 @@
     .accounting-sidebar .sidebar-brand strong { color: var(--accounting-ink); font-size: 18px; }
     .accounting-sidebar .sidebar-brand small { display: block; color: var(--accounting-muted); font-size: 11px; margin-top: 4px; }
     .accounting-sidebar .module-label { padding: 18px 20px 7px; color: var(--accounting-muted); font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; }
-    .accounting-sidebar .list > li > a { color: #36505f; padding: 12px 20px; }
-    .accounting-sidebar .list > li > a i { color: var(--accounting-teal); width: 24px; }
-    .accounting-sidebar, .accounting-sidebar *, .accounting-sidebar a, .accounting-sidebar span { filter: none !important; opacity: 1 !important; text-shadow: none; }
+    
+    /* Main menu items - pure white text and icons */
+    .accounting-sidebar .list > li > a { 
+        color: white !important; 
+        padding: 12px 20px; 
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important;
+    }
+    .accounting-sidebar .list > li > a i { 
+        color: white !important; 
+        width: 24px; 
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important;
+    }
+    .accounting-sidebar .list > li > a span { 
+        color: white !important; 
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important;
+    }
+    
+    /* Ensure white on visited and all pseudo-states */
+    .accounting-sidebar .list > li > a:visited,
+    .accounting-sidebar .list > li > a:hover,
+    .accounting-sidebar .list > li > a:focus { 
+        color: white !important; 
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important;
+    }
+    .accounting-sidebar .list > li > a:visited i,
+    .accounting-sidebar .list > li > a:hover i,
+    .accounting-sidebar .list > li > a:focus i { 
+        color: white !important; 
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important;
+    }
+    
+    /* Active menu items - black text */
+    .accounting-sidebar .list > li.active > a { 
+        background: #e4f2f0 !important; 
+        color: black !important; 
+        font-weight: 600; 
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important; 
+    }
+    .accounting-sidebar .list > li.active > a i { 
+        color: black !important; 
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important; 
+    }
+    .accounting-sidebar .list > li.active > a span { 
+        color: black !important; 
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important; 
+    }
+    
+    .accounting-sidebar, .accounting-sidebar span { filter: none !important; opacity: 1 !important; }
     .accounting-sidebar .list > li > a, .accounting-sidebar .ml-menu li > a { -webkit-font-smoothing: antialiased; transform: none !important; }
-    .accounting-sidebar .list > li.active > a { background: #e4f2f0; color: var(--accounting-teal); font-weight: 600; }
-    .accounting-sidebar .list > li.active > a,
-    .accounting-sidebar .list > li.active > a > i,
-    .accounting-sidebar .list > li.active > a > span { background: #e4f2f0 !important; color: var(--accounting-teal) !important; font-weight: 600; opacity: 1 !important; }
     .accounting-sidebar .list > li.active > .ml-menu,
     .accounting-sidebar .inventory-assets-menu { display: block; }
     .accounting-sidebar .inventory-assets-menu { list-style: none; margin: 0; padding: 0; }
     .accounting-sidebar .inventory-assets-menu > li { display: list-item !important; height: auto !important; visibility: visible !important; }
     .accounting-sidebar .inventory-assets-menu > li > a { display: flex !important; height: auto !important; visibility: visible !important; color: #526873 !important; }
     .accounting-sidebar .ml-menu { background: transparent; }
-    .accounting-sidebar .ml-menu li a { color: #526873; padding: 8px 18px 8px 53px; font-size: 13px; }
-    .accounting-sidebar .ml-menu li.active > a { color: var(--accounting-teal); font-weight: 600; }
+    .accounting-sidebar .ml-menu li a { color: #526873; padding: 8px 18px 8px 53px; font-size: 13px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); }
+    .accounting-sidebar .ml-menu li.active > a { color: var(--accounting-teal); font-weight: 600; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); }
     .accounting-sidebar .ml-menu li.active > a, .accounting-sidebar .ml-menu li > a:hover, .accounting-sidebar .ml-menu li > a:focus { background: transparent !important; color: var(--accounting-teal) !important; }
     .accounting-sidebar .ml-menu li.active > a > i,
     .accounting-sidebar .ml-menu li.active > a > span,
@@ -43,24 +84,28 @@
     @media (max-width: 767px) { .accounting-sidebar { transform: translateX(-100%); transition: transform .2s ease; z-index: 1001; } body.accounting-drawer-open .accounting-sidebar { transform: translateX(0); } }
 </style>
 
-<section>
   <aside id="leftsidebar" class="sidebar accounting-sidebar">
-    <div class="sidebar-brand"><strong>{{ Config::get('settings.company_name') }}</strong><small>Financial workspace</small></div>
+    <div class="sidebar-brand"><strong>{{ Config::get('settings.company_name') }}</strong><small>{{ __('financial.screens.financial_workspace') }}</small></div>
     <div class="menu">
       <ul class="list">
         <li @if (request()->routeIs('dashboard')) class="active" @endif>
-          <a href="{{ route('dashboard') }}" title="Dashboard"><i class="fas fa-home"></i><span>Dashboard</span></a>
+          <a href="{{ route('dashboard') }}" title="{{ __('financial.screens.dashboard') }}"><i class="fas fa-home"></i><span>{{ __('financial.screens.dashboard') }}</span></a>
         </li>
-        <li @if (request()->routeIs('administration.hub')) class="active" @endif><a href="{{ route('administration.hub') }}" title="Administration"><i class="fas fa-sliders-h"></i><span>Administration</span></a></li>
+        <li @if (request()->routeIs('administration.hub')) class="active" @endif><a href="{{ route('administration.hub') }}" title="{{ __('financial.screens.administration') }}"><i class="fas fa-sliders-h"></i><span>{{ __('financial.screens.administration') }}</span></a></li>
+        @if(auth()->check() && auth()->user()->role && strcasecmp(auth()->user()->role->name, 'Super Admin') === 0)
+        <li @if (request()->routeIs('superadmin.*')) class="active" @endif>
+          <a href="{{ route('superadmin.dashboard') }}" title="Super Admin Console"><i class="fas fa-shield-alt"></i><span>Super Admin Console</span></a>
+        </li>
+        @endif
         <li @if (request()->routeIs('reports.hub') or request()->routeIs('reports.*')) class="active" @endif>
-          <a href="{{ route('reports.hub') }}" title="Reports"><i class="fas fa-file-alt"></i><span>Reports</span></a>
+          <a href="{{ route('reports.hub') }}" title="{{ __('financial.screens.reports') }}"><i class="fas fa-file-alt"></i><span>{{ __('financial.screens.reports') }}</span></a>
         </li>
-        <li class="module-label">Workspace</li>
-        <li @if (request()->routeIs('sales.hub')) class="active" @endif><a href="{{ route('sales.hub') }}" title="Sales"><i class="fas fa-chart-line"></i><span>Sales</span></a></li>
-        <li @if (request()->routeIs('purchases.expenses.hub')) class="active" @endif><a href="{{ route('purchases.expenses.hub') }}" title="Purchases &amp; Expenses"><i class="fas fa-shopping-bag"></i><span>Purchases &amp; Expenses</span></a></li>
-        <li @if (request()->routeIs('accounting.hub')) class="active" @endif><a href="{{ route('accounting.hub') }}" title="Accounting"><i class="fas fa-book-open"></i><span>Accounting</span></a></li>
-        <li @if (request()->routeIs('banking.cash.hub')) class="active" @endif><a href="{{ route('banking.cash.hub') }}" title="Banking &amp; Cash"><i class="fas fa-university"></i><span>Banking &amp; Cash</span></a></li>
-        <li @if (request()->routeIs('inventory.assets.hub')) class="active" @endif><a href="{{ route('inventory.assets.hub') }}" title="Inventory &amp; Assets"><i class="fas fa-boxes"></i><span>Inventory &amp; Assets</span></a></li>
+        <li class="module-label">{{ __('financial.screens.workspace') }}</li>
+        <li @if (request()->routeIs('sales.hub')) class="active" @endif><a href="{{ route('sales.hub') }}" title="{{ __('financial.screens.sales') }}"><i class="fas fa-chart-line"></i><span>{{ __('financial.screens.sales') }}</span></a></li>
+        <li @if (request()->routeIs('purchases.expenses.hub')) class="active" @endif><a href="{{ route('purchases.expenses.hub') }}" title="{{ __('financial.screens.purchases_expenses') }}"><i class="fas fa-shopping-bag"></i><span>{{ __('financial.screens.purchases_expenses') }}</span></a></li>
+        <li @if (request()->routeIs('accounting.hub')) class="active" @endif><a href="{{ route('accounting.hub') }}" title="{{ __('financial.screens.accounting') }}"><i class="fas fa-book-open"></i><span>{{ __('financial.screens.accounting') }}</span></a></li>
+        <li @if (request()->routeIs('banking.cash.hub')) class="active" @endif><a href="{{ route('banking.cash.hub') }}" title="{{ __('financial.screens.banking_cash') }}"><i class="fas fa-university"></i><span>{{ __('financial.screens.banking_cash') }}</span></a></li>
+        <li @if (request()->routeIs('inventory.assets.hub')) class="active" @endif><a href="{{ route('inventory.assets.hub') }}" title="{{ __('financial.screens.inventory_assets') }}"><i class="fas fa-boxes"></i><span>{{ __('financial.screens.inventory_assets') }}</span></a></li>
       </ul>
     </div>
   </aside>

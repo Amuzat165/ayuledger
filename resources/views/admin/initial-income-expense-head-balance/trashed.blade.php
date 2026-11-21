@@ -5,7 +5,7 @@
 
 <?php
 
-$moduleName = " Initial Ledger Balance";
+$moduleName = " {{ __('financial.labels.initial_ledger') }} Balance";
 $createItemName = __('root.common.create') . ' ' . $moduleName;
 
 $breadcrumbMainName = $moduleName;
@@ -64,13 +64,13 @@ $transaction = new \App\Transaction();
                 <div class="card">
                     <div class="header">
                         <a @if ($all==0) class="dis-none" @endif class="text-black btn btn-xs btn-success waves-effect"
-                            href="{{ route($ParentRouteName)  }}">All({{
+                            href="{{ route($ParentRouteName)  }}">{{ __('All') }}({{
                             $ModelName::where('voucher_type',$voucher_type)->count() }}
                             )</a>
 
 
                         <a class="btn btn-xs btn-danger waves-effect"
-                            href="{{ route($ParentRouteName.'.trashed') }}">Trash({{
+                            href="{{ route($ParentRouteName.'.trashed') }}">{{ __('Trash') }}({{
                             $ModelName::onlyTrashed()->where('voucher_type',$voucher_type)->count() }}
                             )</a>
 
@@ -90,13 +90,13 @@ $transaction = new \App\Transaction();
                                     <div class="form-group">
                                         <div class="form-line">
                                             <select class="form-control" name="apply_comand_top" id="">
-                                                <option value="0">Select Action</option>
+                                                <option value="0">{{ __('Select Action') }}</option>
                                                 @if ($restore==1)
-                                                <option value="1">Restore</option>
+                                                <option value="1">{{ __('Restore') }}</option>
                                                 @endif
 
                                                 @if ($permanently_delete==1)
-                                                <option value="2">Delete</option>
+                                                <option value="2">{{ __('Delete') }}</option>
                                                 @endif
 
                                             </select>
@@ -105,7 +105,7 @@ $transaction = new \App\Transaction();
                                 </div>
                                 <div class=" margin-bottom-0 col-md-2 col-lg-2 col-sm-2">
                                     <div class="form-group">
-                                        <input class="btn btn-sm btn-info" type="submit" value="Apply" name="ApplyTop">
+                                        <input class="btn btn-sm btn-info" type="submit" value="{{ __('Apply') }}" name="ApplyTop">
                                     </div>
                                 </div>
                                 <div class=" margin-bottom-0 col-md-8 col-sm-8 col-xs-8">
@@ -124,23 +124,23 @@ $transaction = new \App\Transaction();
                                                 class="chk-col-cyan" />
                                             <label for="md_checkbox_p"></label>
                                         </th>
-                                        <th class="text-center">Voucher No</th>
-                                        <th>Branch Name</th>
-                                        <th>Ledger Name</th>
-                                        <th>Voucher Date</th>
-                                        <th>Dr (
+                                        <th class="text-center">{{ __('financial.labels.voucher_number') }}</th>
+                                        <th>{{ __('financial.labels.branch_name') }}</th>
+                                        <th>{{ __('Ledger Name') }}</th>
+                                        <th>{{ __('financial.labels.voucher_date') }}</th>
+                                        <th>{{ __('Dr') }} (
                                             <?php echo (config('settings.is_code') == 'code') ?
                                                     config('settings.currency_code') : config('settings.currency_symbol')  ?>
                                             )
                                         </th>
 
-                                        <th>Cr (
+                                        <th>{{ __('Cr') }} (
                                             <?php echo (config('settings.is_code') == 'code') ?
                                                     config('settings.currency_code') : config('settings.currency_symbol')  ?>
                                             )
                                         </th>
 
-                                        <th>Options</th>
+                                        <th>{{ __('Options') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -171,18 +171,18 @@ $transaction = new \App\Transaction();
                                             <a @if ($restore==0) class="dis-none" @endif
                                                 class="btn btn-xs btn-info waves-effect"
                                                 href="{{ route($ParentRouteName.'.restore',['id'=>$item->voucher_no]) }}"
-                                                data-toggle="tooltip" data-placement="top" title="Restore"><i
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('Restore') }}"><i
                                                     class="material-icons">restore</i></a>
 
                                             <a data-target="#largeModal"
                                                 class="dis-none btn btn-xs btn-success waves-effect ajaxCall" href="#"
-                                                data-toggle="tooltip" data-placement="top" title="Preview"><i
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('Preview') }}"><i
                                                     class="material-icons">pageview</i></a>
 
                                             <a @if ($permanently_delete==0) class="dis-none" @endif
                                                 class="btn btn-xs btn-danger waves-effect"
                                                 href="{{ route($ParentRouteName.'.kill',['id'=>$item->voucher_no]) }}"
-                                                data-toggle="tooltip" data-placement="top" title="Parmanently Delete?">
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('Parmanently Delete?') }}">
                                                 <i class="material-icons">delete</i></a>
 
                                         </td>
@@ -196,24 +196,24 @@ $transaction = new \App\Transaction();
                                                     class="chk-col-cyan" />
                                                 <label for="md_checkbox_footer"></label>
                                             </th>
-                                            <th class="text-center">Voucher No</th>
-                                            <th>Branch Name</th>
-                                            <th>Ledger Name</th>
+                                            <th class="text-center">{{ __('financial.labels.voucher_number') }}</th>
+                                            <th>{{ __('financial.labels.branch_name') }}</th>
+                                            <th>{{ __('Ledger Name') }}</th>
 
-                                            <th>Voucher Date</th>
-                                            <th>Dr (
+                                            <th>{{ __('financial.labels.voucher_date') }}</th>
+                                            <th>{{ __('Dr') }} (
                                                 <?php echo (config('settings.is_code') == 'code') ?
                                                     config('settings.currency_code') : config('settings.currency_symbol')  ?>
                                                 )
                                             </th>
 
-                                            <th>Cr (
+                                            <th>{{ __('Cr') }} (
                                                 <?php echo (config('settings.is_code') == 'code') ?
                                                     config('settings.currency_code') : config('settings.currency_symbol')  ?>
                                                 )
                                             </th>
 
-                                            <th>Options</th>
+                                            <th>{{ __('Options') }}</th>
                                         </tr>
                                     </thead>
 
@@ -239,14 +239,14 @@ $transaction = new \App\Transaction();
                                 <div class="form-group">
                                     <div class="form-line">
                                         <select class="form-control" name="apply_comand_bottom" id="">
-                                            <option value="0">Select Action</option>
+                                            <option value="0">{{ __('Select Action') }}</option>
 
                                             @if ($restore==1)
-                                            <option value="1">Restore</option>
+                                            <option value="1">{{ __('Restore') }}</option>
                                             @endif
 
                                             @if ($permanently_delete==1)
-                                            <option value="2">Delete</option>
+                                            <option value="2">{{ __('Delete') }}</option>
                                             @endif
                                         </select>
                                     </div>
@@ -254,7 +254,7 @@ $transaction = new \App\Transaction();
                             </div>
                             <div class="margin-bottom-0 col-md-2 col-lg-2 col-sm-2">
                                 <div class="form-group">
-                                    <input class="btn btn-sm btn-info" type="submit" value="Apply" name="ApplyTop">
+                                    <input class="btn btn-sm btn-info" type="submit" value="{{ __('Apply') }}" name="ApplyTop">
                                 </div>
                             </div>
                             <div class="margin-bottom-0 col-md-8 col-sm-8 col-xs-8">
@@ -320,11 +320,11 @@ $transaction = new \App\Transaction();
 
 <script>
     @if(Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
                 @if(Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
                 @if ($errors->any())

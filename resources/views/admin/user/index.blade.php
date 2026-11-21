@@ -108,6 +108,7 @@ $trash_show = config('role_manage.User.TrashShow');
                         </div>
                         <div class="body table-responsive">
                             {{ csrf_field() }}
+                            @if ($items->count() > 0)
                             <table class="table table-hover table-bordered table-sm">
                                 <thead>
                                     <tr>
@@ -124,7 +125,7 @@ $trash_show = config('role_manage.User.TrashShow');
                                 <tbody>
                                     <?php $i = 1; ?>
                                     @foreach ($items as $item)
-                                    <tr @if (Auth::id()==$item->id) class="bg-tr" @endif>
+                                    <tr>
                                         <th class="text-center">
                                             <input name="items[id][]" value="{{ $item->id }}" type="checkbox"
                                                 id="md_checkbox_{{ $i }}" class="chk-col-cyan selects " />
@@ -132,7 +133,6 @@ $trash_show = config('role_manage.User.TrashShow');
                                         </th>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->email }}</td>
-                                    
                                         <td class="tdTrashAction">
                                             <a @if ($edit==0) class="dis-none" @endif
                                                 class="btn btn-xs btn-info waves-effect"
@@ -140,8 +140,9 @@ $trash_show = config('role_manage.User.TrashShow');
                                                 data-toggle="tooltip" data-placement="top"
                                                 title="{{ __('root.common.edit') }}"><i
                                                     class="material-icons">mode_edit</i></a>
-                                            <a data-target="#largeModal"
-                                                class="btn btn-xs btn-success waves-effect ajaxCall hidden"
+                                            <a @if ($show==0) class="dis-none" @endif target="_blank"
+                                                data-target="#largeModal"
+                                                class="btn btn-xs btn-success waves-effect ajaxCall"
                                                 href="{{ route($ParentRouteName . '.show', ['id' => $item->id]) }}"
                                                 data-toggle="tooltip" data-placement="top"
                                                 title="{{ __('root.common.preview') }}"><i
@@ -150,26 +151,19 @@ $trash_show = config('role_manage.User.TrashShow');
                                                 class="btn btn-xs btn-danger waves-effect"
                                                 href="{{ route($ParentRouteName . '.destroy', ['id' => $item->id]) }}"
                                                 data-toggle="tooltip" data-placement="top"
-                                                title="{{ __('root.common.trash') }}"> <i
+                                                title="{{ __('root.common.trash') }}"><i
                                                     class="material-icons">delete</i></a>
                                         </td>
                                     </tr>
                                     <?php $i++; ?>
                                     @endforeach
-                                    <thead>
-                                        <tr>
-                                            <th class="checkbox_custom_style text-center">
-                                                <input name="selectBottom" type="checkbox" id="md_checkbox_footer"
-                                                    class="chk-col-cyan" />
-                                                <label for="md_checkbox_footer"></label>
-                                            </th>
-                                            <th>{{ __('root.user.name') }}</th>
-                                            <th>{{ __('root.user.email') }}</th>
-                                            <th>{{ __('root.user.options') }}</th>
-                                        </tr>
-                                    </thead>
                                 </tbody>
                             </table>
+                            @else
+                            <div class="alert alert-info">
+                                {{ __('ui.messages.no_records_found') }}
+                            </div>
+                            @endif
                         </div>
                         <div class="pagination-and-action-area body">
                             <div>
@@ -222,10 +216,10 @@ $trash_show = config('role_manage.User.TrashShow');
 <!-- Autosize Plugin Js -->
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)

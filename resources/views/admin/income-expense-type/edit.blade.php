@@ -4,7 +4,7 @@
 
 <?php
 
-$moduleName = "  Ledger Type";
+$moduleName = __("financial.labels.ledger_type_management");
 $createItemName = __('root.common.edit') .' '. $moduleName;
 
 $breadcrumbMainName = $moduleName;
@@ -57,7 +57,7 @@ $ParentRouteName = 'income_expense_type';
                     <div class="header">
                         <h2>
                             {{ $createItemName }}
-                            <small>Edit {{ $moduleName }} Information</small>
+                            <small>{{ __('financial.labels.edit_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
 
                         <div class="body">
@@ -72,7 +72,7 @@ $ParentRouteName = 'income_expense_type';
                                             <div class="form-line">
                                                 <input value="{{ $item->name }}" name="name" type="text"
                                                     class="form-control">
-                                                <label class="form-label">Name</label>
+                                                <label class="form-label">{{ __('Name') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -82,7 +82,7 @@ $ParentRouteName = 'income_expense_type';
                                             <div class="form-line">
                                                 <input readonly value="{{ $item->code }}" name="code" type="number"
                                                     class="form-control">
-                                                <label class="form-label">Code</label>
+                                                <label class="form-label">{{ __('Code') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -175,11 +175,11 @@ $ParentRouteName = 'income_expense_type';
 
 <script>
     @if(Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
                 @if(Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
                 @if ($errors->any())
@@ -245,7 +245,7 @@ $ParentRouteName = 'income_expense_type';
 
 
                 if (input_values.name == 0) {
-                    toastr["error"]('Set Any' + FieldName1);
+                    toastr["error"](@json(__('financial.labels.set_value_for_field', ['field' => '__FIELD__'])).replace('__FIELD__', FieldName1));
                     e.preventDefault();
                 }
 

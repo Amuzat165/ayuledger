@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class VendorPayments extends Model
+class VendorPayments extends \App\TenantScopedModel
 {
     use HasFactory;
     use SoftDeletes;

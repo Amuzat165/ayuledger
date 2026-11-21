@@ -1,0 +1,21 @@
+<?php
+return [
+    'history_title' => 'Historique des paiements fournisseurs',
+    'history_intro' => 'Consultez les paiements enregistrés pour les factures fournisseurs.',
+    'date_from' => 'Date de début',
+    'date_to' => 'Date de fin',
+    'apply_filters' => 'Appliquer les filtres',
+    'reset_filters' => 'Réinitialiser les filtres',
+    'no_history' => 'Aucun paiement fournisseur enregistré pour le moment.',
+    'no_matching_payments' => 'Aucun paiement fournisseur ne correspond à ces filtres.',
+    'view_supplier_invoice' => 'Voir la facture fournisseur',
+    'make_payment' => 'Effectuer un paiement', 'payment_amount' => 'Montant du paiement', 'payment_date' => 'Date du paiement',
+    'payment_reference' => 'Référence du paiement', 'payment_method' => 'Mode de paiement', 'amount_paid' => 'Montant payé',
+    'amount_remaining' => 'Montant restant', 'payment_history' => 'Historique des paiements', 'payment_receipt' => 'Reçu de paiement',
+    'supplier' => 'Fournisseur', 'internal_invoice_number' => 'Numéro interne de facture fournisseur',
+    'previous_amount_remaining' => 'Montant restant précédent', 'new_amount_remaining' => 'Nouveau montant restant',
+    'recorded_by' => 'Enregistré par', 'select_method' => 'Sélectionner un mode ou compte de paiement', 'not_available' => 'Indisponible',
+    'no_payments' => 'Aucun paiement enregistré pour cette facture fournisseur.', 'validation_help' => 'Veuillez vérifier les détails du paiement.',
+    'receipt_footer' => 'Ce reçu confirme le paiement indiqué ci-dessus.', 'messages' => ['saved' => 'Paiement enregistré.'],
+    'errors' => ['positive_amount' => 'Le montant du paiement doit être supérieur à zéro.', 'invalid_amount' => 'Saisissez un montant valide avec deux décimales au maximum.', 'invalid_date' => 'Saisissez une date de paiement valide.', 'invoice_not_payable' => 'Seule une facture fournisseur approuvée peut recevoir un paiement.', 'no_balance' => 'Aucun montant ne reste à payer sur cette facture.', 'exceeds_balance' => 'Le paiement ne peut pas dépasser le montant restant.', 'invalid_method' => 'Sélectionnez un mode ou compte de paiement actif.', 'submission_conflict' => 'Cette demande a déjà été utilisée avec des détails différents.'],
+];

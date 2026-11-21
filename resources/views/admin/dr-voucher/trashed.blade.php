@@ -72,7 +72,8 @@ $transaction = new \App\Transaction();
                             </form>
                         </ul>
                     </div>
-                    <form class="actionForm" action="{{ route($ParentRouteName . '.trashed.action') }}" method="get">
+                    <form class="actionForm" action="{{ route($ParentRouteName . '.trashed.action') }}" method="post">
+                        {{ csrf_field() }}
                         <div class="pagination-and-action-area body">
                             <div>
                                 <div class="select-and-apply-area">
@@ -156,20 +157,18 @@ $transaction = new \App\Transaction();
                                         <td> {{ $item->cheque_number }} </td>
                                         <td>{{ $transaction->convert_money_format($amount) }}</td>
                                         <td class="tdAction">
-                                            <a @if ($restore==0) class="dis-none" @endif
-                                                class="m-b-3 btn btn-xs btn-info waves-effect "
-                                                href="{{ route($ParentRouteName . '.restore', ['id' => $item->voucher_no]) }}"
-                                                data-toggle="tooltip" data-placement="top" title="Restore"><i
-                                                    class="material-icons">restore</i></a>
+                                            <form method="POST" action="{{ route($ParentRouteName . '.restore', ['id' => $item->voucher_no]) }}" style="display:inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-xs btn-info waves-effect" @if ($restore==0) disabled @endif title="{{ __('Restore') }}"><i class="material-icons">restore</i></button>
+                                            </form>
                                             <a data-target="#largeModal"
                                                 class="dis-none btn btn-xs btn-success waves-effect ajaxCall" href="#"
-                                                data-toggle="tooltip" data-placement="top" title="Preview"><i
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('Preview') }}"><i
                                                     class="material-icons">pageview</i></a>
-                                            <a @if ($permanently_delete==0) class="dis-none" @endif
-                                                class="m-b-5 btn btn-xs btn-danger waves-effect"
-                                                href="{{ route($ParentRouteName . '.kill', ['id' => $item->voucher_no]) }}"
-                                                data-toggle="tooltip" data-placement="top" title="Parmanently Delete?">
-                                                <i class="material-icons">delete</i></a>
+                                            <form method="POST" action="{{ route($ParentRouteName . '.kill', ['id' => $item->voucher_no]) }}" style="display:inline" onsubmit="return confirm(@json(__('ui.messages.confirm_permanent_delete')))">
+                                                @csrf
+                                                <button type="submit" class="btn btn-xs btn-danger waves-effect" @if ($permanently_delete==0) disabled @endif title="{{ __('Permanently Delete') }}"><i class="material-icons">delete</i></button>
+                                            </form>
                                         </td>
                                     </tr>
                                     <?php $i++; ?>
@@ -257,10 +256,10 @@ $transaction = new \App\Transaction();
 @push('include-js')
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)

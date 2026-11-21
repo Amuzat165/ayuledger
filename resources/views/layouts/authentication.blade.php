@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ \App\Support\LocaleManager::direction(app()->getLocale()) }}">
 
 <head>
     <meta charset="UTF-8">
@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- End -->
 
-    
+
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -21,9 +21,7 @@
 
     <title>@yield('title', 'Welcome To | '.$ApplicationName)</title>
 
-    <?php $image = Config::get('settings.company_logo') ?>
-
-    <link rel="icon" href="{{ asset($image ) }}" type="image/x-icon">
+    @include('shared.favicon')
     <!-- Google Fonts -->
 
     <link href="{{ asset('asset/css/font-g/font-1.css') }}" rel="stylesheet"
@@ -44,9 +42,27 @@
 
     <!-- Custom Css -->
     <link href="{{ asset('asset/css/style.css') }}" rel="stylesheet">
+@if (\App\Support\LocaleManager::direction(app()->getLocale()) === 'rtl')
+    <link href="{{ asset('asset/css/style-rtl.css') }}" rel="stylesheet">
+    @endif
 
     {{--Utility Css--}}
     <link rel="stylesheet" type="text/css" href="{{ asset('asset/layout/css/util.css') }}">
+
+    <!-- Dynamic Company Color Override -->
+    <style>
+        <?php
+            $companyColor = Config::get('settings.company_color', '#00897B');
+            $hex = ltrim($companyColor, '#');
+            $r = hexdec(substr($hex, 0, 2));
+            $g = hexdec(substr($hex, 1, 2));
+            $b = hexdec(substr($hex, 2, 2));
+        ?>
+        .bg-cyan, .bg-teal {
+            background-color: {{ $companyColor }} !important;
+            color: #fff !important;
+        }
+    </style>
 
 
 

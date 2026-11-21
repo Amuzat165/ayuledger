@@ -4,7 +4,7 @@
 
 <?php
 
-$moduleName = " Initial Ledger Balance";
+$moduleName = " {{ __('financial.labels.initial_ledger') }} Balance";
 $createItemName = __('root.common.create') . ' ' . $moduleName;
 
 $breadcrumbMainName = $moduleName;
@@ -68,7 +68,7 @@ $trash_show = config('role_manage.InitialIncomeExpenseHeadBalance.TrashShow');
                     <div class="header">
                         <h2 class="m-b-20">
                             {{ $createItemName }}
-                            <small>Put {{ $moduleName }} Information</small>
+                            <small>{{ __('financial.labels.enter_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
 
                         <div class="body">
@@ -83,7 +83,7 @@ $trash_show = config('role_manage.InitialIncomeExpenseHeadBalance.TrashShow');
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control  show-tick"
                                                     name="branch_id" id="">
-                                                    <option value="0">Select Branch Name</option>
+                                                    <option value="0">{{ __('financial.labels.select_branch') }}</option>
                                                     @if (App\Branch::all()->count() >0 )
 
                                                     @foreach( App\Branch::all() as $branch_id )
@@ -103,7 +103,7 @@ $trash_show = config('role_manage.InitialIncomeExpenseHeadBalance.TrashShow');
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control  show-tick"
                                                     name="income_expense_head_id" id="">
-                                                    <option value="0">Select Ledger Name</option>
+                                                    <option value="0">{{ __('financial.labels.select_head_of_account') }}</option>
                                                     @if (App\IncomeExpenseHead::all()->count() >0 )
 
                                                     @foreach( App\IncomeExpenseHead::all() as
@@ -125,7 +125,7 @@ $trash_show = config('role_manage.InitialIncomeExpenseHeadBalance.TrashShow');
                                             <div class="form-line">
                                                 <input autocomplete="off" value="{{ old('amount') }}" name="amount"
                                                     type="number" class="form-control">
-                                                <label class="form-label">Amount</label>
+                                                <label class="form-label">{{ __('Amount') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -135,7 +135,7 @@ $trash_show = config('role_manage.InitialIncomeExpenseHeadBalance.TrashShow');
                                             <div class="form-line " id="bs_datepicker_container1">
                                                 <input autocomplete="off" value="{{ old('voucher_date') }}"
                                                     name="voucher_date" type="text" class="form-control"
-                                                    placeholder="Please choose a voucher date...">
+                                                    placeholder="{{ __('Please choose a voucher date...') }}">
 
                                             </div>
                                         </div>
@@ -146,7 +146,7 @@ $trash_show = config('role_manage.InitialIncomeExpenseHeadBalance.TrashShow');
                                             <div class="form-line">
                                                 <textarea class="form-control"
                                                     name="particulars">{{ old('particulars')  }}</textarea>
-                                                <label class="form-label">Particulars</label>
+                                                <label class="form-label">{{ __('financial.labels.particulars') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -240,11 +240,11 @@ $trash_show = config('role_manage.InitialIncomeExpenseHeadBalance.TrashShow');
 
 <script>
     @if(Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
                 @if(Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
 
@@ -320,22 +320,22 @@ $trash_show = config('role_manage.InitialIncomeExpenseHeadBalance.TrashShow');
 
 
                 if (input_values.voucher_date == 0) {
-                    toastr["error"]('Set Voucher Date');
+                    toastr["error"]('{{ __('financial.labels.date_required') }}');
                     e.preventDefault();
                 }
 
                 if (input_values.amount == 0) {
-                    toastr["error"]('Set Amount');
+                    toastr["error"]('{{ __('financial.labels.enter_amount') }}');
                     e.preventDefault();
                 }
 
                 if (input_values.income_expense_head_id == 0) {
-                    toastr["error"]('Select Income Expense Head Name');
+                    toastr["error"]('{{ __('financial.labels.select_head_of_account') }}');
                     e.preventDefault();
                 }
 
                 if (input_values.branch_id == 0) {
-                    toastr["error"]('Select Branch Name');
+                    toastr["error"]('{{ __('financial.labels.select_branch') }}');
                     e.preventDefault();
                 }
 

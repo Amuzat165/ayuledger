@@ -2,7 +2,7 @@
 
 <?php
 
-$moduleName = __('root.ledger_group.ledger_group_manage');
+$moduleName = __('financial.labels.ledger_group_management');
 $createItemName = __('root.common.create') .' '. $moduleName;
 
 $breadcrumbMainName = $moduleName;
@@ -114,9 +114,9 @@ $trash_show = config('role_manage.LedgerGroup.TrashShow');
                                                 class="chk-col-cyan" />
                                             <label for="md_checkbox_p"></label>
                                         </th>
-                                        <th>{{ __('root.ledger_group.name') }}</th>
-                                        <th>{{ __('root.ledger_group.description') }}</th>
-                                        <th>{{ __('root.ledger_group.options') }}</th>
+                                        <th>{{ __('financial.labels.name') }}</th>
+                                        <th>{{ __('financial.terms.description') }}</th>
+                                        <th>{{ __('financial.labels.actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -167,9 +167,9 @@ $trash_show = config('role_manage.LedgerGroup.TrashShow');
                                                     class="chk-col-cyan" />
                                                 <label for="md_checkbox_footer"></label>
                                             </th>
-                                            <th>{{ __('root.ledger_group.name') }}</th>
-                                            <th>{{ __('root.ledger_group.description') }}</th>
-                                            <th>{{ __('root.ledger_group.options') }}</th>
+                                            <th>{{ __('financial.labels.name') }}</th>
+                                            <th>{{ __('financial.terms.description') }}</th>
+                                            <th>{{ __('financial.labels.actions') }}</th>
                                         </tr>
                                     </thead>
                                 </tbody>
@@ -235,10 +235,10 @@ $trash_show = config('role_manage.LedgerGroup.TrashShow');
 @push('include-js')
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)

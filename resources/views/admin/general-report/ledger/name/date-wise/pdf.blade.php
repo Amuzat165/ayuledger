@@ -20,10 +20,10 @@
                 <table class="table table-bordered table-sm">
                     <thead>
                         <tr>
-                            <td class="text-right">Search By:</td>
-                            <td class="text-right">From Date:</td>
+                            <td class="text-right">{{ __('financial.labels.search_by') }}:</td>
+                            <td class="text-right">{{ __('financial.reports.date_start') }}:</td>
                             <th>{{ $search_by['from'] }}</th>
-                            <td class="text-right">To Date:</td>
+                            <td class="text-right">{{ __('financial.reports.date_end') }}:</td>
                             <th>{{ $search_by['to'] }}</th>
                         </tr>
                     </thead>
@@ -37,16 +37,16 @@
                 <table class="table table-bordered table-sm table-hover">
                     <thead>
                     <tr>
-                        <th class="text-center">Sl.No</th>
-                        <th>Account ID</th>
-                        <th>Account Name</th>
-                        <th>Transaction Date</th>
-                        <th>Reference</th>
-                        <th>Journal</th>
-                        <th>Description</th>
-                        <th class="text-right">Debit</th>
-                        <th class="text-right">Credit</th>
-                        <th class="text-right">Balance</th>
+                        <th class="text-center">{{ __('Sl.No') }}</th>
+                        <th>{{ __('Account ID') }}</th>
+                        <th>{{ __('financial.screens.account_name') }}</th>
+                        <th>{{ __('financial.terms.transaction_date') }}</th>
+                        <th>{{ __('financial.terms.reference') }}</th>
+                        <th>{{ __('financial.terms.journal') }}</th>
+                        <th>{{ __('financial.terms.description') }}</th>
+                        <th class="text-right">{{ __('financial.terms.debit') }}</th>
+                        <th class="text-right">{{ __('financial.terms.credit') }}</th>
+                        <th class="text-right">{{ __('financial.terms.balance') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -81,7 +81,7 @@
                         @endforeach
                     @empty
                         <tr>
-                            <td colspan="10" class="text-center">No data available</td>
+                            <td colspan="10" class="text-center">{{ __('No data available') }}</td>
                         </tr>
                     @endforelse
                     </tbody>

@@ -21,12 +21,12 @@
                 <table class="table table-bordered table-sm">
                     <thead>
                         <tr>
-                            <td class="text-right">Search By:</td>
-                            <td class="text-right">Voucher Type</td>
+                            <td class="text-right">{{ __('financial.labels.search_by') }}:</td>
+                            <td class="text-right">{{ __('Voucher Type') }}</td>
                             <th>{{ $search_by['type_name'] }}</th>
-                            <td class="text-right">From Date:</td>
+                            <td class="text-right">{{ __('financial.reports.date_start') }}:</td>
                             <th>{{ $search_by['from'] }}</th>
-                            <td class="text-right">To Date:</td>
+                            <td class="text-right">{{ __('financial.reports.date_end') }}:</td>
                             <th>{{ $search_by['to'] }}</th>
                         </tr>
                     </thead>
@@ -41,20 +41,20 @@
                     <thead>
                         <tr>
                             <th class="text-center">
-                                Sl.No
+                                {{ __('Sl.No') }}
                             </th>
-                            <th class="text-center">Voucher No</th>
-                            <th class="text-center">Type</th>
-                            <th>Particulars</th>
-                            <th>Branch Name</th>
-                            <th>Date</th>
-                            <th>Ledger Name</th>
-                            <th>Made Of Payment</th>
-                            <th>CHQ. No</th>
-                            <th>Debit ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?>
+                            <th class="text-center">{{ __('financial.labels.voucher_number') }}</th>
+                            <th class="text-center">{{ __('Type') }}</th>
+                            <th>{{ __('financial.labels.particulars') }}</th>
+                            <th>{{ __('financial.labels.branch_name') }}</th>
+                            <th>{{ __('financial.labels.date') }}</th>
+                            <th>{{ __('Ledger Name') }}</th>
+                            <th>{{ __('financial.labels.payment_account') }}</th>
+                            <th>{{ __('CHQ. No') }}</th>
+                            <th>{{ __('Debit') }} ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?>
                                 )
                             </th>
-                            <th>Credit ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?>
+                            <th>{{ __('Credit') }} ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?>
                                 )
                             </th>
                         </tr>

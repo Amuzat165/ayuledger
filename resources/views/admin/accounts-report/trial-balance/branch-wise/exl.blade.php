@@ -21,13 +21,13 @@
                                 </th>
                             </tr>
                             <tr>
-                                <th class="text-center" scope="col"><b>Sl. No</b></th>
-                                <th scope="col"><b>Head Of Account</b></th>
-                                <th class="text-right" scope="col"><b>Dr
+                                <th class="text-center" scope="col"><b>{{ __('Sl. No') }}</b></th>
+                                <th scope="col"><b>{{ __('financial.labels.head_of_account') }}</b></th>
+                                <th class="text-right" scope="col"><b>{{ __('Dr') }}
                                         ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
                                     </b>
                                 </th>
-                                <th class="text-right" scope="col"><b>Cr
+                                <th class="text-right" scope="col"><b>{{ __('Cr') }}
                                         ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
                                     </b>
                                 </th>
@@ -85,13 +85,13 @@
                             <?php $total_dr += $sub_dr; ?>
                             <?php $total_cr += $sub_cr; ?>
                             <tr>
-                                <th class="text-right" colspan="2">Sub Total =</th>
+                                <th class="text-right" colspan="2">{{ __('financial.labels.subtotal_equals') }}</th>
                                 <th class="text-right">{{ Helper::convertMoneyFormat($sub_dr) }}</th>
                                 <th class="text-right">{{ Helper::convertMoneyFormat($sub_cr) }}</th>
                             </tr>
                             @if ($items['branches']->count() == $branch_number)
                                 <tr>
-                                    <th class="text-right font-s-20" colspan="2">Total Amount=</th>
+                                    <th class="text-right font-s-20" colspan="2">{{ __('Total Amount') }}=</th>
                                     <th class="text-right font-s-20">{{ Helper::convertMoneyFormat($total_dr) }}
                                     </th>
                                     <th class="text-right font-s-20">{{ Helper::convertMoneyFormat($total_cr) }}
@@ -110,16 +110,16 @@
                     <thead>
                         <tr>
                             <th class="text-center font-s-18" colspan="4">
-                                <b> Closing Bank &amp; Cash Balance</b>
+                                <b> {{ __('financial.labels.closing_bank_cash_balance') }}</b>
                             </th>
                         </tr>
                         <tr>
-                            <th class="text-center" scope="col"><b>Sl. No</b></th>
+                            <th class="text-center" scope="col"><b>{{ __('Sl. No') }}</b></th>
                             <th scope="col"></th>
-                            <th class="text-right" scope="col"><b>Dr ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
+                            <th class="text-right" scope="col"><b>{{ __('Dr') }} ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
                                 </b>
                             </th>
-                            <th class="text-right" scope="col"><b>Cr ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
+                            <th class="text-right" scope="col"><b>{{ __('Cr') }} ( <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?> )
                                 </b>
                             </th>
                         </tr>
@@ -158,12 +158,12 @@
                             @endphp
                         @endforeach
                         <tr>
-                            <th class="text-right" colspan="2">Sub Total =</th>
+                            <th class="text-right" colspan="2">{{ __('financial.labels.subtotal_equals') }}</th>
                             <th class="text-right">{{ Helper::convertMoneyFormat($total_bank_cash_balance) }}</th>
                             <th class="text-right">{{ Helper::convertMoneyFormat(0) }}</th>
                         </tr>
                         <tr>
-                            <th class="text-right font-s-20" colspan="2">Grand Total Amount =</th>
+                            <th class="text-right font-s-20" colspan="2">{{ __('financial.labels.grand_total_amount_equals') }}</th>
                             <th class="text-right font-s-20">{{ Helper::convertMoneyFormat($total_cr) }}</th>
                             <th class="text-right font-s-20">
                                 {{ Helper::convertMoneyFormat($total_dr + $total_bank_cash_balance) }}</th>

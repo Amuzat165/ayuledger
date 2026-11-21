@@ -20,21 +20,21 @@ class VendorController extends Controller
         $vendors = Vendor::with('branch')->get();
 
         return view('pages.vendors.index', [
-            'title' => 'View Vendors',
-            'resource' => 'Vendors',
+            'title' => __('financial.screens.view_vendors'),
+            'resource' => __('financial.screens.vendors'),
             'type' => 'table',
             'thead' => [
                 '#',
                 'ID',
-                'Branch',
-                'Name',
-                'Address',
-                'Phone no',
-                'Account',
-                'Terms of Payment',
+                __('financial.labels.branch'),
+                __('financial.terms.vendor'),
+                __('financial.screens.address'),
+                __('financial.screens.phone_number'),
+                __('financial.terms.account'),
+                __('financial.screens.terms_of_payment'),
 //                'Date Created',
-                'Edit',
-                'Del'
+                __('root.common.edit'),
+                __('ui.actions.delete')
             ],
             'tbody' => $vendors,
         ]);
@@ -51,7 +51,7 @@ class VendorController extends Controller
         $branches = Branch::pluck('name', 'id');
 
         $params = [
-            'title' => 'Add Vendor',
+            'title' => __('financial.screens.add_vendor'),
             'resource' => 'Vendors',
             'type' => 'form',
             'action' => route('vendors.store'),
@@ -101,7 +101,7 @@ class VendorController extends Controller
             'terms_of_payment' => $termsOfPayment,
         ]);
 
-        return redirect()->route('vendors.index')->with('success', 'Vendor created successfully.');
+        return redirect()->route('vendors.index')->with('success', __('financial.screens.vendor_created'));
     }
 
 
@@ -133,7 +133,7 @@ class VendorController extends Controller
         $accounts = IncomeExpenseHead::pluck('name', 'id');
 
         $params = (object) [
-            'title' => 'Edit Vendor',
+            'title' => __('financial.screens.edit_vendor'),
             'resource' => 'Vendors',
             'type' => 'form',
             'action' => route('vendors.update', $vendor->id),
@@ -173,9 +173,16 @@ class VendorController extends Controller
         ]);
 
         $vendor = Vendor::findOrFail($id);
-        $vendor->update($request->all());
+        $vendor->update($request->only([
+            'branch_id',
+            'name',
+            'address',
+            'phone_number',
+            'account',
+            'terms_of_payment',
+        ]));
 
-        return redirect()->route('vendors.index')->with('success', 'Vendor updated successfully.');
+        return redirect()->route('vendors.index')->with('success', __('financial.screens.vendor_updated'));
     }
 
     /**
@@ -189,6 +196,6 @@ class VendorController extends Controller
         $vendor = Vendor::findOrFail($id);
         $vendor->delete();
 
-        return redirect()->route('vendors.index')->with('success', 'Vendor deleted successfully.');
+        return redirect()->route('vendors.index')->with('success', __('financial.screens.vendor_deleted'));
     }
 }

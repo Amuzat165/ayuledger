@@ -1,7 +1,7 @@
 @extends('layouts.app')
 <?php
 
-$moduleName = __('root.bank_cash.bank_cash_manage');
+$moduleName = __('financial.labels.bank_cash_management');
 $createItemName = __('root.common.create') . ' ' . $moduleName;
 
 $breadcrumbMainName = $moduleName;
@@ -110,10 +110,10 @@ $trash_show = config('role_manage.BankCash.TrashShow');
                                                 class="chk-col-cyan" />
                                             <label for="md_checkbox_p"></label>
                                         </th>
-                                        <th>{{ __('root.bank_cash.name') }}</th>
-                                        <th>{{ __('root.bank_cash.account_number') }}</th>
-                                        <th>{{ __('root.bank_cash.description') }}</th>
-                                        <th>{{ __('root.bank_cash.options') }}</th>
+                                        <th>{{ __('financial.labels.name') }}</th>
+                                        <th>{{ __('financial.labels.account_number') }}</th>
+                                        <th>{{ __('financial.terms.description') }}</th>
+                                        <th>{{ __('financial.labels.actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -158,19 +158,6 @@ $trash_show = config('role_manage.BankCash.TrashShow');
                                     </tr>
                                     <?php $i++; ?>
                                     @endforeach
-                                    <thead>
-                                        <tr>
-                                            <th class="checkbox_custom_style text-center">
-                                                <input name="selectBottom" type="checkbox" id="md_checkbox_footer"
-                                                    class="chk-col-cyan" />
-                                                <label for="md_checkbox_footer"></label>
-                                            </th>
-                                            <th>{{ __('root.bank_cash.name') }}</th>
-                                            <th>{{ __('root.bank_cash.account_number') }}</th>
-                                            <th>{{ __('root.bank_cash.description') }}</th>
-                                            <th>{{ __('root.bank_cash.options') }}</th>
-                                        </tr>
-                                    </thead>
                                 </tbody>
                             </table>
                             @else
@@ -234,10 +221,10 @@ $trash_show = config('role_manage.BankCash.TrashShow');
 @push('include-js')
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)

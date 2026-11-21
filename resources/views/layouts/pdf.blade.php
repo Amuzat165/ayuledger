@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ \App\Support\LocaleManager::direction(app()->getLocale()) }}">
 
 <head>
     <!-- Required meta tags -->
@@ -11,9 +11,8 @@
     <meta name="description"
         content="E-Account is a dynamic, open source, easy to use, user friendly web base application. Which is built in PHP – MySQL">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Favicon-->
-    <?php $image = Config::get('settings.company_logo'); ?>
-    <link rel="icon" href="{{ asset($image) }}" type="image/x-icon">
+    <!-- Company favicon-->
+    @include('shared.favicon')
     <!-- End -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!-- CSRF Token -->
@@ -27,6 +26,17 @@
     <title>@yield('title', 'Report')</title>
     @stack('include-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('asset/layout/css/util.css') }}">
+    
+    <!-- Dynamic Company Color Override for PDF -->
+    <style>
+        <?php 
+            $companyColor = Config::get('settings.company_color', '#00897B');
+        ?>
+        .bg-cyan, .bg-teal, .header.bg-cyan, .card .header.bg-cyan {
+            background-color: {{ $companyColor }} !important;
+            color: #fff !important;
+        }
+    </style>
 </head>
 
 <body>

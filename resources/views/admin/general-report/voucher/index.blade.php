@@ -11,8 +11,8 @@
 @stop
 @section('content')
 <section @if ($is_rtl) dir="rtl" @endif class="content">
-    <div class="header">
-        <h2 class="text-center">Voucher Report</h2>
+    <div class="header" style="background-color: transparent !important;">
+        <h2 class="text-center">{{ __('financial.screens.voucher') }}</h2>
     </div>
     <div class="container-fluid">
         <!-- Inline Layout | With Floating Label -->
@@ -20,24 +20,18 @@
             <!-- Credit Voucher Wise Start -->
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 @if ($is_rtl) float-r @endif">
                 <div class="card">
-                    <div class="header bg-cyan">
-                        <h2>
-                            Voucher
-                            <small>Anything is select show all</small>
-                        </h2>
-                    </div>
-                    <br>
                     <div class="body">
                         <div class="row clearfix">
                             <form class="form" id="form_validation" method="post"
                                 action="{{ route('reports.general.voucher.report') }}">
                                 {{ csrf_field() }}
                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                                         <div class="form-group form-float">
+                                                                            <label>{{ __('financial.labels.branch') }}</label>
                                                                             <div class="form-line">
                                                                                 <select class="form-control show-tick" name="branch_id">
-                                                                                    <option value="">All Branches</option>
+                                                                                    <option value="">{{ __('financial.labels.all_branches') }}</option>
                                                                                     @foreach ($branches as $branch)
                                                                                         <option value="{{ $branch->id }}">{{ $branch->name }}</option>
                                                                                     @endforeach
@@ -49,13 +43,13 @@
                                         <div class="form-line">
                                             <select data-live-search="true" class="form-control show-tick"
                                                 name="voucher_type">
-                                                <option value="">Select Voucher Type</option>
-                                                <option value="CV">Credit Voucher</option>
-                                                <option value="DV">Debit Voucher</option>
-                                                <option value="JV">Journal Voucher</option>
-                                                <option value="Contra">Contra Voucher</option>
-                                                <option value="IBCBV">Initial Bank Cash</option>
-                                                <option value="IIEHBV">Initial Ledger</option>
+                                                <option value="">{{ __('financial.labels.select_voucher_type') }}</option>
+                                                <option value="CV">{{ __('financial.screens.credit_voucher') }}</option>
+                                                <option value="DV">{{ __('financial.screens.debit_voucher') }}</option>
+                                                <option value="JV">{{ __('financial.screens.journal_voucher') }}</option>
+                                                <option value="Contra">{{ __('financial.screens.contra_voucher') }}</option>
+                                                <option value="IBCBV">{{ __('financial.labels.initial_bank_cash') }}</option>
+                                                <option value="IIEHBV">{{ __('financial.labels.initial_ledger') }}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -64,12 +58,12 @@
                                     <div class="input-daterange input-group" id="bs_datepicker_range_container2">
                                         <div class="form-line">
                                             <input autocomplete="off" name="from" type="text" class="form-control"
-                                                placeholder="Date start...">
+                                                placeholder="{{ __('Date start...') }}">
                                         </div>
-                                        <span class="input-group-addon">to</span>
+                                        <span class="input-group-addon">{{ __('financial.reports.to') }}</span>
                                         <div class="form-line">
                                             <input autocomplete="off" name="to" type="text" class="form-control"
-                                                placeholder="Date end...">
+                                                placeholder="{{ __('Date end...') }}">
                                         </div>
                                     </div>
                                 </div>
@@ -133,11 +127,11 @@
 <script src="{{ asset('asset/js/pages/forms/basic-form-elements.js') }}"></script>
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)

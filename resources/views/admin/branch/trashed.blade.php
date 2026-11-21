@@ -69,7 +69,7 @@ $trash_show = config('role_manage.Branch.TrashShow');
                             </form>
                         </ul>
                     </div>
-                    <form class="actionForm" action="{{ route($ParentRouteName . '.trashed.action') }}" method="get">
+                    <form class="actionForm" action="{{ route($ParentRouteName . '.trashed.action') }}" method="post">
                         <div class="pagination-and-action-area body">
                             <div>
                                 <div class="select-and-apply-area">
@@ -128,22 +128,23 @@ $trash_show = config('role_manage.Branch.TrashShow');
                                         <td>{{ $item->location }}</td>
                                         <td>{{ $item->description }}</td>
                                         <td class="tdAction">
-                                            <a @if ($restore==0) class="dis-none" @endif
+                                            @if ($restore)
+                                            <button type="submit" form="branch-restore-{{ $item->id }}"
                                                 class="btn btn-xs btn-info waves-effect"
-                                                href="{{ route($ParentRouteName . '.restore', ['id' => $item->id]) }}"
-                                                data-toggle="tooltip" data-placement="top" title="Restore"><i
-                                                    class="material-icons">restore</i></a>
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('Restore') }}"><i class="material-icons">restore</i></button>
+                                            @endif
 
                                             <a data-target="#largeModal"
                                                 class="btn btn-xs btn-success waves-effect ajaxCall dis-none" href="#"
-                                                data-toggle="tooltip" data-placement="top" title="Preview"><i
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('Preview') }}"><i
                                                     class="material-icons">pageview</i></a>
 
-                                            <a @if ($permanently_delete==0) class="dis-none" @endif
+                                            @if ($permanently_delete)
+                                            <button type="submit" form="branch-kill-{{ $item->id }}"
                                                 class="btn btn-xs btn-danger waves-effect"
-                                                href="{{ route($ParentRouteName . '.kill', ['id' => $item->id]) }}"
-                                                data-toggle="tooltip" data-placement="top" title="Parmanently Delete?">
-                                                <i class="material-icons">delete</i></a>
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('Permanently Delete?') }}">
+                                                <i class="material-icons">delete</i></button>
+                                            @endif
                                         </td>
                                     </tr>
                                     <?php $i++; ?>
@@ -205,6 +206,15 @@ $trash_show = config('role_manage.Branch.TrashShow');
                             </div>
                         </div>
                     </form>
+                    @foreach ($items as $item)
+                    <form id="branch-restore-{{ $item->id }}" action="{{ route($ParentRouteName . '.restore', ['id' => $item->id]) }}" method="post" class="d-none">
+                        {{ csrf_field() }}
+                    </form>
+                    <form id="branch-kill-{{ $item->id }}" action="{{ route($ParentRouteName . '.kill', ['id' => $item->id]) }}" method="post" class="d-none">
+                        {{ csrf_field() }}
+                        @method('DELETE')
+                    </form>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -222,10 +232,10 @@ $trash_show = config('role_manage.Branch.TrashShow');
 <!-- Autosize Plugin Js -->
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)

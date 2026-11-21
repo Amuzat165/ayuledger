@@ -22,12 +22,12 @@
                             <th class="text-center">
                             </th>
                             <th class="text-center">
-                                <h5>From {{ $search_by['start_from'] }} To {{ $search_by['start_to'] }}</h5>
+                                <h5>{{ __('From') }} {{ $search_by['start_from'] }} {{ __('To') }} {{ $search_by['start_to'] }}</h5>
                             </th>
                         </tr>
                     @endif
                     <tr>
-                        <th class="text-left" scope="col">Groups Name</th>
+                        <th class="text-left" scope="col">{{ __('Groups Name') }}</th>
                         <th class="text-right" scope="col"> <?php echo config('settings.is_code') == 'code' ? config('settings.currency_code') : config('settings.currency_symbol'); ?>
                         </th>
                     </tr>
@@ -61,7 +61,7 @@
                         @endphp
                     @endforeach
                     <tr>
-                        <th class="text-right"> Sub Total =</th>
+                        <th class="text-right"> {{ __('financial.labels.subtotal_equals') }}</th>
                         <th class="text-right">{{ Helper::convertMoneyFormat($sub_total) }}</th>
                     </tr>
                     @php
@@ -74,7 +74,7 @@
             <thead>
                 <tr>
                     <th class="text-right">
-                        <h2>Grand Total = </h2>
+                        <h2>{{ __('Grand Total') }} = </h2>
                     </th>
                     <th class="text-right">
                         <h2>{{ Helper::convertMoneyFormat($grand_total) }} </h2>

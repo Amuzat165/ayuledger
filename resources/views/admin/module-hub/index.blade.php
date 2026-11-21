@@ -19,12 +19,12 @@
             <p>{{ $description }}</p>
         </div>
 
-        <label class="module-search"><i class="fas fa-search"></i><input id="module-search" type="search" placeholder="Search {{ strtolower($title) }}..." aria-label="Search {{ $title }}"></label>
+        <label class="module-search"><i class="fas fa-search"></i><input id="module-search" type="search" placeholder="{{ __('root.hubs.search_modules') }}" aria-label="{{ __('root.hubs.search_modules') }}"></label>
 
         <div class="module-grid" id="module-grid">
             @foreach ($categories as $category)
                 <section class="module-category">
-                    <div class="module-heading"><h2>{{ $category['title'] }}</h2><span>{{ count($category['items']) }} links</span></div>
+                    <div class="module-heading"><h2>{{ $category['title'] }}</h2><span>{{ trans_choice('root.hubs.links_count', count($category['items'])) }}</span></div>
                     <div class="module-cards">
                         @foreach ($category['items'] as $item)
                             <a class="module-card" href="{{ route($item[0]) }}" data-module-name="{{ strtolower($item[1] . ' ' . $item[2]) }}">
@@ -37,7 +37,7 @@
                 </section>
             @endforeach
         </div>
-        <p class="module-empty" id="module-empty">No links match your search.</p>
+        <p class="module-empty" id="module-empty">{{ __('root.hubs.no_links_match') }}</p>
     </div>
 </section>
 @stop

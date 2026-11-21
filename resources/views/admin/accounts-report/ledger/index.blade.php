@@ -11,7 +11,7 @@
 @stop
 @section('content')
 <section @if($is_rtl) dir="rtl" @endif class="content">
-    <div class="header">
+    <div class="header" style="background-color: transparent !important;">
         <h2 class="text-center">{{ __('root.reports.ledger_manage') }}</h2>
     </div>
     <div class="container-fluid">
@@ -22,8 +22,7 @@
                 <div class="card">
                     <div class="header bg-cyan">
                         <h2>
-                            {{ __('root.reports.branch_wise') }}
-                            <small>{{ __('root.reports.show_all') }}</small>
+                            {{ __('financial.reports.branch_wise') }}
                         </h2>
                     </div>
                     <br>
@@ -37,7 +36,7 @@
                                         <div class="form-line">
                                             <select data-live-search="true" class="form-control show-tick"
                                                 name="branch_id">
-                                                <option value="">All Branches</option>
+                                                <option value="">{{ __('financial.labels.all_branches') }}</option>
                                                 @foreach ($branches as $Branch)
                                                 <option value="{{ $Branch->id }}">{{ $Branch->name }}</option>
                                                 @endforeach
@@ -63,23 +62,23 @@
                                     <div class="input-daterange input-group" id="bs_datepicker_range_container">
                                         <div class="form-line">
                                             <input autocomplete="off" name="from" type="text" class="form-control"
-                                                placeholder="{{ __('root.reports.date_start') }}...">
+                                                placeholder="{{ __('financial.reports.date_start') }}...">
                                         </div>
-                                        <span class="input-group-addon">{{ __('root.reports.to') }}</span>
+                                        <span class="input-group-addon">{{ __('financial.reports.to') }}</span>
                                         <div class="form-line">
                                             <input autocomplete="off" name="to" type="text" class="form-control"
-                                                placeholder="{{ __('root.reports.date_end') }}...">
+                                                placeholder="{{ __('financial.reports.date_end') }}...">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="form-line">
-                                        <input formtarget="_blank" name="action" value="Show" type="submit"
-                                            class="btn btn-primary m-t-15 waves-effect">
-                                        <input name="action" value="Pdf" type="submit"
-                                            class="btn btn-primary m-t-15 waves-effect">
-                                        <input name="action" value="Excel" type="submit"
-                                            class="btn btn-primary m-t-15 waves-effect">
+                                        <button formtarget="_blank" name="action" value="Show" type="submit"
+                                            class="btn btn-primary m-t-15 waves-effect">{{ __('financial.screens.show') }}</button>
+                                        <button name="action" value="Pdf" type="submit"
+                                            class="btn btn-primary m-t-15 waves-effect">{{ __('financial.screens.pdf_file') }}</button>
+                                        <button name="action" value="Excel" type="submit"
+                                            class="btn btn-primary m-t-15 waves-effect">{{ __('financial.screens.excel_file') }}</button>
                                     </div>
                                 </div>
                             </form>
@@ -94,7 +93,6 @@
                     <div class="header bg-cyan">
                         <h2>
                             {{ __('root.reports.ledger_name_wise') }}
-                            <small>{{ __('root.reports.show_all') }}</small>
                         </h2>
                     </div>
                     <br>
@@ -119,10 +117,11 @@
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                     <div class="form-group form-float">
+                                        <label>{{ __('financial.labels.branch') }}</label>
                                         <div class="form-line">
                                             <select data-live-search="true" class="form-control show-tick"
                                                 name="branch_id">
-                                                <option value="">All Branches</option>
+                                                <option value="">{{ __('financial.labels.all_branches') }}</option>
                                                 @foreach ($branches as $Branch)
                                                 <option value="{{ $Branch->id }}">{{ $Branch->name }}</option>
                                                 @endforeach
@@ -134,23 +133,23 @@
                                     <div class="input-daterange input-group" id="bs_datepicker_range_container1">
                                         <div class="form-line">
                                             <input autocomplete="off" name="from" type="text" class="form-control"
-                                                placeholder="{{ __('root.reports.date_start') }}...">
+                                                placeholder="{{ __('financial.reports.date_start') }}...">
                                         </div>
-                                        <span class="input-group-addon">{{ __('root.reports.to') }}</span>
+                                        <span class="input-group-addon">{{ __('financial.reports.to') }}</span>
                                         <div class="form-line">
                                             <input autocomplete="off" name="to" type="text" class="form-control"
-                                                placeholder="{{ __('root.reports.date_end') }}...">
+                                                placeholder="{{ __('financial.reports.date_end') }}...">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="form-line">
-                                        <input formtarget="_blank" name="action" value="Show" type="submit"
-                                            class="btn btn-primary m-t-15 waves-effect">
-                                        <input name="action" value="Pdf" type="submit"
-                                            class="btn btn-primary m-t-15 waves-effect">
-                                        <input name="action" value="Excel" type="submit"
-                                            class="btn btn-primary m-t-15 waves-effect">
+                                        <button formtarget="_blank" name="action" value="Show" type="submit"
+                                            class="btn btn-primary m-t-15 waves-effect">{{ __('financial.screens.show') }}</button>
+                                        <button name="action" value="Pdf" type="submit"
+                                            class="btn btn-primary m-t-15 waves-effect">{{ __('financial.screens.pdf_file') }}</button>
+                                        <button name="action" value="Excel" type="submit"
+                                            class="btn btn-primary m-t-15 waves-effect">{{ __('financial.screens.excel_file') }}</button>
                                     </div>
                                 </div>
                             </form>
@@ -165,7 +164,6 @@
                     <div class="header bg-cyan">
                         <h2>
                             {{ __('root.reports.cash_bank_book_wise') }}
-                            <small>{{ __('root.reports.show_all') }}</small>
                         </h2>
                     </div>
                     <br>
@@ -190,10 +188,11 @@
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                     <div class="form-group form-float">
+                                        <label>{{ __('financial.labels.branch') }}</label>
                                         <div class="form-line">
                                             <select data-live-search="true" class="form-control show-tick"
                                                 name="branch_id">
-                                                <option value="">All Branches</option>
+                                                <option value="">{{ __('financial.labels.all_branches') }}</option>
                                                 @foreach ($branches as $project)
                                                 <option @if ($project->id == old('branch_id')) selected @endif
                                                     value="{{ $project->id }}">{{ $project->name }}</option>
@@ -206,23 +205,23 @@
                                     <div class="input-daterange input-group" id="bs_datepicker_range_container2">
                                         <div class="form-line">
                                             <input autocomplete="off" name="from" type="text" class="form-control"
-                                                placeholder="{{ __('root.reports.date_start') }}...">
+                                                placeholder="{{ __('financial.reports.date_start') }}...">
                                         </div>
-                                        <span class="input-group-addon">{{ __('root.reports.to') }}</span>
+                                        <span class="input-group-addon">{{ __('financial.reports.to') }}</span>
                                         <div class="form-line">
                                             <input autocomplete="off" name="to" type="text" class="form-control"
-                                                placeholder="{{ __('root.reports.date_end') }}...">
+                                                placeholder="{{ __('financial.reports.date_end') }}...">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="form-line">
-                                        <input formtarget="_blank" name="action" value="Show" type="submit"
-                                            class="btn btn-primary m-t-15 waves-effect">
-                                        <input name="action" value="Pdf" type="submit"
-                                            class="btn btn-primary m-t-15 waves-effect">
-                                        <input name="action" value="Excel" type="submit"
-                                            class="btn btn-primary m-t-15 waves-effect">
+                                        <button formtarget="_blank" name="action" value="Show" type="submit"
+                                            class="btn btn-primary m-t-15 waves-effect">{{ __('financial.screens.show') }}</button>
+                                        <button name="action" value="Pdf" type="submit"
+                                            class="btn btn-primary m-t-15 waves-effect">{{ __('financial.screens.pdf_file') }}</button>
+                                        <button name="action" value="Excel" type="submit"
+                                            class="btn btn-primary m-t-15 waves-effect">{{ __('financial.screens.excel_file') }}</button>
                                     </div>
                                 </div>
                             </form>
@@ -275,10 +274,10 @@
 <script src="{{ asset('asset/js/pages/forms/basic-form-elements.js') }}"></script>
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)

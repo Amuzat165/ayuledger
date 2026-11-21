@@ -2,8 +2,8 @@
 
 <?php
 
-$moduleName = ' Language manage';
-$createItemName = 'Configuration' . $moduleName;
+$moduleName = ' ' . __('Language manage');
+$createItemName = __('Configuration') . $moduleName;
 
 $breadcrumbMainName = $moduleName;
 $breadcrumbCurrentName = ' '.__('root.common.all');
@@ -48,9 +48,9 @@ $ParentRouteName = 'language';
                 <div class="card">
                     <div class="header">
                         <h2>
-                            Language Mange for country <b>{{ $language->name }}</b> and code is <b>{{ $language->code
+                            {{ __('Language Mange for country') }} <b>{{ $language->name }}</b> {{ __('and code is') }} <b>{{ $language->code
                                 }}</b>
-                            <small>Configuration {{ $moduleName }} Information </small>
+                            <small>{{ __('Configuration :value Information', ['value' => $moduleName]) }} </small>
                         </h2>
                     </div>
                     <div class="body">
@@ -105,7 +105,7 @@ $ParentRouteName = 'language';
                             </div>
                             <div class="form-line p-b-30">
                                 <button type="submit" class="btn btn-primary m-t-15 waves-effect">
-                                    Update
+                                    {{ __('Update') }}
                                 </button>
                             </div>
 
@@ -153,10 +153,10 @@ $ParentRouteName = 'language';
 <script src="{{ asset('asset/js/pages/forms/basic-form-elements.js') }}"></script>
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)

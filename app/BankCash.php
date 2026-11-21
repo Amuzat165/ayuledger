@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
-class BankCash extends Model
+class BankCash extends TenantScopedModel
 {
     use Notifiable;
     use SoftDeletes;

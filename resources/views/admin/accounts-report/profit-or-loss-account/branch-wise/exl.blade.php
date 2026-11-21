@@ -9,19 +9,18 @@
                 <table class="table table-bordered table-sm table-hover">
                     <thead>
                         <tr>
-                            <th colspan="3">Profit Or Loss
-                                Account
+                            <th colspan="3">{{ __('Profit Or Loss Account') }}
                             </th>
                         </tr>
                         <tr>
                             <th>
-                                <h5>Particulars </h5>
+                                <h5>{{ __('financial.labels.particulars') }} </h5>
                             </th>
                             <th>
-                                <h5>From {{ $search_by['start_from'] }} To {{ $search_by['start_to'] }}</h5>
+                                <h5>{{ __('From') }} {{ $search_by['start_from'] }} {{ __('To') }} {{ $search_by['start_to'] }}</h5>
                             </th>
                             <th>
-                                <h5>From {{ $search_by['end_from'] }} To {{ $search_by['end_to'] }}</h5>
+                                <h5>{{ __('From') }} {{ $search_by['end_from'] }} {{ __('To') }} {{ $search_by['end_to'] }}</h5>
                             </th>
                         </tr>
                         <tr>

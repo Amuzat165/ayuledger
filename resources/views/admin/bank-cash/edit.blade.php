@@ -4,11 +4,11 @@
 
 <?php
 
-$moduleName = __('root.bank_cash.bank_cash_manage');
+$moduleName = __('financial.labels.bank_cash_management');
 $createItemName = __('root.common.edit') . ' ' . $moduleName;
 
 $breadcrumbMainName = $moduleName;
-$breadcrumbCurrentName = ' All';
+$breadcrumbCurrentName = ' ' . __('All');
 
 $breadcrumbMainIcon = 'fas fa-university';
 $breadcrumbCurrentIcon = 'archive';
@@ -52,7 +52,7 @@ $ParentRouteName = 'bank_cash';
                     <div class="header">
                         <h2>
                             {{ $createItemName }}
-                            <small>Edit {{ $moduleName }} Information</small>
+                            <small>{{ __('financial.labels.edit_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
                         <div class="body">
                             <form class="form" id="form_validation" method="post"
@@ -64,7 +64,7 @@ $ParentRouteName = 'bank_cash';
                                             <div class="form-line">
                                                 <input value="{{ $item->name }}" name="name" type="text"
                                                     class="form-control">
-                                                <label class="form-label">Name</label>
+                                                <label class="form-label">{{ __('financial.labels.name') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -73,7 +73,7 @@ $ParentRouteName = 'bank_cash';
                                             <div class="form-line">
                                                 <input value="{{ $item->account_number }}" name="account_number"
                                                     type="text" class="form-control">
-                                                <label class="form-label">Account Number</label>
+                                                <label class="form-label">{{ __('financial.labels.account_number') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -82,7 +82,7 @@ $ParentRouteName = 'bank_cash';
                                             <div class="form-line">
                                                 <textarea class="form-control"
                                                     name="description">{{ $item->description }}</textarea>
-                                                <label class="form-label">Description</label>
+                                                <label class="form-label">{{ __('financial.terms.description') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -162,11 +162,11 @@ $ParentRouteName = 'bank_cash';
 
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
         @if ($errors->any())
@@ -230,7 +230,7 @@ $ParentRouteName = 'bank_cash';
                 var FieldName1 = " Name";
 
                 if (input_values.name == 0) {
-                    toastr["error"]('Set Any' + FieldName1);
+                    toastr["error"](@json(__('financial.labels.set_value_for_field', ['field' => '__FIELD__'])).replace('__FIELD__', FieldName1));
                     e.preventDefault();
                 }
 

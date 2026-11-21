@@ -49,6 +49,8 @@ class RoleManageController extends Controller
 
     public function arrangeRoleItem($content, $module_name)
     {
+        $content = is_array($content) ? $content : [];
+
         if (array_key_exists(1, $content)) { //Module Show
             $module_show = 1;
         } else {
@@ -122,6 +124,7 @@ class RoleManageController extends Controller
             'RoleManager' => $this->arrangeRoleItem($request->role_manage, 'Role Manager'),
             'Settings' => $this->arrangeRoleItem($request->settings, 'Settings'),
             'Branch' => $this->arrangeRoleItem($request->Branch, 'Branch'),
+            'Inventory' => $this->arrangeRoleItem($request->Inventory, 'Inventory'),
             'Language' => $this->arrangeRoleItem($request->Language, 'Language'),
             'LedgerType' => $this->arrangeRoleItem($request->LedgerType, 'Ledger Type'),
             'LedgerGroup' => $this->arrangeRoleItem($request->LedgerGroup, 'Ledger Group'),
@@ -149,6 +152,8 @@ class RoleManageController extends Controller
             'GeneralLedger' => $this->arrangeRoleItem($request->GeneralLedger, 'General Ledger Report'),
             'GeneralBankCash' => $this->arrangeRoleItem($request->GeneralBankCash, 'General Bank Cash Report'),
             'GeneralVoucher' => $this->arrangeRoleItem($request->GeneralVoucher, 'General Voucher Report'),
+            'PurchaseOrder' => $this->arrangeRoleItem($request->PurchaseOrder, 'Purchase Order'),
+            'SupplierInvoice' => $this->arrangeRoleItem($request->SupplierInvoice, 'Supplier Invoice'),
         );
         $content = json_encode($content);
         $this->parentModel::create([
@@ -156,7 +161,7 @@ class RoleManageController extends Controller
             'content' => $content,
             'create_by' => \Auth::user()->email,
         ]);
-        Session::flash('success', 'Successfully Created');
+        Session::flash('success', __('ui.messages.created'));
         return redirect()->back();
     }
 
@@ -170,7 +175,7 @@ class RoleManageController extends Controller
     {
         $item = $this->parentModel::find($request->id);
         if (empty($item)) {
-            Session::flash('error', "Item not found");
+            Session::flash('error', __('ui.messages.not_found'));
             return redirect()->route('role-manage');
         }
         $content = (array)json_decode($item['content']);
@@ -184,15 +189,41 @@ class RoleManageController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
+    protected function normalizeRolePermissions($content)
+    {
+        $content = is_array($content) ? $content : (array) $content;
+        $normalized = $content;
+
+        foreach (config('role_manage', []) as $module => $permissions) {
+            $row = isset($content[$module])
+                ? (is_array($content[$module]) ? $content[$module] : (array) $content[$module])
+                : [];
+
+            if (!array_key_exists(0, $row)) {
+                $row[0] = preg_replace('/(?<!^)([A-Z])/', ' $1', $module);
+            }
+
+            for ($index = 1; $index <= 9; $index++) {
+                if (!array_key_exists($index, $row)) {
+                    $row[$index] = 0;
+                }
+            }
+
+            $normalized[$module] = $row;
+        }
+
+        return $normalized;
+    }
+
     public function edit($id)
     {
         $item = $this->parentModel::find($id);
         if (empty($item)) {
-            Session::flash('error', "Item not found");
+            Session::flash('error', __('ui.messages.not_found'));
             return redirect()->route('role-manage');
         }
-        $content = json_decode($item['content']);
-        $item['content'] = $content;
+        $content = json_decode($item['content'], true);
+        $item['content'] = $this->normalizeRolePermissions($content);
         return view($this->parentView . '.edit')->with('item', $item);
     }
 
@@ -209,46 +240,38 @@ class RoleManageController extends Controller
             'name' => 'required | unique:role_manages,name,' . $id,
         ]);
         $item = $this->parentModel::find($id);
-        $items = array(
-            'User' => $this->arrangeRoleItem($request->details['User'], 'User '),
-            'RoleManager' => $this->arrangeRoleItem($request->details['RoleManager'], 'Role Manager'),
-            'Settings' => $this->arrangeRoleItem($request->details['Settings'], 'Settings'),
-            'Branch' => $this->arrangeRoleItem($request->details['Branch'], 'Branch'),
-            'Language' => $this->arrangeRoleItem($request->details['Language'], 'Language'),
-            'LedgerType' => $this->arrangeRoleItem($request->details['LedgerType'], 'Ledger Type'),
-            'LedgerGroup' => $this->arrangeRoleItem($request->details['LedgerGroup'], 'Ledger Group'),
-            'LedgerName' => $this->arrangeRoleItem($request->details['LedgerName'], 'Ledger Name'),
-            'BankCash' => $this->arrangeRoleItem($request->details['BankCash'], 'Bank Cash'),
-            'InitialIncomeExpenseHeadBalance' => $this->arrangeRoleItem($request->details['InitialIncomeExpenseHeadBalance'], 'Initial Income Expense Head Balance'),
-            'InitialBankCashBalance' => $this->arrangeRoleItem($request->details['InitialBankCashBalance'], 'Initial Bank Cash Balance'),
-            'DrVoucher' => $this->arrangeRoleItem($request->details['DrVoucher'], 'Dr Voucher'),
-            'CrVoucher' => $this->arrangeRoleItem($request->details['CrVoucher'], 'Cr Voucher'),
-            'JnlVoucher' => $this->arrangeRoleItem($request->details['JnlVoucher'], 'Jnl Voucher'),
-            'ContraVoucher' => $this->arrangeRoleItem($request->details['ContraVoucher'], 'Contra Voucher'),
+        $existingContent = json_decode($item->content, true) ?: [];
+        $details = $request->input('details', []);
+        $details = is_array($details) ? $details : [];
+        $items = [];
 
-            'Ledger' => $this->arrangeRoleItem($request->details['Ledger'], 'Ledger'),
-            'TrialBalance' => $this->arrangeRoleItem($request->details['TrialBalance'], 'Trial Balance'),
-            'CostOfRevenue' => $this->arrangeRoleItem($request->details['CostOfRevenue'], 'Cost Of Revenue'),
-            'ProfitOrLossAccount' => $this->arrangeRoleItem($request->details['ProfitOrLossAccount'], 'Profit Or Loss Account'),
-            'RetainedEarning' => $this->arrangeRoleItem($request->details['RetainedEarning'], 'Retained Earning'),
-            'FixedAssetsSchedule' => $this->arrangeRoleItem($request->details['FixedAssetsSchedule'], 'Fixed Assets Schedule'),
-            'StatementOfFinancialPosition' => $this->arrangeRoleItem($request->details['StatementOfFinancialPosition'], 'Statement Of Financial Position'),
-            'CashFlow' => $this->arrangeRoleItem($request->details['CashFlow'], 'Cash Flow'),
-            'ReceiveAndPayment' => $this->arrangeRoleItem($request->details['ReceiveAndPayment'], 'Receive And Payment'),
-            'Notes' => $this->arrangeRoleItem($request->details['Notes'], 'Notes'),
+        foreach (config('role_manage', []) as $module => $permissions) {
+            $existingRow = isset($existingContent[$module]) && is_array($existingContent[$module])
+                ? $existingContent[$module]
+                : [];
+            $moduleLabel = array_key_exists(0, $existingRow)
+                ? $existingRow[0]
+                : preg_replace('/(?<!^)([A-Z])/', ' $1', $module);
+            $submittedPermissions = isset($details[$module]) && is_array($details[$module])
+                ? $details[$module]
+                : [];
 
-            'GeneralBranch' => $this->arrangeRoleItem($request->details['GeneralBranch'], 'General Branch Report'),
-            'GeneralLedger' => $this->arrangeRoleItem($request->details['GeneralLedger'], 'General Ledger Report'),
-            'GeneralBankCash' => $this->arrangeRoleItem($request->details['GeneralBankCash'], 'General Bank Cash Report'),
-            'GeneralVoucher' => $this->arrangeRoleItem($request->details['GeneralVoucher'], 'General Voucher Report'),
-        );
+            $items[$module] = $this->arrangeRoleItem($submittedPermissions, $moduleLabel);
+        }
+
+        // Retain legacy stored modules that are no longer configured rather than discarding their data.
+        foreach ($existingContent as $module => $row) {
+            if (!array_key_exists($module, $items)) {
+                $items[$module] = $row;
+            }
+        }
 
         $item->name = $request->name;
         $item->content = json_encode($items);
         $item->update_by = \Auth::user()->email;
 
         $item->save();
-        Session::flash('success', 'Successfully Updated');
+        Session::flash('success', __('ui.messages.updated'));
         return redirect()->route($this->parentRoute);
     }
 
@@ -264,7 +287,7 @@ class RoleManageController extends Controller
         $users = User::withTrashed()->where('role_manage_id', $id)->get();
 
         if (count($users) > 0) {  // Check One to many relation in ( User has or not )
-            Session::flash('error', "You Can not delete this item, because it already assigned Some User");
+            Session::flash('error', __('ui.messages.role_in_use'));
             return redirect()->back();
         }
 
@@ -272,7 +295,7 @@ class RoleManageController extends Controller
         $item->save(); /// update user info who delete this item
 
         $item->delete();
-        Session::flash('success', "Successfully Destroy");
+        Session::flash('success', __('ui.messages.role_removed'));
         return redirect()->back();
     }
 
@@ -280,7 +303,7 @@ class RoleManageController extends Controller
     {
         $item = $this->parentModel::find($request->id);
         if (empty($item)) {
-            Session::flash('error', "Item not found");
+            Session::flash('error', __('ui.messages.not_found'));
             return redirect()->route('role-manage');
         }
         $content = (array)json_decode($item['content']);
@@ -309,7 +332,7 @@ class RoleManageController extends Controller
     {
         $project = $this->parentModel::onlyTrashed()->where('id', $id)->first();
         $project->restore();
-        Session::flash('success', 'Successfully Restore');
+        Session::flash('success', __('ui.messages.restored'));
         return redirect()->back();
     }
 
@@ -319,12 +342,12 @@ class RoleManageController extends Controller
         $users = User::withTrashed()->where('role_manage_id', $id)->get();
 
         if (count($users) > 0) {  // Check One to many relation in ( User has or not )
-            Session::flash('error', "You Can not delete this item, because it already assigned Some User");
+            Session::flash('error', __('ui.messages.role_in_use'));
             return redirect()->back();
         }
 
         $project->forceDelete();
-        Session::flash('success', 'Parmanently Delete');
+        Session::flash('success', __('ui.messages.role_permanently_deleted'));
         return redirect()->back();
     }
 
@@ -375,7 +398,7 @@ class RoleManageController extends Controller
             }
             return redirect()->back();
         } else {
-            Session::flash('error', "Something is wrong.Try again");
+            Session::flash('error', __('ui.messages.operation_failed'));
             return redirect()->back();
         }
     }
@@ -397,7 +420,7 @@ class RoleManageController extends Controller
             }
             return redirect()->back();
         } else {
-            Session::flash('error', "Something is wrong.Try again");
+            Session::flash('error', __('ui.messages.operation_failed'));
             return redirect()->back();
         }
         return redirect()->back();

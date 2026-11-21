@@ -21,7 +21,7 @@ class Create
         if ($UserCreate){ // Create
             return $next($request);
         }else{
-            Session::flash('error', 'You Can Not Perform This Action.Please Contact Your It Officer');
+            Session::flash('error', __('ui.messages.permission_denied'));
             return redirect()->back();
         }
     }

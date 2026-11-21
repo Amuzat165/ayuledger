@@ -64,8 +64,8 @@ class AccountsReportController extends Controller
         $search_by = array(
             'branch_name' => ($branch_module) ? $branch_module->name : '',
             'income_expense_head_name' => ($incomeExpenseHead) ? $incomeExpenseHead->name : '',
-            'from' => ($request->from && $request->from != null) ? date(config('settings.date_format'), strtotime($request->from)) : '',
-            'to' => ($request->to && $request->to != null) ? date(config('settings.date_format'), strtotime($request->to)) : '',
+            'from' => ($request->from && $request->from != null) ? date('d/m/Y', strtotime($request->from)) : '',
+            'to' => ($request->to && $request->to != null) ? date('d/m/Y', strtotime($request->to)) : '',
         );
         //Show Action
         if ($request->action == 'Show') {
@@ -131,8 +131,8 @@ class AccountsReportController extends Controller
         $search_by = array(
             'branch_name' => ($request->branch_id != null) ? Branch::find($request->branch_id)->name : '',
             'income_expense_head_name' => ($request->income_expense_head_id != null) ? IncomeExpenseHead::find($request->income_expense_head_id)->name : '',
-            'from' => ($request->from) ? date(config('settings.date_format'), strtotime($request->from)) : '',
-            'to' => ($request->to) ? date(config('settings.date_format'), strtotime($request->to)) : '',
+            'from' => ($request->from) ? date('d/m/Y', strtotime($request->from)) : '',
+            'to' => ($request->to) ? date('d/m/Y', strtotime($request->to)) : '',
         );
         // Show Action
         if ($request->action == 'Show') {
@@ -188,8 +188,8 @@ class AccountsReportController extends Controller
         $search_by = [
             'branch_name' => ($request->branch_id && $request->branch_id != null) ? $branches->where('id', $request->branch_id)->first()->name : '',
             'bank_cash_name' => ($request->bank_cash_id && $request->bank_cash_id != null) ? $bank_cashes->where('id', $request->bank_cash_id)->first()->name : '',
-            'from' => ($request->from) ? date(config('settings.date_format'), strtotime($request->from)) : '',
-            'to' => ($request->to) ? date(config('settings.date_format'), strtotime($request->to)) : '',
+            'from' => ($request->from) ? date('d/m/Y', strtotime($request->from)) : '',
+            'to' => ($request->to) ? date('d/m/Y', strtotime($request->to)) : '',
         ];
         $bank_caches_balance = Helper::__bank_cash_details($request->bank_cash_id, $request->branch_id, $request->from, $request->to);
         // Show Action

@@ -51,7 +51,7 @@ $ParentRouteName = 'language';
                     <div class="header">
                         <h2>
                             {{ $createItemName }}
-                            <small>Edit {{ $moduleName }} Information</small>
+                            <small>{{ __('Edit :value Information', ['value' => $moduleName]) }}</small>
                         </h2>
                         <div class="body">
                             <form class="form" id="form_validation" method="post"
@@ -63,7 +63,7 @@ $ParentRouteName = 'language';
                                             <div class="form-line">
                                                 <input value="{{ $item->name }}" name="name" type="text"
                                                     class="form-control">
-                                                <label class="form-label">Name</label>
+                                                <label class="form-label">{{ __('Name') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -72,7 +72,7 @@ $ParentRouteName = 'language';
                                             <div class="form-line">
                                                 <input value="{{ $item->code }}" name="code" type="text"
                                                     class="form-control">
-                                                <label class="form-label">Code</label>
+                                                <label class="form-label">{{ __('Code') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -81,7 +81,7 @@ $ParentRouteName = 'language';
                                             <div class="form-line">
                                                 <input value="{{ $item->country_name }}" name="country_name" type="text"
                                                     class="form-control">
-                                                <label class="form-label">Country name</label>
+                                                <label class="form-label">{{ __('Country name') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -163,11 +163,11 @@ $ParentRouteName = 'language';
 
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
         @if ($errors->any())

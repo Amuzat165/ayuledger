@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Notifiable;
+    use SupportsTenantIsolation;
 
     use SoftDeletes;
     /**
@@ -27,7 +28,8 @@ class User extends Authenticatable
         'language_id',
         'create_by',
         'update_by',
-        'delete_by'
+        'delete_by',
+        'business_id'
     ];
 
     /**
@@ -41,13 +43,55 @@ class User extends Authenticatable
 
     protected $dates = ['deleted_at'];
 
+    protected static function booted()
+    {
+        static::creating(function (User $user) {
+            if ($user->role_manage_id) {
+                $roleExists = RoleManage::withoutGlobalScopes()
+                    ->whereKey($user->role_manage_id)
+                    ->exists();
+
+                if ($roleExists) {
+                    return;
+                }
+            }
+
+            $roleName = $user->email === config('app.super_admin_email', 'admin@gmail.com')
+                ? 'Super Admin'
+                : 'Admin';
+
+            $role = RoleManage::withoutGlobalScopes()->where('name', $roleName)->first();
+
+            if (!$role) {
+                $role = new RoleManage([
+                    'name' => $roleName,
+                    'content' => '{}',
+                ]);
+                $role->save();
+            }
+
+            $user->role_manage_id = $role->id;
+        });
+    }
+
     public function profile()
     {
         return $this->hasOne('App\Profile');
     }
+
+    public function business()
+    {
+        return $this->belongsTo(BusinessSetting::class, 'business_id');
+    }
+
+    public function tenantMemberships()
+    {
+        return $this->hasMany(TenantMembership::class);
+    }
     public function role()
     {
-        return $this->hasOne('App\RoleManage', 'id');
+        return $this->belongsTo('App\RoleManage', 'role_manage_id')
+            ->withoutGlobalScopes();
     }
 
     /**

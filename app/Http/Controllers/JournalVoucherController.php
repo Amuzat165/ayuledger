@@ -457,6 +457,11 @@ class JournalVoucherController extends Controller
             'items' => 'required'
         ]);
         if ($request->apply_comand_top == 3 || $request->apply_comand_bottom == 3) {
+            \App\Support\VoucherBulkActionAuthorization::authorize('jnl_voucher', 'active', 3);
+        } elseif ($request->apply_comand_top == 2 || $request->apply_comand_bottom == 2) {
+            \App\Support\VoucherBulkActionAuthorization::authorize('jnl_voucher', 'active', 2);
+        }
+        if ($request->apply_comand_top == 3 || $request->apply_comand_bottom == 3) {
             foreach ($request->items["id"] as $id) {
                 $items = $this->parentModel::where('voucher_type', '=', $this->voucher_type)
                     ->where(function ($q) use ($id) {
@@ -495,6 +500,11 @@ class JournalVoucherController extends Controller
         $request->validate([
             'items' => 'required'
         ]);
+        if ($request->apply_comand_top == 1 || $request->apply_comand_bottom == 1) {
+            \App\Support\VoucherBulkActionAuthorization::authorize('jnl_voucher', 'trashed', 1);
+        } elseif ($request->apply_comand_top == 2 || $request->apply_comand_bottom == 2) {
+            \App\Support\VoucherBulkActionAuthorization::authorize('jnl_voucher', 'trashed', 2);
+        }
         if ($request->apply_comand_top == 1 || $request->apply_comand_bottom == 1) {
             foreach ($request->items["id"] as $id) {
                 $items = $this->parentModel::where('voucher_type', '=', $this->voucher_type)

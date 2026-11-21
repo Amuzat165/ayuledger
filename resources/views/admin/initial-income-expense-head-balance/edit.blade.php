@@ -5,7 +5,7 @@
 <?php
 
 
-$moduleName = " Initial Ledger Balance";
+$moduleName = " {{ __('financial.labels.initial_ledger') }} Balance";
 $createItemName = __('root.common.edit') . ' ' . $moduleName;
 
 $breadcrumbMainName = $moduleName;
@@ -56,7 +56,7 @@ $ParentRouteName = 'initial_income_expense_head_balance';
                     <div class="header">
                         <h2>
                             {{ $createItemName }}
-                            <small>Edit {{ $moduleName }} Information</small>
+                            <small>{{ __('financial.labels.edit_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
 
                         <div class="body">
@@ -71,7 +71,7 @@ $ParentRouteName = 'initial_income_expense_head_balance';
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control  show-tick"
                                                     name="branch_id" id="">
-                                                    <option value="0">Select Branch Name</option>
+                                                    <option value="0">{{ __('financial.labels.select_branch') }}</option>
                                                     @if (App\Branch::all()->count() >0 )
 
                                                     @foreach( App\Branch::all() as $branch_id )
@@ -91,7 +91,7 @@ $ParentRouteName = 'initial_income_expense_head_balance';
                                             <div class="form-line">
                                                 <select data-live-search="true" class="form-control  show-tick"
                                                     name="income_expense_head_id" id="">
-                                                    <option value="0">Select Income/Expense Head Head</option>
+                                                    <option value="0">{{ __('Select Income/Expense Head Head') }}</option>
                                                     @if (App\IncomeExpenseHead::all()->count() >0 )
 
                                                     @foreach( App\IncomeExpenseHead::all() as
@@ -113,7 +113,7 @@ $ParentRouteName = 'initial_income_expense_head_balance';
                                             <div class="form-line">
                                                 <input value="{{ $item->amount }}" name="amount" type="number"
                                                     class="form-control">
-                                                <label class="form-label">Amount</label>
+                                                <label class="form-label">{{ __('Amount') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -123,7 +123,7 @@ $ParentRouteName = 'initial_income_expense_head_balance';
                                             <div class="form-line " id="bs_datepicker_container1">
                                                 <input autocomplete="off" value="{{ $item->voucher_date }}"
                                                     name="voucher_date" type="text" class="form-control"
-                                                    placeholder="Please choose a voucher date...">
+                                                    placeholder="{{ __('Please choose a voucher date...') }}">
 
                                             </div>
                                         </div>
@@ -134,7 +134,7 @@ $ParentRouteName = 'initial_income_expense_head_balance';
                                             <div class="form-line">
                                                 <textarea class="form-control"
                                                     name="particulars">{{ $item->particulars  }}</textarea>
-                                                <label class="form-label">Particulars</label>
+                                                <label class="form-label">{{ __('financial.labels.particulars') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -226,11 +226,11 @@ $ParentRouteName = 'initial_income_expense_head_balance';
 
 <script>
     @if(Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
                 @if(Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
                 @if ($errors->any())
@@ -304,22 +304,22 @@ $ParentRouteName = 'initial_income_expense_head_balance';
 
 
                 if (input_values.voucher_date == 0) {
-                    toastr["error"]('Set Voucher Date');
+                    toastr["error"]('{{ __('financial.labels.date_required') }}');
                     e.preventDefault();
                 }
 
                 if (input_values.amount == 0) {
-                    toastr["error"]('Set Amount');
+                    toastr["error"]('{{ __('financial.labels.enter_amount') }}');
                     e.preventDefault();
                 }
 
                 if (input_values.income_expense_head_id == 0) {
-                    toastr["error"]('Select Income Expense Head Name');
+                    toastr["error"]('{{ __('financial.labels.select_head_of_account') }}');
                     e.preventDefault();
                 }
 
                 if (input_values.branch_id == 0) {
-                    toastr["error"]('Select Branch Name');
+                    toastr["error"]('{{ __('financial.labels.select_branch') }}');
                     e.preventDefault();
                 }
 

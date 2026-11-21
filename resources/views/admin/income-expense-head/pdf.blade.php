@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="module_name">
-            <p>Module Name : {{ $extra['module_name']  }}</p>
+            <p>{{ __('financial.labels.module_name') }} : {{ $extra['module_name']  }}</p>
         </div>
         <div class="card">
             <div class="header">
@@ -40,11 +40,11 @@
                             <table class="table  table-bordered table-hover">
                                 <thead>
                                 <tr>
-                                    <th scope="col" class="text-center">Name</th>
-                                    <th>Ledger Type Name</th>
-                                    <th>Ledger Group Name</th>
-                                    <th scope="col" class="text-center">Unit</th>
-                                    <th scope="col" class="text-center">Type</th>
+                                    <th scope="col" class="text-center">{{ __('financial.labels.name') }}</th>
+                                    <th>{{ __('financial.labels.account_type') }}</th>
+                                    <th>{{ __('financial.labels.account_group') }}</th>
+                                    <th scope="col" class="text-center">{{ __('financial.labels.unit_of_measurement') }}</th>
+                                    <th scope="col" class="text-center">{{ __('Type') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -67,9 +67,9 @@
                                     </td>
                                     <td class="text-center">
                                         @if ($items->type=='0')
-                                            Cr
+                                            {{ __('Cr') }}
                                         @else
-                                            Dr
+                                            {{ __('Dr') }}
                                         @endif
 
                                     </td>

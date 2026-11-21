@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Purchases & Expenses')
+@section('title', __('root.purchases_hub.title'))
 
 @section('top-bar')
     @include('shared.header')
@@ -14,28 +14,30 @@
 <section @if ($is_rtl) dir="rtl" @endif class="content purchases-hub">
     <div class="container-fluid">
         <div class="purchases-intro">
-            <p class="purchases-eyebrow">Procurement workspace</p>
-            <h1>Purchases &amp; Expenses</h1>
-            <p>Manage vendors, purchases, payments, and expenses from one place.</p>
+            <p class="purchases-eyebrow">{{ __('root.purchases_hub.eyebrow') }}</p>
+            <h1>{{ __('root.purchases_hub.title') }}</h1>
+            <p>{{ __('root.purchases_hub.description') }}</p>
         </div>
 
-        <label class="purchases-search"><i class="fas fa-search"></i><input id="purchases-search" type="search" placeholder="Search purchases and expenses..." aria-label="Search purchases and expenses"></label>
+        <label class="purchases-search"><i class="fas fa-search"></i><input id="purchases-search" type="search" placeholder="{{ __('root.purchases_hub.search_placeholder') }}" aria-label="{{ __('Search purchases and expenses') }}"></label>
 
         @php
             $purchaseCategories = [
-                ['title' => 'Vendors', 'class' => 'vendors', 'items' => [
-                    ['vendors.create', 'Add Vendor', 'Create a new supplier record.', 'fa-user-plus'],
-                    ['vendors.index', 'View Vendors', 'Review and manage your suppliers.', 'fa-briefcase'],
+                ['title' => __('root.purchases_hub.vendors'), 'class' => 'vendors', 'items' => [
+                    ['vendors.create', __('root.purchases_hub.add_vendor'), __('root.purchases_hub.add_vendor_desc'), 'fa-user-plus'],
+                    ['vendors.index', __('root.purchases_hub.view_vendors'), __('root.purchases_hub.view_vendors_desc'), 'fa-briefcase'],
                 ]],
-                ['title' => 'Purchases & Payments', 'class' => 'purchases', 'items' => [
-                    ['vouchers.create', 'Create Purchase Order', 'Start a purchase order for a vendor.', 'fa-file-signature'],
-                    ['vouchers.index', 'View Purchases', 'Review purchase orders and invoices.', 'fa-shopping-cart'],
-                    ['payments.create', 'Add Payment Voucher', 'Record a payment made to a vendor.', 'fa-money-check-alt'],
-                    ['vendors.receipts.view', 'View Payments', 'Review vendor payment receipts.', 'fa-receipt'],
+                ['title' => __('root.purchases_hub.purchases_payments'), 'class' => 'purchases', 'items' => [
+                    ['purchase-orders.create', __('root.purchases_hub.create_purchase_order'), __('root.purchases_hub.create_purchase_order_desc'), 'fa-file-signature'],
+                    ['purchase-orders.index', __('purchase_orders.title'), __('purchase_orders.list_intro'), 'fa-clipboard-list'],
+                    ['supplier-invoices.index', __('supplier_invoices.title'), __('supplier_invoices.list_intro'), 'fa-shopping-cart'],
+
+                    ['supplier-invoices.index', __('root.purchases_hub.make_supplier_payment'), __('root.purchases_hub.make_supplier_payment_desc'), 'fa-money-check-alt'],
+                    ['supplier-invoice-payments.index', __('root.purchases_hub.view_payments'), __('supplier_payments.history_intro'), 'fa-receipt'],
                 ]],
-                ['title' => 'Expenses', 'class' => 'expenses', 'items' => [
-                    ['expenses.create', 'Record Expense', 'Capture a new business expense.', 'fa-plus-circle'],
-                    ['expenses.index', 'View Expenses', 'Review and manage recorded expenses.', 'fa-list-alt'],
+                ['title' => __('root.purchases_hub.expenses'), 'class' => 'expenses', 'items' => [
+                    ['expenses.create', __('root.purchases_hub.record_expense'), __('root.purchases_hub.record_expense_desc'), 'fa-plus-circle'],
+                    ['expenses.index', __('root.purchases_hub.view_expenses'), __('root.purchases_hub.view_expenses_desc'), 'fa-list-alt'],
                 ]],
             ];
         @endphp
@@ -43,7 +45,7 @@
         <div class="purchases-grid" id="purchases-grid">
             @foreach ($purchaseCategories as $category)
                 <section class="purchase-category {{ $category['class'] }}">
-                    <div class="purchase-heading"><h2>{{ $category['title'] }}</h2><span>{{ count($category['items']) }} links</span></div>
+                    <div class="purchase-heading"><h2>{{ $category['title'] }}</h2><span>{{ count($category['items']) }} {{ __('root.purchases_hub.links_count') }}</span></div>
                     <div class="purchase-cards">
                         @foreach ($category['items'] as $item)
                             <a class="purchase-card" href="{{ route($item[0]) }}" data-purchase-name="{{ strtolower($item[1] . ' ' . $item[2]) }}">
@@ -56,7 +58,7 @@
                 </section>
             @endforeach
         </div>
-        <p class="purchases-empty" id="purchases-empty">No purchases or expenses match your search.</p>
+        <p class="purchases-empty" id="purchases-empty">{{ __('root.purchases_hub.search_no_match') }}</p>
     </div>
 </section>
 @stop

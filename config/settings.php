@@ -35,6 +35,9 @@ return [
     'zip_code' => '900108',
     // 'company_logo' => 'upload/company-logo/e.png',
     'company_logo' => 'upload/company-logo/e.png',
+    'header_image' => null,
+    'company_color' => '#00897B',
+    'vat_percentage' => 0,
 
     /*
     |--------------------------------------------------------------------------

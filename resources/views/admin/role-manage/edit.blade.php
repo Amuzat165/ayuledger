@@ -51,7 +51,7 @@ $ParentRouteName = 'role-manage';
                     <div class="header">
                         <h2>
                             {{ $createItemName }}
-                            <small>Edit {{ $moduleName }} Information</small>
+                            <small>{{ __('ui.forms.edit_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
                         <div class="body">
                             <form class="form" id="form_validation" method="post"
@@ -63,7 +63,7 @@ $ParentRouteName = 'role-manage';
                                             <div class="form-line">
                                                 <input value="{{ $item->name }}" name="name" type="text"
                                                     class="form-control">
-                                                <label class="form-label">Name</label>
+                                                <label class="form-label">{{ __('root.user.name') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -76,16 +76,16 @@ $ParentRouteName = 'role-manage';
                                                             class="chk-col-cyan topBottom" />
                                                         <label for="md_checkbox_p"></label>
                                                     </th>
-                                                    <th scope="col" class="text-center">Module Name</th>
-                                                    <th scope="col" class="text-center">All</th>
-                                                    <th scope="col" class="text-center">Show</th>
-                                                    <th scope="col" class="text-center">Create</th>
-                                                    <th scope="col" class="text-center">Edit</th>
-                                                    <th scope="col" class="text-center">Delete</th>
-                                                    <th scope="col" class="text-center">PDF</th>
-                                                    <th scope="col" class="text-center">Trash Show</th>
-                                                    <th scope="col" class="text-center">Restore</th>
-                                                    <th scope="col" class="text-center">Permanently Delete</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.permissions.module_name') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.all') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.actions.show') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.create') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.edit') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.actions.delete') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.permissions.pdf') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('ui.permissions.trash_show') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.restore') }}</th>
+                                                    <th scope="col" class="text-center">{{ __('root.common.permanently_delete') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -105,6 +105,8 @@ $ParentRouteName = 'role-manage';
                                                         <input value="{{ $content }}" type="hidden"
                                                             name="details[{{ $key }}][{{ $key_content }}]">
                                                         {{ $content }}
+                                                        @elseif ($key === 'Inventory' && !in_array((int) $key_content, [1, 3, 4, 5], true))
+                                                        <div class="switch"><label><input type="checkbox" disabled><span class="lever switch-col-cyan"></span></label></div>
                                                         @elseif ($content == 1)
                                                         <div class="switch">
                                                             <label>
@@ -210,11 +212,11 @@ $ParentRouteName = 'role-manage';
 
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
         @if ($errors->any())

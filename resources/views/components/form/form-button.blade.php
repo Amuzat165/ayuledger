@@ -4,7 +4,7 @@
   <div class="form-line" style="float:right;">
     {{-- RESET--}}
     <button type="reset" class="btn btn-secondary m-r-15 waves-effect">
-      Cancel
+      {{ __('Cancel') }}
     </button>
 
     {{-- SUBMIT --}}

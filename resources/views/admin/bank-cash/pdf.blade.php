@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="module_name">
-            <p>Module Name : {{ $extra['module_name']  }}</p>
+            <p>{{ __('financial.labels.module_name') }} : {{ $extra['module_name']  }}</p>
         </div>
         <div class="card">
             <div class="header">
@@ -38,9 +38,9 @@
                             <table class="table  table-bordered table-hover">
                                 <thead>
                                 <tr>
-                                    <th scope="col" class="text-center">Name</th>
-                                    <th scope="col" class="text-center">Account Number</th>
-                                    <th scope="col" class="text-center">Description</th>
+                                    <th scope="col" class="text-center">{{ __('financial.labels.name') }}</th>
+                                    <th scope="col" class="text-center">{{ __('financial.labels.account_number') }}</th>
+                                    <th scope="col" class="text-center">{{ __('financial.terms.description') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>

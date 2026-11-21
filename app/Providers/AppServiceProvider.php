@@ -3,13 +3,12 @@
 namespace App\Providers;
 
 use App\Setting;
-use App\Language;
-use Illuminate\Support\Facades\App;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -27,16 +26,23 @@ class AppServiceProvider extends ServiceProvider
         
         if (!app()->runningInConsole()) {
             // Share settings
-            if (Cache::get('system_settings') && Cache::get('system_settings') != null) {
-                $system_settings = json_decode(Cache::get('system_settings'), true);
+            $businessId = Auth::check() ? (int) Auth::user()->business_id : 0;
+            $systemCacheKey = 'system_settings_' . $businessId;
+            $generalCacheKey = 'general_settings_' . $businessId;
+            if (Cache::get($systemCacheKey) && Cache::get($systemCacheKey) != null) {
+                $system_settings = json_decode(Cache::get($systemCacheKey), true);
             } else {
-                $system_settings_info = Setting::where('settings_name', 'System Settings')->get()->first();
+                $system_settings_info = $businessId
+                    ? Setting::where('settings_name', 'System Settings')->where('business_id', $businessId)->first()
+                    : Setting::where('settings_name', 'System Settings')->first();
                 $system_settings = json_decode($system_settings_info->content, true);
             }
-            if (Cache::get('general_settings') && Cache::get('general_settings') != null) {
-                $general_settings = json_decode(Cache::get('general_settings'), true);
+            if (Cache::get($generalCacheKey) && Cache::get($generalCacheKey) != null) {
+                $general_settings = json_decode(Cache::get($generalCacheKey), true);
             } else {
-                $system_settings_info = Setting::where('settings_name', 'General Settings')->get()->first();
+                $system_settings_info = $businessId
+                    ? Setting::where('settings_name', 'General Settings')->where('business_id', $businessId)->first()
+                    : Setting::where('settings_name', 'General Settings')->first();
                 $general_settings = json_decode($system_settings_info->content, true);
             }
             View::share('general_settings', $general_settings);
@@ -48,20 +54,6 @@ class AppServiceProvider extends ServiceProvider
             }
             View::share('is_rtl', $is_rtl);
 
-            // For language support
-            view()->composer('*', function ($view) {
-                if (auth()->check()) {
-                    $language = (auth()->user()->language) ? auth()->user()->language :  Language::where('is_default', 1)->first();
-                    // dd($language);
-                    if ($language) {
-                        App::setLocale($language->code);
-                    } else {
-                        App::setLocale('main');
-                    }
-                } else {
-                    App::setLocale('main');
-                }
-            });
         }
     }
 

@@ -136,7 +136,7 @@ $trash_show = config('role_manage.User.TrashShow');
                                             <a @if ($restore==0) class="dis-none" @endif
                                                 class="btn btn-xs btn-info waves-effect"
                                                 href="{{ route($ParentRouteName . '.restore', ['id' => $item->id]) }}"
-                                                data-toggle="tooltip" data-placement="top" title="Restore"><i
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('root.common.restore') }}"><i
                                                     class="material-icons">restore</i></a>
                                             <a data-target="#largeModal"
                                                 class="dis-none btn btn-xs btn-success waves-effect ajaxCall "
@@ -147,7 +147,7 @@ $trash_show = config('role_manage.User.TrashShow');
                                             <a @if ($permanently_delete==0) class="dis-none" @endif
                                                 class="btn btn-xs btn-danger waves-effect"
                                                 href="{{ route($ParentRouteName . '.kill', ['id' => $item->id]) }}"
-                                                data-toggle="tooltip" data-placement="top" title="Parmanently Delete?">
+                                                data-toggle="tooltip" data-placement="top" title="{{ __('ui.messages.permanently_delete') }}">
                                                 <i class="material-icons">delete</i></a>
                                         </td>
                                     </tr>
@@ -172,7 +172,7 @@ $trash_show = config('role_manage.User.TrashShow');
                             <table class="table table-hover table-bordered table-sm">
                                 <thead>
                                     <tr>
-                                        <th class="text-center text-danger">There has No data</th>
+                                        <th class="text-center text-danger">{{ __('ui.messages.no_records_found') }}</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -226,10 +226,10 @@ $trash_show = config('role_manage.User.TrashShow');
 <!-- Autosize Plugin Js -->
 <script>
     @if (Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
         @if (Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
         @if ($errors->any())
             @foreach ($errors->all() as $error)

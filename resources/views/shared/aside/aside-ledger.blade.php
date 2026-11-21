@@ -14,7 +14,7 @@
   Request::url()===route('income_expense_head.trashed.search') ) class="active" @endif>
   <a class="menu-toggle" href="javascript:void(0);">
     <i class="fas fa-file-invoice-dollar"></i>
-    <span>{{ __('root.menu.ledger') }} </span>
+    <span>{{ __('financial.terms.chart_of_accounts') }} </span>
   </a>
   <ul class="ml-menu">
     {{-- Ledger Type Start --}}
@@ -25,13 +25,13 @@
       Request::url()===route('income_expense_type.active.search') or
       Request::url()===route('income_expense_type.trashed.search')) class="active " @endif>
       <a class="menu-toggle " href="javascript:void(0);">
-        <span>{{ __('root.menu.type') }} </span>
+        <span>{{ __('financial.screens.account_type') }} </span>
       </a>
       <ul class="ml-menu">
         <li @if (Request::url()===route('income_expense_type') or
           Request::url()===route('income_expense_type.active.search')) class="active" @endif>
           <a @if (config('role_manage.LedgerType.All')==0) class="dis-none" @endif
-            href="{{ route('income_expense_type') }}">{{ __('root.menu.type_all') }}</a>
+            href="{{ route('income_expense_type') }}">{{ __('financial.labels.all') }}</a>
         </li>
       </ul>
     </li>
@@ -46,24 +46,24 @@
       Request::url()===route('income_expense_group.active.search') or
       Request::url()===route('income_expense_group.trashed.search')) class="active " @endif>
       <a class="menu-toggle " href="javascript:void(0);">
-        <span>{{ __('root.menu.group') }} </span>
+        <span>{{ __('financial.screens.account_group') }} </span>
       </a>
       <ul class="ml-menu">
         <li @if (Request::url()===route('income_expense_group') or
           Request::url()===route('income_expense_group.active.search')) class="active" @endif>
           <a @if (config('role_manage.LedgerGroup.All')==0) class="dis-none" @endif
-            href="{{ route('income_expense_group') }}">{{ __('root.menu.group_all') }}</a>
+            href="{{ route('income_expense_group') }}">{{ __('financial.labels.all') }}</a>
         </li>
         <li @if (Request::url()===route('income_expense_group.create')) class="active" @endif>
           <a @if (config('role_manage.LedgerGroup.Create')==0) class="dis-none" @endif
             href="{{ route('income_expense_group.create') }}">{{
-            __('root.menu.group_create') }}</a>
+            __('financial.screens.create') }}</a>
         </li>
         <li @if (Request::url()===route('income_expense_group.trashed') or
           Request::url()===route('income_expense_group.trashed.search')) class="active" @endif>
           <a @if (config('role_manage.LedgerGroup.TrashShow')==0) class="dis-none" @endif
             href="{{ route('income_expense_group.trashed') }}">{{
-            __('root.menu.group_trashed') }}</a>
+            __('financial.screens.trash') }}</a>
         </li>
       </ul>
     </li>
@@ -78,24 +78,24 @@
       Request::url()===route('income_expense_head.active.search') or
       Request::url()===route('income_expense_head.trashed.search')) class="active " @endif>
       <a class="menu-toggle " href="javascript:void(0);">
-        <span>{{ __('root.menu.name') }} </span>
+        <span>{{ __('financial.screens.account_name') }} </span>
       </a>
       <ul class="ml-menu">
         <li @if (Request::url()===route('income_expense_head') or
           Request::url()===route('income_expense_head.active.search')) class="active" @endif>
           <a @if (config('role_manage.LedgerName.All')==0) class="dis-none" @endif
-            href="{{ route('income_expense_head') }}">{{ __('root.menu.name_all') }}</a>
+            href="{{ route('income_expense_head') }}">{{ __('financial.labels.all') }}</a>
         </li>
         <li @if (Request::url()===route('income_expense_head.create')) class="active" @endif>
           <a @if (config('role_manage.LedgerName.Create')==0) class="dis-none" @endif
-            href="{{ route('income_expense_head.create') }}">{{ __('root.menu.name_create')
+            href="{{ route('income_expense_head.create') }}">{{ __('financial.screens.create')
             }}</a>
         </li>
         <li @if (Request::url()===route('income_expense_head.trashed') or
           Request::url()===route('income_expense_head.trashed.search')) class="active" @endif>
           <a @if (config('role_manage.LedgerName.TrashShow')==0) class="dis-none" @endif
             href="{{ route('income_expense_head.trashed') }}">{{
-            __('root.menu.name_trashed') }}</a>
+            __('financial.screens.trash') }}</a>
         </li>
       </ul>
     </li>
@@ -107,22 +107,22 @@
           class="active " @endif>
           <a class="menu-toggle " href="javascript:void(0);">
 {{--              <i class="fas fa-university"></i>--}}
-              <span>{{ __('root.menu.bank_cash') }}</span>
+              <span>{{ __('financial.screens.bank_accounts') }}</span>
           </a>
           <ul class="ml-menu">
               <li @if (Request::url()===route('bank_cash') or Request::url()===route('bank_cash.active.search')) class="active"
                   @endif>
                   <a @if (config('role_manage.BankCash.All')==0) class="dis-none" @endif href="{{ route('bank_cash') }}">{{
-        __('root.menu.bank_cash_all') }}</a>
+        __('financial.labels.all') }}</a>
               </li>
               <li @if (Request::url()===route('bank_cash.create')) class="active" @endif>
                   <a @if (config('role_manage.BankCash.Create')==0) class="dis-none" @endif
-                  href="{{ route('bank_cash.create') }}">{{ __('root.menu.bank_cash_create') }}</a>
+                  href="{{ route('bank_cash.create') }}">{{ __('financial.screens.create') }}</a>
               </li>
               <li @if (Request::url()===route('bank_cash.trashed') or Request::url()===route('bank_cash.trashed.search'))
                       class="active" @endif>
                   <a @if (config('role_manage.BankCash.TrashShow')==0) class="dis-none" @endif
-                  href="{{ route('bank_cash.trashed') }}">{{ __('root.menu.bank_cash_trashed') }}</a>
+                  href="{{ route('bank_cash.trashed') }}">{{ __('financial.screens.trash') }}</a>
               </li>
           </ul>
       </li>

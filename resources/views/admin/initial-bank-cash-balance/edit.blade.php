@@ -5,7 +5,7 @@
 <?php
 
 
-$moduleName = " Initial Bank Cash Balance";
+$moduleName = " {{ __('financial.labels.initial_bank_cash') }} Balance";
 $createItemName = " Edit" . $moduleName;
 
 $breadcrumbMainName = $moduleName;
@@ -36,7 +36,7 @@ $ParentRouteName = 'initial_bank_cash_balance';
 <section @if($is_rtl) dir="rtl" @endif class="content">
     <div class="container-fluid">
         <div class="block-header @if ($is_rtl) pull-right @else pull-left @endif">
-            <a class="btn btn-sm btn-info waves-effect" href="{{ route($ParentRouteName) }}">Back</a>
+            <a class="btn btn-sm btn-info waves-effect" href="{{ route($ParentRouteName) }}">{{ __('Back') }}</a>
         </div>
 
         <ol class="breadcrumb breadcrumb-col-cyan @if ($is_rtl) pull-left  @else pull-right @endif">
@@ -56,7 +56,7 @@ $ParentRouteName = 'initial_bank_cash_balance';
                     <div class="header">
                         <h2 class="m-b-20">
                             {{ $createItemName }}
-                            <small>Edit {{ $moduleName }} Information</small>
+                            <small>{{ __('financial.labels.edit_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
 
                         <div class="body">
@@ -73,7 +73,7 @@ $ParentRouteName = 'initial_bank_cash_balance';
                                                 <div class="form-line">
                                                     <select data-live-search="true" class="form-control show-tick"
                                                         name="branch_id">
-                                                        <option value="0">Select Branch Name</option>
+                                                        <option value="0">{{ __('financial.labels.select_branch') }}</option>
                                                         @if (App\Branch::all()->count() >0 )
                                                         @foreach( App\Branch::all() as $project )
                                                         <option @if ( $project->id == $item->branch_id ))
@@ -91,7 +91,7 @@ $ParentRouteName = 'initial_bank_cash_balance';
                                                 <div class="form-line">
                                                     <select data-live-search="true" class="form-control show-tick"
                                                         name="bank_cash_id" id="">
-                                                        <option value="0"> Select Bank Cash Name ( Dr )</option>
+                                                        <option value="0"> {{ __('financial.labels.select_bank_cash') }} ( {{ __('Dr') }} )</option>
                                                         @if (App\BankCash::all()->count() >0 )
                                                         @foreach( App\BankCash::all() as $bank_cash )
                                                         <option @if ( $bank_cash->id == $item->bank_cash_id)
@@ -109,7 +109,7 @@ $ParentRouteName = 'initial_bank_cash_balance';
                                                 <div class="form-line">
                                                     <input value="{{ $item->cheque_number  }}" name="cheque_number"
                                                         type="text" class="form-control">
-                                                    <label class="form-label">Cheque Number</label>
+                                                    <label class="form-label">{{ __('Cheque Number') }}</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -120,7 +120,7 @@ $ParentRouteName = 'initial_bank_cash_balance';
                                             <div class="form-line">
                                                 <input value="{{ $item->cr }}" name="amount" type="text"
                                                     class="form-control">
-                                                <label class="form-label">Amount</label>
+                                                <label class="form-label">{{ __('Amount') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -132,7 +132,7 @@ $ParentRouteName = 'initial_bank_cash_balance';
                                                     ($item->voucher_date)) }}"
                                                 name="voucher_date" type="text"
                                                 class="form-control"
-                                                placeholder="Please choose a voucher date...">
+                                                placeholder="{{ __('Please choose a voucher date...') }}">
 
                                             </div>
                                         </div>
@@ -143,7 +143,7 @@ $ParentRouteName = 'initial_bank_cash_balance';
                                             <div class="form-line">
                                                 <textarea class="form-control"
                                                     name="particulars">{{ $item->particulars  }}</textarea>
-                                                <label class="form-label">Particulars</label>
+                                                <label class="form-label">{{ __('financial.labels.particulars') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -236,11 +236,11 @@ $ParentRouteName = 'initial_bank_cash_balance';
 
 <script>
     @if(Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
                 @if(Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
                 @if ($errors->any())
@@ -359,23 +359,23 @@ $ParentRouteName = 'initial_bank_cash_balance';
 
 
                 if (Values.project_id == 0) {
-                    toastr["error"]('Select  branch name');
+                    toastr["error"]('{{ __('financial.labels.select_branch') }}');
                     e.preventDefault();
                 }
 
                 if (Values.bankcash_id == 0) {
-                    toastr["error"]('Select Bank Cash Name ');
+                    toastr["error"]('{{ __('financial.labels.select_bank_cash') }} ');
                     e.preventDefault();
                 }
 
 
                 if (Values.amount == 0) {
-                    toastr["error"]('Amount is required');
+                    toastr["error"]('{{ __('financial.labels.amount_required') }}');
                     e.preventDefault();
                 }
 
                 if (Values.date == 0) {
-                    toastr["error"]('Date is required');
+                    toastr["error"]('{{ __('financial.labels.date_required') }}');
                     e.preventDefault();
                 }
 

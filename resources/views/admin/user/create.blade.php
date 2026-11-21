@@ -52,10 +52,15 @@ $ParentRouteName = 'user';
                     <div class="header">
                         <h2>
                             {{ $createItemName }}
-                            <small>Put {{ $moduleName }} Information</small>
+                            <small>{{ __('ui.forms.put_module_information', ['module' => $moduleName]) }}</small>
                         </h2>
 
                         <div class="body">
+                            @if ($tenantUserLimit !== null)
+                                <div class="alert alert-info">
+                                    Tenant users: {{ $tenantUserCount }} of {{ $tenantUserLimit }} allowed
+                                </div>
+                            @endif
                             <form class="form" id="form_validation" method="post"
                                 action="{{ route($ParentRouteName.'.store') }}">
 
@@ -67,7 +72,7 @@ $ParentRouteName = 'user';
                                             <div class="form-line">
                                                 <input autofocus value="{{ old('name')  }}" name="name" type="text"
                                                     class="form-control">
-                                                <label class="form-label">Name</label>
+                                                <label class="form-label">{{ __('root.user.name') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -77,7 +82,7 @@ $ParentRouteName = 'user';
                                             <div class="form-line">
                                                 <input value="{{ old('email')  }}" name="email" type="email"
                                                     class="form-control">
-                                                <label class="form-label">Email Address</label>
+                                                <label class="form-label">{{ __('ui.forms.email_address') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -87,7 +92,7 @@ $ParentRouteName = 'user';
                                         <div class="form-group form-float">
                                             <div class="form-line">
                                                 <input name="password" type="password" class="form-control ">
-                                                <label class="form-label">Password</label>
+                                                <label class="form-label">{{ __('ui.forms.password') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -97,7 +102,7 @@ $ParentRouteName = 'user';
                                             <div class="form-line">
                                                 <input name="password_confirmation" type="password"
                                                     class="form-control">
-                                                <label class="form-label">Confirm Password</label>
+                                                <label class="form-label">{{ __('ui.forms.confirm_password') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -106,8 +111,8 @@ $ParentRouteName = 'user';
                                         <div class="form-line">
                                             <select data-live-search="true" class="form-control show-tick"
                                                 name="role_manage_id" id="role_manage_id">
-                                                <option value="0">Select User Role</option>
-                                                @foreach(App\RoleManage::orderBy('created_at','desc')->get() as $role)
+                                                <option value="0">{{ __('ui.forms.select_user_role') }}</option>
+                                                @foreach($tenantRoles as $role)
                                                 <option value="{{ $role->id  }}">{{ $role->name }}</option>
                                                 @endforeach
                                             </select>
@@ -116,7 +121,8 @@ $ParentRouteName = 'user';
 
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="form-line">
-                                            <button type="submit" class="btn btn-primary m-t-15 waves-effect">
+                                            <button type="submit" class="btn btn-primary m-t-15 waves-effect"
+                                                @if($tenantUserCount >= $tenantUserLimit) disabled @endif>
                                                 {{ __('root.common.save') }}
                                             </button>
                                         </div>
@@ -202,11 +208,11 @@ $ParentRouteName = 'user';
 
 <script>
     @if(Session::has('success'))
-            toastr["success"]('{{ Session::get('success') }}');
+            toastr["success"]('{{ __(Session::get('success')) }}');
         @endif
 
                 @if(Session::has('error'))
-            toastr["error"]('{{ Session::get('error') }}');
+            toastr["error"]('{{ __(Session::get('error')) }}');
         @endif
 
                 @if ($errors->any())
@@ -284,23 +290,23 @@ $ParentRouteName = 'user';
 
 
                 if (input_values.role_manage_id == 0) {
-                    toastr["error"]('Select Any Role');
+                    toastr["error"](@json(__('ui.messages.select_any_role')));
                     e.preventDefault();
                 }
 
 
                 if (input_values.password != input_values.confirm_password) {
-                    toastr["error"]('Password Does Not Match');
+                    toastr["error"](@json(__('ui.messages.password_mismatch')));
                     e.preventDefault();
                 }
 
                 if (input_values.email == 0) {
-                    toastr["error"]('Email Is Required');
+                    toastr["error"](@json(__('ui.messages.email_required')));
                     e.preventDefault();
                 }
 
                 if (input_values.name == 0) {
-                    toastr["error"]('Name is Required');
+                    toastr["error"](@json(__('ui.messages.name_required')));
                     e.preventDefault();
                 }
 

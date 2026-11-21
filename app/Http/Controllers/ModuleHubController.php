@@ -6,99 +6,99 @@ class ModuleHubController extends Controller
 {
     public function sales()
     {
-        return $this->render('Sales', 'Customer workspace', 'Manage customers, invoices, and receipts from one place.', [
-            ['title' => 'Customers', 'items' => [
-                ['customers.create', 'Add Customer', 'Create a new customer record.', 'fa-user-plus'],
-                ['customers.index', 'View Customers', 'Review and manage your customers.', 'fa-users'],
+        return $this->render(__('root.hubs.sales'), __('root.hubs.sales_eyebrow'), __('root.hubs.sales_description'), [
+            ['title' => __('root.hubs.customers'), 'items' => [
+                ['customers.create', __('root.hubs.add_customer'), __('root.hubs.add_customer_description'), 'fa-user-plus'],
+                ['customers.index', __('root.hubs.view_customers'), __('root.hubs.view_customers_description'), 'fa-users'],
             ]],
-            ['title' => 'Invoices & Receipts', 'items' => [
-                ['customers.invoices.create', 'Add Invoice', 'Create an invoice for a customer.', 'fa-file-invoice'],
-                ['customers.invoices.index', 'View Invoices', 'Review customer invoices.', 'fa-file-alt'],
-                ['customers.receipts.create', 'Add Receipt', 'Record a customer receipt.', 'fa-cash-register'],
-                ['customers.receipts.view', 'View Receipts', 'Review customer receipts.', 'fa-receipt'],
+            ['title' => __('root.hubs.invoices_receipts'), 'items' => [
+                ['customers.invoices.create', __('root.hubs.add_invoice'), __('root.hubs.add_invoice_description'), 'fa-file-invoice'],
+                ['customers.invoices.index', __('root.hubs.view_invoices'), __('root.hubs.view_invoices_description'), 'fa-file-alt'],
+                ['customers.receipts.create', __('root.hubs.add_receipt'), __('root.hubs.add_receipt_description'), 'fa-cash-register'],
+                ['customers.receipts.view', __('root.hubs.view_receipts'), __('root.hubs.view_receipts_description'), 'fa-receipt'],
             ]],
         ]);
     }
 
     public function administration()
     {
-        return $this->render('Administration', 'Control center', 'Manage your organization, users, access, language, and settings.', [
-            ['title' => 'Organization', 'items' => [
-                ['branch', 'View Branches', 'Manage company branches.', 'fa-project-diagram'],
-                ['branch.create', 'Add Branch', 'Create a new company branch.', 'fa-plus-circle'],
-                ['settings.general', 'General Settings', 'Configure general company settings.', 'fa-sliders-h'],
-                ['settings.system', 'System Settings', 'Manage system and accounting settings.', 'fa-cog'],
+        return $this->render(__('sections.administration.title'), __('sections.administration.eyebrow'), __('sections.administration.description'), [
+            ['title' => __('sections.administration.organization'), 'items' => [
+                ['branch', __('sections.administration.view_branches'), __('sections.administration.view_branches_description'), 'fa-project-diagram'],
+                ['branch.create', __('sections.administration.add_branch'), __('sections.administration.add_branch_description'), 'fa-plus-circle'],
+                ['settings.general', __('sections.administration.general_settings'), __('sections.administration.general_settings_description'), 'fa-sliders-h'],
+                ['settings.system', __('sections.administration.system_settings'), __('sections.administration.system_settings_description'), 'fa-cog'],
             ]],
-            ['title' => 'Users & Access', 'items' => [
-                ['user', 'View Users', 'Review and manage system users.', 'fa-users'],
-                ['user.create', 'Add User', 'Create a new system user.', 'fa-user-plus'],
-                ['role-manage', 'View Roles', 'Manage roles and permissions.', 'fa-user-lock'],
-                ['role-manage.create', 'Add Role', 'Create a new access role.', 'fa-shield-alt'],
+            ['title' => __('sections.administration.users_access'), 'items' => [
+                ['user', __('sections.administration.view_users'), __('sections.administration.view_users_description'), 'fa-users'],
+                ['user.create', __('sections.administration.add_user'), __('sections.administration.add_user_description'), 'fa-user-plus'],
+                ['role-manage', __('sections.administration.view_roles'), __('sections.administration.view_roles_description'), 'fa-user-lock'],
+                ['role-manage.create', __('sections.administration.add_role'), __('sections.administration.add_role_description'), 'fa-shield-alt'],
             ]],
-            ['title' => 'Language', 'items' => [
-                ['language', 'View Languages', 'Manage available application languages.', 'fa-language'],
-                ['language.create', 'Add Language', 'Create a new application language.', 'fa-plus-circle'],
+            ['title' => __('sections.administration.language'), 'items' => [
+                ['language', __('sections.administration.view_languages'), __('sections.administration.view_languages_description'), 'fa-language'],
+                ['language.create', __('sections.administration.add_language'), __('sections.administration.add_language_description'), 'fa-plus-circle'],
             ]],
         ]);
     }
 
     public function accounting()
     {
-        return $this->render('Accounting', 'Core finance workspace', 'Manage ledgers, journals, vouchers, payroll, and budgets.', [
-            ['title' => 'Income & Expense Ledger', 'items' => [
-                ['income_expense_type', 'Ledger Types', 'View income and expense types.', 'fa-list'],
-                ['income_expense_type.create', 'Add Ledger Type', 'Create an income or expense type.', 'fa-plus-circle'],
-                ['income_expense_group', 'Ledger Groups', 'View income and expense groups.', 'fa-layer-group'],
-                ['income_expense_group.create', 'Add Ledger Group', 'Create a new ledger group.', 'fa-folder-plus'],
-                ['income_expense_head', 'Ledger Names', 'View ledger names and accounts.', 'fa-book'],
-                ['income_expense_head.create', 'Add Ledger Name', 'Create a new ledger name.', 'fa-file-medical'],
+        return $this->render(__('root.hubs.accounting'), __('root.hubs.accounting_eyebrow'), __('root.hubs.accounting_description'), [
+            ['title' => __('root.hubs.income_expense_ledger'), 'items' => [
+                ['income_expense_type', __('root.hubs.ledger_types'), __('root.hubs.ledger_types_description'), 'fa-list'],
+                ['income_expense_type.create', __('root.hubs.add_ledger_type'), __('root.hubs.add_ledger_type_description'), 'fa-plus-circle'],
+                ['income_expense_group', __('root.hubs.ledger_groups'), __('root.hubs.ledger_groups_description'), 'fa-layer-group'],
+                ['income_expense_group.create', __('root.hubs.add_ledger_group'), __('root.hubs.add_ledger_group_description'), 'fa-folder-plus'],
+                ['income_expense_head', __('root.hubs.ledger_names'), __('root.hubs.ledger_names_description'), 'fa-book'],
+                ['income_expense_head.create', __('root.hubs.add_ledger_name'), __('root.hubs.add_ledger_name_description'), 'fa-file-medical'],
             ]],
-            ['title' => 'Journals & Planning', 'items' => [
-                ['general-journal.create', 'Add Journal Entry', 'Record a general journal entry.', 'fa-book-open'],
-                ['general-journal.index', 'View Journal Entries', 'Review general journal entries.', 'fa-list-alt'],
-                ['payrolls.create', 'Add Payroll', 'Create a payroll record.', 'fa-user-tie'],
-                ['payrolls.index', 'View Payrolls', 'Review payroll records.', 'fa-users'],
-                ['budgets.index', 'View Budgets', 'Review planned financial activity.', 'fa-clipboard-list'],
+            ['title' => __('root.hubs.journals_planning'), 'items' => [
+                ['general-journal.create', __('root.hubs.add_journal_entry'), __('root.hubs.add_journal_entry_description'), 'fa-book-open'],
+                ['general-journal.index', __('root.hubs.view_journal_entries'), __('root.hubs.view_journal_entries_description'), 'fa-list-alt'],
+                ['payrolls.create', __('root.hubs.add_payroll'), __('root.hubs.add_payroll_description'), 'fa-user-tie'],
+                ['payrolls.index', __('root.hubs.view_payrolls'), __('root.hubs.view_payrolls_description'), 'fa-users'],
+                ['budgets.index', __('root.hubs.view_budgets'), __('root.hubs.view_budgets_description'), 'fa-clipboard-list'],
             ]],
-            ['title' => 'Vouchers', 'items' => [
-                ['cr_voucher.create', 'Add Credit Voucher', 'Create a credit voucher.', 'fa-arrow-right'],
-                ['cr_voucher', 'View Credit Vouchers', 'Review credit vouchers.', 'fa-list'],
-                ['dr_voucher.create', 'Add Debit Voucher', 'Create a debit voucher.', 'fa-arrow-left'],
-                ['dr_voucher', 'View Debit Vouchers', 'Review debit vouchers.', 'fa-list'],
-                ['jnl_voucher.create', 'Add Journal Voucher', 'Create a journal voucher.', 'fa-arrows-alt-h'],
-                ['jnl_voucher', 'View Journal Vouchers', 'Review journal vouchers.', 'fa-list'],
-                ['contra_voucher.create', 'Add Contra Voucher', 'Create a contra voucher.', 'fa-exchange-alt'],
-                ['contra_voucher', 'View Contra Vouchers', 'Review contra vouchers.', 'fa-list'],
+            ['title' => __('root.hubs.vouchers'), 'items' => [
+                ['cr_voucher.create', __('root.hubs.add_credit_voucher'), __('root.hubs.add_credit_voucher_description'), 'fa-arrow-right'],
+                ['cr_voucher', __('root.hubs.view_credit_vouchers'), __('root.hubs.view_credit_vouchers_description'), 'fa-list'],
+                ['dr_voucher.create', __('root.hubs.add_debit_voucher'), __('root.hubs.add_debit_voucher_description'), 'fa-arrow-left'],
+                ['dr_voucher', __('root.hubs.view_debit_vouchers'), __('root.hubs.view_debit_vouchers_description'), 'fa-list'],
+                ['jnl_voucher.create', __('root.hubs.add_journal_voucher'), __('root.hubs.add_journal_voucher_description'), 'fa-arrows-alt-h'],
+                ['jnl_voucher', __('root.hubs.view_journal_vouchers'), __('root.hubs.view_journal_vouchers_description'), 'fa-list'],
+                ['contra_voucher.create', __('root.hubs.add_contra_voucher'), __('root.hubs.add_contra_voucher_description'), 'fa-exchange-alt'],
+                ['contra_voucher', __('root.hubs.view_contra_vouchers'), __('root.hubs.view_contra_vouchers_description'), 'fa-list'],
             ]],
         ]);
     }
 
     public function banking()
     {
-        return $this->render('Banking & Cash', 'Treasury workspace', 'Manage bank and cash accounts, balances, and opening entries.', [
-            ['title' => 'Bank & Cash Accounts', 'items' => [
-                ['bank_cash', 'View Bank & Cash', 'Review your bank and cash accounts.', 'fa-university'],
-                ['bank_cash.create', 'Add Bank or Cash', 'Create a new bank or cash account.', 'fa-plus-circle'],
-                ['bank_cash.trashed', 'Trashed Accounts', 'Restore or permanently remove accounts.', 'fa-trash'],
+        return $this->render(__('root.hubs.banking'), __('root.hubs.banking_eyebrow'), __('root.hubs.banking_description'), [
+            ['title' => __('root.hubs.bank_cash_accounts'), 'items' => [
+                ['bank_cash', __('root.hubs.view_bank_cash'), __('root.hubs.view_bank_cash_description'), 'fa-university'],
+                ['bank_cash.create', __('root.hubs.add_bank_or_cash'), __('root.hubs.add_bank_or_cash_description'), 'fa-plus-circle'],
+                ['bank_cash.trashed', __('root.hubs.trashed_accounts'), __('root.hubs.trashed_accounts_description'), 'fa-trash'],
             ]],
-            ['title' => 'Opening Balances', 'items' => [
-                ['initial_bank_cash_balance', 'Bank or Cash Balances', 'Manage opening bank and cash balances.', 'fa-wallet'],
-                ['initial_bank_cash_balance.create', 'Add Opening Bank Balance', 'Record an opening bank or cash balance.', 'fa-money-bill-wave'],
-                ['initial_income_expense_head_balance', 'Ledger Balances', 'Manage opening ledger balances.', 'fa-book'],
-                ['initial_income_expense_head_balance.create', 'Add Opening Ledger Balance', 'Record an opening ledger balance.', 'fa-plus-circle'],
+            ['title' => __('root.hubs.opening_balances'), 'items' => [
+                ['initial_bank_cash_balance', __('root.hubs.bank_or_cash_balances'), __('root.hubs.bank_or_cash_balances_description'), 'fa-wallet'],
+                ['initial_bank_cash_balance.create', __('root.hubs.add_opening_bank_balance'), __('root.hubs.add_opening_bank_balance_description'), 'fa-money-bill-wave'],
+                ['initial_income_expense_head_balance', __('root.hubs.ledger_balances'), __('root.hubs.ledger_balances_description'), 'fa-book'],
+                ['initial_income_expense_head_balance.create', __('root.hubs.add_opening_ledger_balance'), __('root.hubs.add_opening_ledger_balance_description'), 'fa-plus-circle'],
             ]],
         ]);
     }
 
     public function inventory()
     {
-        return $this->render('Inventory & Assets', 'Stock and asset workspace', 'Manage inventory records and review fixed asset schedules.', [
-            ['title' => 'Inventory', 'items' => [
-                ['inventories.create', 'Add Inventory', 'Create a new inventory record.', 'fa-box-open'],
-                ['inventories.index', 'View Inventory', 'Review inventory and quantities on hand.', 'fa-boxes'],
+        return $this->render(__('root.hubs.inventory'), __('root.hubs.inventory_eyebrow'), __('root.hubs.inventory_description'), [
+            ['title' => __('root.hubs.inventory_section'), 'items' => [
+                ['inventories.create', __('root.hubs.add_inventory'), __('root.hubs.add_inventory_description'), 'fa-box-open'],
+                ['inventories.index', __('root.hubs.view_inventory'), __('root.hubs.view_inventory_description'), 'fa-boxes'],
             ]],
-            ['title' => 'Assets', 'items' => [
-                ['reports.accounts.fixed_asset_schedule', 'Fixed Asset Schedule', 'Review assets and depreciation schedules.', 'fa-briefcase'],
+            ['title' => __('root.hubs.assets'), 'items' => [
+                ['reports.accounts.fixed_asset_schedule', __('root.hubs.fixed_asset_schedule'), __('root.hubs.fixed_asset_schedule_description'), 'fa-briefcase'],
             ]],
         ]);
     }

@@ -14,12 +14,12 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <a class="btn btn-sm btn-info waves-effect" href="{{ route('general-journal.index') }}">Back</a>
+                <a class="btn btn-sm btn-info waves-effect" href="{{ route('general-journal.index') }}">{{ __('Back') }}</a>
             </div>
 
             <ol class="breadcrumb breadcrumb-col-cyan pull-right">
-                <li><a href="{{ route('dashboard') }}"><i class="material-icons">home</i> Home</a></li>
-                <li><a href="{{ route('general-journal.index') }}"><i class="fas fa-archive"></i> General Journal</a></li>
+                <li><a href="{{ route('dashboard') }}"><i class="material-icons">home</i> {{ __('Home') }}</a></li>
+                <li><a href="{{ route('general-journal.index') }}"><i class="fas fa-archive"></i> {{ __('General Journal') }}</a></li>
                 <li class="active"><i class="material-icons">archive</i> {{ $params->title }}</li>
             </ol>
 
@@ -28,7 +28,7 @@
                     <div class="card">
                         <div class="header">
                             <h2>{{ $params->title }}</h2>
-                            <small>Enter {{ $params->resource }} Information</small>
+                            <small>{{ __('Enter :value Information', ['value' => $params->resource]) }}</small>
                         </div>
                         <div class="body">
                             <form method="POST" action="{{ $params->action }}" class="form2">
@@ -36,10 +36,10 @@
                                 <table class="table table-bordered">
                                     <tbody>
                                     <tr>
-                                        <td><label for="account">Branch</label></td>
+                                        <td><label for="account">{{ __('Branch') }}</label></td>
                                         <td>
                                             <select id="branch_id" class="form-control" name="branch_id" required>
-                                                <option value="">Select Branch</option>
+                                                <option value="">{{ __('Select Branch') }}</option>
                                                 @foreach($params->branches as $branchesId => $branchesName)
                                                     <option value="{{ $branchesId }}">{{ $branchesName }}</option>
                                                 @endforeach
@@ -47,10 +47,10 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><label for="account">Account</label></td>
+                                        <td><label for="account">{{ __('Account') }}</label></td>
                                         <td>
                                             <select id="debit_account_id" name="debit_account_id" class="form-control" required>
-                                                <option value="" disabled selected>Select Debit Account</option>
+                                                <option value="" disabled selected>{{ __('Select Debit Account') }}</option>
                                                 @foreach($params->accounts as $accountId => $accountName)
                                                     <option value="{{ $accountId }}">{{ $accountName }}</option>
                                                 @endforeach
@@ -58,17 +58,17 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><label for="debit">Debit</label></td>
+                                        <td><label for="debit">{{ __('Debit') }}</label></td>
                                         <td>
                                             <input id="debit" name="debit" type="number" class="form-control"
                                                    value="{{ old('debit', $params->defaults['debit'] ?? '') }}" required>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><label for="account">Account</label></td>
+                                        <td><label for="account">{{ __('Account') }}</label></td>
                                         <td>
                                             <select id="credit_account_id" name="credit_account_id" class="form-control" required>
-                                                <option value="" disabled selected>Select Credit Account</option>
+                                                <option value="" disabled selected>{{ __('Select Credit Account') }}</option>
                                                 @foreach($params->accounts as $accountId => $accountName)
                                                     <option value="{{ $accountId }}">{{ $accountName }}</option>
                                                 @endforeach
@@ -76,24 +76,24 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><label for="credit">Credit</label></td>
+                                        <td><label for="credit">{{ __('Credit') }}</label></td>
                                         <td>
                                             <input id="credit" name="credit" type="number" class="form-control"
                                                    value="{{ old('credit', $params->defaults['credit'] ?? '') }}" required>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><label for="memo">Memo</label></td>
+                                        <td><label for="memo">{{ __('Memo') }}</label></td>
                                         <td>
                                             <input id="memo" name="memo" class="form-control" required
                                                    value="{{ old('memo', $params->defaults['memo'] ?? '') }}">
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><label for="customer_vendor">Customer/Vendor</label></td>
+                                        <td><label for="customer_vendor">{{ __('Customer/Vendor') }}</label></td>
                                         <td>
                                             <select id="customer_vendor" name="customer_vendor" class="form-control" required>
-                                                <option value="">Select Customer/Vendor</option>
+                                                <option value="">{{ __('Select Customer/Vendor') }}</option>
                                                 @foreach ($params->customers as $customer)
                                                     <option value="{{ $customer->name }}">{{ $customer->name }}</option>
                                                 @endforeach
@@ -112,7 +112,7 @@
                             </form>
                             @if(session('success'))
                                 <div class="alert alert-success">
-                                    {{ session('success') }}
+                                    {{ __(session('success')) }}
                                 </div>
                             @endif
                         </div>
