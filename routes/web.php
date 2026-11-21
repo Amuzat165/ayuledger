@@ -63,6 +63,9 @@ Auth::routes();
 Route::get('/email/verify-code', [\App\Http\Controllers\Auth\RegisterController::class, 'showVerificationForm'])->name('verification.notice');
 Route::post('/email/verify-code', [\App\Http\Controllers\Auth\RegisterController::class, 'verifyCode'])->middleware('throttle:6,1')->name('verification.verify');
 Route::post('/email/verify-code/resend', [\App\Http\Controllers\Auth\RegisterController::class, 'resendVerificationCode'])->middleware('throttle:3,1')->name('verification.resend');
+Route::get('/email/verify/{user}/{code}', [\App\Http\Controllers\Auth\RegisterController::class, 'verifyByEmailLink'])
+    ->middleware(['signed', 'throttle:6,1'])
+    ->name('verification.email-link');
 
 Route::get('/', [\App\Http\Controllers\LandingController::class, 'index'])->name('landing');
 Route::post('/contact', [\App\Http\Controllers\LandingController::class, 'contact'])->name('landing.contact');
@@ -86,6 +89,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/console/database', [\App\Http\Controllers\SuperAdminController::class, 'database'])->name('superadmin.database');
     Route::post('/console/business/{business}/approve', [\App\Http\Controllers\SuperAdminController::class, 'approve'])->name('superadmin.business.approve');
     Route::post('/console/business/{business}/reject', [\App\Http\Controllers\SuperAdminController::class, 'reject'])->name('superadmin.business.reject');
+    Route::delete('/console/business/{business}', [\App\Http\Controllers\SuperAdminController::class, 'destroyBusiness'])->name('superadmin.business.destroy');
     Route::post('/console/payment/{verification}/verify', [\App\Http\Controllers\SuperAdminController::class, 'verifyPayment'])->name('superadmin.payment.verify');
     Route::get('/console/site-builder', [\App\Http\Controllers\SuperAdminController::class, 'siteBuilder'])->name('superadmin.site-builder');
     Route::post('/console/site-builder/settings', [\App\Http\Controllers\SuperAdminController::class, 'saveSiteSettings'])->name('superadmin.site-builder.settings');

@@ -24,3 +24,4 @@ yarn-error.log
 .ignore
 /public/store
 !/resources/lang/main/ui.php
+!/resources/lang/main/financial.php

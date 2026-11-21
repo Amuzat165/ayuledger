@@ -41,7 +41,7 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at', 'email_verification_expires_at'];
 
     protected static function booted()
     {

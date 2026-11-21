@@ -22,6 +22,7 @@
         </div>
     </div>
     @if (session('status')) <div class="alert alert-success">{{ session('status') }}</div> @endif
+    @if (session('error')) <div class="alert alert-danger">{{ session('error') }}</div> @endif
     <table class="table table-striped">
         <thead><tr><th>Business</th><th>Email</th><th>Subscription</th><th>Registration</th><th>Actions</th></tr></thead>
         <tbody>
@@ -36,6 +37,12 @@
                     <form method="POST" action="{{ route('superadmin.business.reject', $business) }}" style="display:inline">@csrf
                         <input type="hidden" name="admin_note" value="Registration rejected by administrator">
                         <button class="btn btn-danger btn-sm">Reject</button>
+                    </form>
+                    <form method="POST" action="{{ route('superadmin.business.destroy', $business) }}" style="display:inline"
+                        onsubmit="return confirm('Permanently delete this business and all related data? This cannot be undone.');">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger btn-sm">Delete</button>
                     </form>
                 </td>
             </tr>

@@ -14,6 +14,7 @@
             <file>./tests/Unit/InvoiceDiscountConfigurationTest.php</file>
             <file>./tests/Unit/VatConfigurationTest.php</file>
             <file>./tests/Unit/WhtConfigurationTest.php</file>
+            <file>./tests/Unit/EnglishSidebarTranslationsTest.php</file>
         </testsuite>
     </testsuites>
     <coverage processUncoveredFiles="true">

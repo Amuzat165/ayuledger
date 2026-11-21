@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\URL;
 
 class RegisterController extends Controller
 {
@@ -151,7 +152,7 @@ class RegisterController extends Controller
         }
 
         if ($codeStatus !== 'sent') {
-            return redirect()->route('verification.notice')->with('status', 'Your account was created, but verification could not be completed. Please try a new code or contact support.');
+            return redirect()->route('verification.notice')->with('status', 'Your account was created, but verification could not be completed. Please contact support to finish setting up email verification.');
         }
 
         return redirect()->route('verification.notice')->with('status', 'We sent a verification code to '.$user->email.'.');
@@ -171,11 +172,30 @@ class RegisterController extends Controller
         $user = User::find($request->session()->get('email_verification_user_id'));
         if (!$user) return redirect()->route('register')->withErrors(['email' => 'Please register again to verify your account.']);
 
-        if (!$user->email_verification_code || !$user->email_verification_expires_at || now()->greaterThan($user->email_verification_expires_at) || !Hash::check($request->code, $user->email_verification_code)) {
+        if (!$this->hasValidVerificationCode($user, $request->code)) {
             return back()->withErrors(['code' => 'The code is invalid or expired. Request a new code and try again.']);
         }
 
-        $user->forceFill(['email_verification_code' => null, 'email_verification_expires_at' => null, 'email_verified_at' => now()])->save();
+        $this->markEmailAsVerified($user);
+        $request->session()->forget('email_verification_user_id');
+        auth()->login($user);
+
+        return redirect()->route('business.payment')->with('status', 'Your email has been verified.');
+    }
+
+    public function verifyByEmailLink(Request $request, User $user, $code)
+    {
+        if ($user->email_verified_at) {
+            return redirect()->route('login')->with('status', 'Your email is already verified. Please sign in.');
+        }
+
+        if (!$this->hasValidVerificationCode($user, $code)) {
+            return redirect()->route('login')->withErrors([
+                'email' => 'This verification link has expired. Sign in to request a new verification email.',
+            ]);
+        }
+
+        $this->markEmailAsVerified($user);
         $request->session()->forget('email_verification_user_id');
         auth()->login($user);
 
@@ -196,7 +216,7 @@ class RegisterController extends Controller
             return back()->with('status', 'A new verification code was sent.');
         }
         if ($result === 'storage_failed') {
-            return back()->withErrors(['code' => 'Verification is not fully configured on the server. Please contact support.']);
+            return back()->withErrors(['code' => 'Verification setup is incomplete. Please contact support to apply the email verification database migration.']);
         }
 
         return back()->withErrors(['code' => 'The verification email could not be delivered. Please contact support.']);
@@ -206,17 +226,27 @@ class RegisterController extends Controller
     {
         try {
             $code = (string) random_int(100000, 999999);
-            $user->forceFill(['email_verification_code' => Hash::make($code), 'email_verification_expires_at' => now()->addMinutes(10)])->save();
+            $expiresAt = now()->addMinutes(10);
+            $user->forceFill([
+                'email_verification_code' => Hash::make($code),
+                'email_verification_expires_at' => $expiresAt,
+            ])->save();
         } catch (\Throwable $exception) {
             Log::error('Registration verification code could not be stored.', ['user_id' => $user->id, 'exception' => $exception]);
             return 'storage_failed';
         }
+
         try {
-            Mail::raw(implode("\n\n", [
-                'Hello '.$user->name.',',
-                'Your email verification code is '.$code.'.',
-                'This code expires in 10 minutes. If you did not create an account, you can ignore this email.',
-            ]), function ($message) use ($user) {
+            $verificationUrl = URL::temporarySignedRoute(
+                'verification.email-link',
+                $expiresAt,
+                ['user' => $user->getKey(), 'code' => $code]
+            );
+
+            Mail::send([
+                'html' => 'emails.verify-address',
+                'text' => 'emails.verify-address-text',
+            ], compact('user', 'code', 'verificationUrl'), function ($message) use ($user) {
                 $message->to($user->email)->subject('Verify your AYULEDGERS email');
             });
 
@@ -229,6 +259,23 @@ class RegisterController extends Controller
 
             return 'delivery_failed';
         }
+    }
+
+    private function hasValidVerificationCode(User $user, $code)
+    {
+        return $user->email_verification_code
+            && $user->email_verification_expires_at
+            && now()->lessThanOrEqualTo($user->email_verification_expires_at)
+            && Hash::check($code, $user->email_verification_code);
+    }
+
+    private function markEmailAsVerified(User $user)
+    {
+        $user->forceFill([
+            'email_verification_code' => null,
+            'email_verification_expires_at' => null,
+            'email_verified_at' => now(),
+        ])->save();
     }
 
     /**

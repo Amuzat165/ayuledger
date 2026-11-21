@@ -16,7 +16,7 @@
 <main class="verify-card">
     <a href="/" class="font-weight-bold text-primary">AYULEDGERS</a>
     <h1 class="h3 mt-4">Verify your email</h1>
-    <p class="text-muted">Enter the six digit code we sent to your email address. It expires in 10 minutes.</p>
+    <p class="text-muted">Enter the six-digit code from your email, or click the verification button in the email. Both expire in 10 minutes.</p>
     @if(session('status')) <div class="alert alert-info">{{ session('status') }}</div> @endif
     @if(session('error')) <div class="alert alert-danger">{{ session('error') }}</div> @endif
     @if($errors->any()) <div class="alert alert-danger">{{ $errors->first() }}</div> @endif

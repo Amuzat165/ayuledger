@@ -10,6 +10,7 @@ use App\SiteSetting;
 use App\SiteSlide;
 use App\SubscriptionPlan;
 use App\Testimonial;
+use App\Services\BusinessDataDeletionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -138,6 +139,43 @@ class SuperAdminController extends Controller
         Tenant::whereKey($business->tenant_id)->update(['status' => 'inactive']);
         TenantMembership::where('tenant_id', $business->tenant_id)->update(['status' => 'inactive']);
         return back()->with('status', $business->business_name . ' was rejected.');
+    }
+
+    public function destroyBusiness(BusinessSetting $business, BusinessDataDeletionService $deletion)
+    {
+        $tenant = Tenant::find($business->tenant_id);
+        if ($tenant && $tenant->slug === 'ayuglobal') {
+            return back()->with('error', 'The primary AYUGLOBAL business cannot be deleted.');
+        }
+
+        $superAdminEmail = strtolower(config('app.super_admin_email', 'admin@gmail.com'));
+        $hasSuperAdmin = DB::table('users')
+            ->leftJoin('role_manages', 'role_manages.id', '=', 'users.role_manage_id')
+            ->where('users.business_id', $business->id)
+            ->where(function ($query) use ($superAdminEmail) {
+                $query->whereRaw('LOWER(role_manages.name) = ?', ['super admin'])
+                    ->orWhereRaw('LOWER(users.email) = ?', [$superAdminEmail]);
+            })
+            ->exists();
+        if ($hasSuperAdmin) {
+            return back()->with('error', 'A business that owns a Super Admin account cannot be deleted.');
+        }
+
+        $hasSharedUsers = DB::table('tenant_memberships')
+            ->join('users', 'users.id', '=', 'tenant_memberships.user_id')
+            ->where('users.business_id', $business->id)
+            ->where('tenant_memberships.tenant_id', '<>', $business->tenant_id)
+            ->exists();
+        if ($hasSharedUsers) {
+            return back()->with('error', 'This business has users with memberships in other businesses and cannot be deleted safely.');
+        }
+
+        $businessName = $business->business_name;
+        if (!$deletion->delete($business)) {
+            return back()->with('error', $businessName.' was deleted, but some uploaded files could not be removed. Check the application log.');
+        }
+
+        return back()->with('status', $businessName.' and all associated business data were permanently deleted.');
     }
 
     public function verifyPayment(BusinessPaymentVerification $verification)
