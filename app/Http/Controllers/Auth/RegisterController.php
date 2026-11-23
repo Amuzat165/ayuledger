@@ -6,7 +6,6 @@ use App\User;
 use App\Tenant;
 use App\TenantMembership;
 use App\BusinessSetting;
-use App\Branch;
 use App\Profile;
 use App\SubscriptionPlan;
 use App\Http\Controllers\Controller;
@@ -135,13 +134,6 @@ class RegisterController extends Controller
                     'role_manage_id' => $user->role_manage_id,
                     'status' => 'pending',
                 ]);
-
-                $branch = new Branch();
-                $branch->tenant_id = $tenant->id;
-                $branch->business_id = $tenant->id;
-                $branch->name = $request->business_name . ' - Main Branch (' . $tenant->id . ')';
-                $branch->create_by = $user->email;
-                $branch->save();
 
                 $profile = new Profile();
                 $profile->user_id = $user->id;
